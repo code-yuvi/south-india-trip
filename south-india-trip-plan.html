@@ -276,8 +276,8 @@
   }
   .member .mbody{padding:12px 14px 16px}
   .member .mrole{
-    display:inline-block;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;
-    color:var(--red);margin:0 0 6px;
+    display:inline-block;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;
+    color:var(--red);margin:0 6px 6px 0;
   }
   .member h3{margin:0 0 8px;font-size:18px;letter-spacing:-.02em}
   .member .mduty{margin:0;padding:0;list-style:none}
@@ -465,9 +465,8 @@
 
 <section id="tab-team" class="pad" hidden>
   <h2>Our team · 7 people, one Crysta</h2>
-  <p class="sub">The crew on this loop. Photos, roles and day-to-day duties will fill in as you send them. Until then each card shows initials.</p>
+  <p class="sub">Finance, expedition, wheels, routes, meals, safety and memories — this is who holds which job on the loop.</p>
   <div class="teamgrid" id="teamgrid"></div>
-  <div class="note"><b>Next from you.</b> Send a photo for each person, plus their role title and 3–5 responsibilities. Spellings used here: Yuvraj Deshmukh, Aditya Jadhav, Vaibhav Kushare, Vaibhav Sonawane, Ashish Mahale, Chaityna Jadhav, Vishal Gawali.</div>
 </section>
 
 <footer class="pad">
@@ -815,13 +814,27 @@ var DROPS=[
 ];
 
 var TEAM=[
- {id:"yuvraj",name:"Yuvraj Deshmukh",initials:"YD",color:"#e50914",photo:"team/yuvraj.jpg",role:"",duties:[]},
- {id:"aditya",name:"Aditya Jadhav",initials:"AJ",color:"#f59e0b",photo:"team/aditya.jpg",role:"",duties:[]},
- {id:"kushare",name:"Vaibhav Kushare",initials:"VK",color:"#22c55e",photo:"team/vaibhav-kushare.jpg",role:"",duties:[]},
- {id:"sonawane",name:"Vaibhav Sonawane",initials:"VS",color:"#38bdf8",photo:"team/vaibhav-sonawane.jpg",role:"",duties:[]},
- {id:"ashish",name:"Ashish Mahale",initials:"AM",color:"#a78bfa",photo:"team/ashish.jpg",role:"",duties:[]},
- {id:"chaityna",name:"Chaityna Jadhav",initials:"CJ",color:"#fb7185",photo:"team/chaityna.jpg",role:"",duties:[]},
- {id:"vishal",name:"Vishal Gawali",initials:"VG",color:"#fbbf24",photo:"team/vishal.jpg",role:"",duties:[]}
+ {id:"yuvraj",name:"Yuvraj Deshmukh",initials:"YD",color:"#e50914",photo:"team/yuvraj.jpg",
+  roles:["Finance & Treasure Head","Media & Memories Head"],
+  duties:["Holds the trip cash, bills and daily spend.","Books and tracks rooms, tickets and the group budget.","Shoots stills and video, and backs up memories each night."]},
+ {id:"aditya",name:"Aditya Jadhav",initials:"AJ",color:"#f59e0b",photo:"team/aditya.jpg",
+  roles:["Expedition Lead","Media & Memories Head"],
+  duties:["Sets the day's start time and the visit order.","Keeps the group moving on the 12-day loop.","Shares media and memories with Yuvraj — photos, clips, group recap."]},
+ {id:"kushare",name:"Vaibhav Kushare",initials:"VK",color:"#22c55e",photo:"team/vaibhav-kushare.jpg",
+  roles:["Media & Memories Head"],
+  duties:["Captures temples, food and road moments.","Keeps a second camera rolling so nothing is missed.","Helps cut the day's story for the family group."]},
+ {id:"ashish",name:"Ashish Mahale",initials:"AM",color:"#a78bfa",photo:"team/ashish.jpg",
+  roles:["Expedition Lead","Transportation Head"],
+  duties:["Co-leads the day's expedition with Aditya.","Owns the Crysta: fuel, parking, ghat-road calls.","Vehicle ready before every departure."]},
+ {id:"sonwane",name:"Vaibhav Sonwane",initials:"VS",color:"#38bdf8",photo:"team/vaibhav-sonwane.jpg",
+  roles:["Navigation & Route Intelligence","Food and Hospitality"],
+  duties:["Maps the next halt and the backup road.","Reads ghats, closures and night-drive limits.","Finds meal stops, thalis and water on time."]},
+ {id:"chaitnya",name:"Chaitnya Jadhav",initials:"CJ",color:"#fb7185",photo:"team/chaitnya.jpg",
+  roles:["Food and Hospitality","Safety & Logistics Head"],
+  duties:["Plans meals, snacks and who eats when.","Watches bags, room keys and the last-out hotel check.","Keeps first-aid and night-halt safety in view."]},
+ {id:"vishal",name:"Vishal Gawali",initials:"VG",color:"#fbbf24",photo:"team/vishal.jpg",
+  roles:["Safety & Logistics Head"],
+  duties:["Owns safety on ghats, ferries and crowded temples.","Counts bags, keys and people before the car moves.","First-aid kit and night halt checks."]}
 ];
 
 var MAP_W=520,MAP_H=760,LON_MIN=72.5,LON_SPAN=9.7,LAT_MAX=20,LAT_SPAN=14.2;
@@ -1445,14 +1458,16 @@ function drawTeam(){
     var duties=m.duties&&m.duties.length
       ? '<ul class="mduty"><li>'+m.duties.map(esc).join("</li><li>")+"</li></ul>"
       : '<p class="wait">Role and responsibilities coming next.</p>';
-    var role=m.role?'<div class="mrole">'+esc(m.role)+"</div>":'<div class="mrole">Crew</div>';
+    var roles=(m.roles&&m.roles.length?m.roles:[m.role||"Crew"]).map(function(r){
+      return '<div class="mrole">'+esc(r)+"</div>";
+    }).join("");
     var photo=m.photo
       ? '<img src="'+esc(m.photo)+'" alt="'+esc(m.name)+'" onerror="this.remove()">'
       : "";
     return '<article class="member">'
       +'<div class="portrait" style="background:radial-gradient(circle at 50% 30%,'+m.color+' 0%,#0b0b10 72%)">'
       +'<span class="initials">'+esc(m.initials)+"</span>"+photo
-      +"</div><div class=\"mbody\">"+role+"<h3>"+esc(m.name)+"</h3>"+duties+"</div></article>";
+      +"</div><div class=\"mbody\">"+roles+"<h3>"+esc(m.name)+"</h3>"+duties+"</div></article>";
   }).join("");
 }
 function showTab(t){
