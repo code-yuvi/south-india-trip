@@ -54,6 +54,17 @@
   @media(min-width:900px){.topnav{padding:14px 34px}}
   .brand{font-weight:900;letter-spacing:.16em;font-size:15px;color:var(--red);text-transform:uppercase;white-space:nowrap}
   .brand span{color:var(--ink);letter-spacing:.14em}
+  .devtag{
+    display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;
+    font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;
+    color:#fff;background:linear-gradient(180deg,#e50914,#b0060f);
+    border-radius:4px;padding:5px 9px;white-space:nowrap;
+    box-shadow:0 0 0 1px rgba(255,255,255,.08) inset;
+  }
+  .devtag b{font-weight:900;letter-spacing:.14em}
+  .topnav .devtag{display:none}
+  @media(min-width:1100px){.topnav .devtag{display:inline-flex}}
+  .byline{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:14px 0 0}
   .tabs{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .tabs::-webkit-scrollbar{display:none}
   .tabs button{
@@ -252,6 +263,7 @@
     <button role="tab" data-tab="places" aria-selected="false">Place guide</button>
     <button role="tab" data-tab="logi" aria-selected="false">Car, stay, money</button>
   </div>
+  <span class="devtag">Created &amp; developed by <b>Yuvraj</b></span>
   <div class="navclock"><span class="navdot"></span><b id="navtime">--:--:--</b> IST</div>
 </nav>
 
@@ -259,7 +271,7 @@
   <div class="heroart" id="heroart"></div>
   <div class="scrim"></div>
   <div class="inner">
-    <p class="kicker">A Family Original · 7 people · Innova Crysta</p>
+    <p class="kicker">A Family Original · 7 people · Innova Crysta · Created &amp; developed by Yuvraj</p>
     <h1>South India,<br />drawn as a circle</h1>
     <div class="herometa">
       <span class="matchpct">98% match</span><span class="dotsep"></span>
@@ -398,6 +410,7 @@
 </section>
 
 <footer class="pad">
+  <p class="byline"><span class="devtag">Created &amp; developed by <b>Yuvraj</b></span></p>
   Temple hours shift on festivals. Recheck Srisailam, TTD Tirupati, Meenakshi, Rameswaram, Padmanabhaswamy and Isha a week before you roll.
   <details class="credits">
     <summary>Photo credits and licences</summary>
