@@ -255,38 +255,79 @@
     .nights{grid-template-columns:repeat(4,1fr)}
     .teamgrid{grid-template-columns:repeat(3,1fr)}
   }
-  .teamgrid{display:grid;grid-template-columns:1fr;gap:14px;margin:16px 0 8px}
+  .teamgrid{display:grid;grid-template-columns:1fr;gap:18px;margin:16px 0 8px}
   @media(min-width:640px){.teamgrid{grid-template-columns:repeat(2,1fr)}}
-  .member{
-    background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;
-    display:flex;flex-direction:column;transition:transform .2s,border-color .2s,box-shadow .2s;
+  .teamlegend{
+    display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px;padding:12px 14px;
+    background:var(--panel);border:1px solid var(--line);border-radius:10px;
   }
-  .member:hover{transform:translateY(-4px);border-color:#4a4a5a;box-shadow:0 14px 30px rgba(0,0,0,.45)}
+  .teamlegend .chip{
+    display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;
+    padding:6px 10px;border-radius:999px;border:1px solid transparent;letter-spacing:.04em;
+  }
+  .teamlegend .chip i{font-style:normal;font-size:12px;opacity:.9}
+  .role-finance{background:#1a2e18;color:#86efac;border-color:#166534}
+  .role-media{background:#2a1830;color:#f0abfc;border-color:#7e22ce}
+  .role-expedition{background:#2a1810;color:#fdba74;border-color:#c2410c}
+  .role-transport{background:#141f2e;color:#93c5fd;border-color:#2563eb}
+  .role-nav{background:#102028;color:#67e8f9;border-color:#0891b2}
+  .role-food{background:#2a2210;color:#fde68a;border-color:#ca8a04}
+  .role-safety{background:#1a2418;color:#bbf7d0;border-color:#15803d}
+  .member{
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;
+    display:flex;flex-direction:column;transition:transform .22s,border-color .22s,box-shadow .22s;
+    position:relative;
+  }
+  .member:before{
+    content:"";position:absolute;inset:0 0 auto 0;height:3px;z-index:2;
+    background:var(--accent-bar,#e50914);
+  }
+  .member:hover{transform:translateY(-5px);border-color:#4a4a5a;box-shadow:0 16px 36px rgba(0,0,0,.5)}
   .member .portrait{
-    position:relative;aspect-ratio:3/4;background:#121218;display:flex;align-items:center;justify-content:center;
+    position:relative;aspect-ratio:4/5;background:#121218;display:flex;align-items:center;justify-content:center;
     overflow:hidden;
   }
-  .member .portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top}
+  .member .portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center}
   .member .initials{
-    font-size:42px;font-weight:900;letter-spacing:.08em;color:#fff;text-shadow:0 8px 24px rgba(0,0,0,.5);
+    font-size:44px;font-weight:900;letter-spacing:.08em;color:#fff;text-shadow:0 8px 24px rgba(0,0,0,.55);
   }
   .member .portrait:after{
-    content:"";position:absolute;inset:auto 0 0 0;height:42%;
-    background:linear-gradient(0deg,#17171d,transparent);
+    content:"";position:absolute;inset:auto 0 0 0;height:48%;
+    background:linear-gradient(0deg,#17171d 8%,transparent);
   }
-  .member .mbody{padding:12px 14px 16px}
-  .member .mrole{
-    display:inline-block;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;
-    color:var(--red);margin:0 6px 6px 0;
+  .member .seat{
+    position:absolute;left:10px;top:10px;z-index:2;background:rgba(0,0,0,.72);color:#fff;
+    font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:4px 8px;border-radius:4px;
+    border:1px solid rgba(255,255,255,.12);
   }
-  .member h3{margin:0 0 8px;font-size:18px;letter-spacing:-.02em}
-  .member .mduty{margin:0;padding:0;list-style:none}
-  .member .mduty li{
-    position:relative;padding:4px 0 4px 14px;margin:0;font-size:13.5px;color:var(--ink2);border-bottom:1px solid var(--line);
+  .member .mbody{padding:14px 15px 18px}
+  .member h3{margin:0 0 10px;font-size:19px;letter-spacing:-.02em;color:#fff}
+  .rolestack{display:flex;flex-direction:column;gap:8px}
+  .rolecard{
+    display:flex;align-items:flex-start;gap:10px;padding:10px 11px;border-radius:8px;
+    border:1px solid transparent;background:#121218;transition:transform .15s;
   }
-  .member .mduty li:last-child{border-bottom:0}
-  .member .mduty li:before{content:"";position:absolute;left:0;top:12px;width:6px;height:6px;border-radius:50%;background:var(--red)}
-  .member .wait{font-size:13px;color:var(--ink3);margin:0}
+  .rolecard:hover{transform:translateX(3px)}
+  .rolecard .num{
+    flex:0 0 22px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:900;color:#0b0b0f;
+  }
+  .rolecard .rtitle{font-size:12.5px;font-weight:800;line-height:1.25;margin:0 0 3px;color:#fff}
+  .rolecard .rline{font-size:11.5px;margin:0;color:var(--ink3);line-height:1.45}
+  .rolecard.role-finance .num{background:#86efac}
+  .rolecard.role-media .num{background:#f0abfc}
+  .rolecard.role-expedition .num{background:#fdba74}
+  .rolecard.role-transport .num{background:#93c5fd}
+  .rolecard.role-nav .num{background:#67e8f9}
+  .rolecard.role-food .num{background:#fde68a}
+  .rolecard.role-safety .num{background:#bbf7d0}
+  .member[data-accent="finance"]:before{background:linear-gradient(90deg,#166534,#86efac)}
+  .member[data-accent="media"]:before{background:linear-gradient(90deg,#7e22ce,#f0abfc)}
+  .member[data-accent="expedition"]:before{background:linear-gradient(90deg,#c2410c,#fdba74)}
+  .member[data-accent="transport"]:before{background:linear-gradient(90deg,#2563eb,#93c5fd)}
+  .member[data-accent="nav"]:before{background:linear-gradient(90deg,#0891b2,#67e8f9)}
+  .member[data-accent="food"]:before{background:linear-gradient(90deg,#ca8a04,#fde68a)}
+  .member[data-accent="safety"]:before{background:linear-gradient(90deg,#15803d,#bbf7d0)}
   @media (prefers-reduced-motion:reduce){
     .route-draw,.stopg,.stat,.livebar,.card,section,.hero .inner,.navdot{animation:none}
     .tile:hover{transform:none}
@@ -465,7 +506,8 @@
 
 <section id="tab-team" class="pad" hidden>
   <h2>Our team · 7 people, one Crysta</h2>
-  <p class="sub">Finance, expedition, wheels, routes, meals, safety and memories — this is who holds which job on the loop.</p>
+  <p class="sub">Each colour is a different job on the road. Number 1 is the lead hat; number 2 is the second hat on the same person.</p>
+  <div class="teamlegend" id="teamlegend"></div>
   <div class="teamgrid" id="teamgrid"></div>
 </section>
 
@@ -813,28 +855,31 @@ var DROPS=[
  ["Padmanabhaswamy if the ferry runs late","Kanyakumari sunrise happens once. TVM can be a morning instead."]
 ];
 
+var ROLE_META={
+ "Finance & Treasure Head":{key:"finance",legend:"₹ Finance",line:"Cash, bills, rooms and the group budget."},
+ "Media & Memories Head":{key:"media",legend:"▶ Media",line:"Photos, video and nightly backups for the family."},
+ "Expedition Lead":{key:"expedition",legend:"★ Expedition",line:"Start times, visit order and keeping the loop on pace."},
+ "Transportation Head":{key:"transport",legend:"◆ Transport",line:"Crysta, fuel, parking and ghat-road calls."},
+ "Navigation & Route Intelligence":{key:"nav",legend:"⌖ Routes",line:"Maps, backup roads and night-drive limits."},
+ "Food and Hospitality":{key:"food",legend:"◉ Food",line:"Meals, thalis, snacks and water on time."},
+ "Safety & Logistics Head":{key:"safety",legend:"✦ Safety",line:"Bags, keys, head-counts and first-aid."}
+};
+
 var TEAM=[
- {id:"yuvraj",name:"Yuvraj Deshmukh",initials:"YD",color:"#e50914",photo:"team/yuvraj.jpg",
-  roles:["Finance & Treasure Head","Media & Memories Head"],
-  duties:["Holds the trip cash, bills and daily spend.","Books and tracks rooms, tickets and the group budget.","Shoots stills and video, and backs up memories each night."]},
- {id:"aditya",name:"Aditya Jadhav",initials:"AJ",color:"#f59e0b",photo:"team/aditya.jpg",
-  roles:["Expedition Lead","Media & Memories Head"],
-  duties:["Sets the day's start time and the visit order.","Keeps the group moving on the 12-day loop.","Shares media and memories with Yuvraj — photos, clips, group recap."]},
- {id:"kushare",name:"Vaibhav Kushare",initials:"VK",color:"#22c55e",photo:"team/vaibhav-kushare.jpg",
-  roles:["Media & Memories Head"],
-  duties:["Captures temples, food and road moments.","Keeps a second camera rolling so nothing is missed.","Helps cut the day's story for the family group."]},
- {id:"ashish",name:"Ashish Mahale",initials:"AM",color:"#a78bfa",photo:"team/ashish.jpg",
-  roles:["Expedition Lead","Transportation Head"],
-  duties:["Co-leads the day's expedition with Aditya.","Owns the Crysta: fuel, parking, ghat-road calls.","Vehicle ready before every departure."]},
- {id:"sonwane",name:"Vaibhav Sonwane",initials:"VS",color:"#38bdf8",photo:"team/vaibhav-sonwane.jpg",
-  roles:["Navigation & Route Intelligence","Food and Hospitality"],
-  duties:["Maps the next halt and the backup road.","Reads ghats, closures and night-drive limits.","Finds meal stops, thalis and water on time."]},
- {id:"chaitnya",name:"Chaitnya Jadhav",initials:"CJ",color:"#fb7185",photo:"team/chaitnya.jpg",
-  roles:["Food and Hospitality","Safety & Logistics Head"],
-  duties:["Plans meals, snacks and who eats when.","Watches bags, room keys and the last-out hotel check.","Keeps first-aid and night-halt safety in view."]},
- {id:"vishal",name:"Vishal Gawali",initials:"VG",color:"#fbbf24",photo:"team/vishal.jpg",
-  roles:["Safety & Logistics Head"],
-  duties:["Owns safety on ghats, ferries and crowded temples.","Counts bags, keys and people before the car moves.","First-aid kit and night halt checks."]}
+ {id:"yuvraj",name:"Yuvraj Deshmukh",initials:"YD",seat:"Crew 01",photo:"team/yuvraj.jpg",
+  roles:["Finance & Treasure Head","Media & Memories Head"]},
+ {id:"aditya",name:"Aditya Jadhav",initials:"AJ",seat:"Crew 02",photo:"team/aditya.jpg",
+  roles:["Expedition Lead","Media & Memories Head"]},
+ {id:"kushare",name:"Vaibhav Kushare",initials:"VK",seat:"Crew 03",photo:"team/vaibhav-kushare.jpg",
+  roles:["Finance & Treasure Head"]},
+ {id:"ashish",name:"Ashish Mahale",initials:"AM",seat:"Crew 04",photo:"team/ashish.jpg",
+  roles:["Expedition Lead","Transportation Head"]},
+ {id:"sonwane",name:"Vaibhav Sonwane",initials:"VS",seat:"Crew 05",photo:"team/vaibhav-sonwane.jpg",
+  roles:["Navigation & Route Intelligence","Food and Hospitality"]},
+ {id:"chaitnya",name:"Chaitnya Jadhav",initials:"CJ",seat:"Crew 06",photo:"team/chaitnya.jpg",
+  roles:["Food and Hospitality","Safety & Logistics Head"]},
+ {id:"vishal",name:"Vishal Gawali",initials:"VG",seat:"Crew 07",photo:"team/vishal.jpg",
+  roles:["Safety & Logistics Head"]}
 ];
 
 var MAP_W=520,MAP_H=760,LON_MIN=72.5,LON_SPAN=9.7,LAT_MAX=20,LAT_SPAN=14.2;
@@ -1453,21 +1498,30 @@ function drawTables(){
   el("droptable").innerHTML='<tr><th>Cut</th><th>Why</th></tr>'+DROPS.map(function(r){
     return '<tr><td>'+esc(r[0])+'</td><td>'+esc(r[1])+'</td></tr>';}).join("");
 }
+function roleMeta(name){return ROLE_META[name]||{key:"expedition",legend:name,line:""};}
+function drawTeamLegend(){
+  var keys=["Finance & Treasure Head","Media & Memories Head","Expedition Lead","Transportation Head","Navigation & Route Intelligence","Food and Hospitality","Safety & Logistics Head"];
+  el("teamlegend").innerHTML=keys.map(function(k){
+    var r=roleMeta(k);
+    return '<span class="chip role-'+r.key+'"><i>'+esc(r.legend.split(" ")[0])+'</i> '+esc(r.legend.slice(r.legend.indexOf(" ")+1))+'</span>';
+  }).join("");
+}
 function drawTeam(){
   el("teamgrid").innerHTML=TEAM.map(function(m){
-    var duties=m.duties&&m.duties.length
-      ? '<ul class="mduty"><li>'+m.duties.map(esc).join("</li><li>")+"</li></ul>"
-      : '<p class="wait">Role and responsibilities coming next.</p>';
-    var roles=(m.roles&&m.roles.length?m.roles:[m.role||"Crew"]).map(function(r){
-      return '<div class="mrole">'+esc(r)+"</div>";
+    var roles=(m.roles||[]).map(function(r,i){
+      var meta=roleMeta(r);
+      return '<div class="rolecard role-'+meta.key+'">'
+        +'<div class="num">'+(i+1)+'</div>'
+        +'<div><p class="rtitle">'+esc(r)+'</p><p class="rline">'+esc(meta.line)+'</p></div>'
+        +'</div>';
     }).join("");
-    var photo=m.photo
-      ? '<img src="'+esc(m.photo)+'" alt="'+esc(m.name)+'" onerror="this.remove()">'
-      : "";
-    return '<article class="member">'
-      +'<div class="portrait" style="background:radial-gradient(circle at 50% 30%,'+m.color+' 0%,#0b0b10 72%)">'
-      +'<span class="initials">'+esc(m.initials)+"</span>"+photo
-      +"</div><div class=\"mbody\">"+roles+"<h3>"+esc(m.name)+"</h3>"+duties+"</div></article>";
+    var accent=roleMeta(m.roles[0]).key;
+    var photo=m.photo?'<img src="'+esc(m.photo)+'" alt="'+esc(m.name)+'" onerror="this.remove()">':'';
+    return '<article class="member" data-accent="'+accent+'">'
+      +'<div class="portrait">'
+      +'<span class="seat">'+esc(m.seat)+'</span>'
+      +'<span class="initials">'+esc(m.initials)+'</span>'+photo
+      +'</div><div class="mbody"><h3>'+esc(m.name)+'</h3><div class="rolestack">'+roles+'</div></div></article>';
   }).join("");
 }
 function showTab(t){
@@ -1506,7 +1560,7 @@ el("bookbtn").addEventListener("click",function(){
 });
 el("teambtn").addEventListener("click",function(){showTab("team");});
 
-drawHero();drawMap();drawStop();drawLegs();drawDays();drawPlaces();drawTables();drawRows();drawPhotoCredits();drawTeam();showTab("dest");
+drawHero();drawMap();drawStop();drawLegs();drawDays();drawPlaces();drawTables();drawRows();drawPhotoCredits();drawTeamLegend();drawTeam();showTab("dest");
 tickLive();
 setInterval(tickLive,1000);
 setInterval(function(){heroIndex=(heroIndex+1)%HERO_KEYS.length;drawHero();},7000);
