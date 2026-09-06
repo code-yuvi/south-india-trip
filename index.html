@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>South India Trip Plan — 7 people, Innova Crysta</title>
+<link rel="icon" href="yuvraj-deshmukh-mark.svg" type="image/svg+xml" />
 <meta name="description" content="Pune to Srisailam, Tirupati, Madurai, Rameswaram, Dhanushkodi, Kanyakumari, Thiruvananthapuram, Jatayu, Adiyogi, Ooty, Mysore, Kolhapur and back. Route map, day plan, food and stay." />
 <style>
   :root{
@@ -55,16 +56,23 @@
   .brand{font-weight:900;letter-spacing:.16em;font-size:15px;color:var(--red);text-transform:uppercase;white-space:nowrap}
   .brand span{color:var(--ink);letter-spacing:.14em}
   .devtag{
-    display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;
+    display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;
     font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;
     color:#fff;background:linear-gradient(180deg,#e50914,#b0060f);
-    border-radius:4px;padding:5px 9px;white-space:nowrap;
+    border-radius:4px;padding:4px 10px 4px 5px;white-space:nowrap;
     box-shadow:0 0 0 1px rgba(255,255,255,.08) inset;
   }
   .devtag b{font-weight:900;letter-spacing:.14em}
   .topnav .devtag{display:none}
   @media(min-width:1100px){.topnav .devtag{display:inline-flex}}
-  .byline{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:14px 0 0}
+  .byline{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:14px 0 0}
+  .ydmark{width:26px;height:26px;display:block;flex:0 0 auto;color:#fff}
+  .ydmark.lg{width:64px;height:64px;color:var(--red)}
+  .yd-seal{display:flex;align-items:center;gap:12px}
+  .yd-seal .who{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);font-weight:800;line-height:1.25}
+  .yd-seal .who b{display:block;color:#fff;font-size:16px;letter-spacing:.16em}
+  .ydring{transform-origin:36px 36px;animation:ydspin 22s linear infinite}
+  @keyframes ydspin{to{transform:rotate(360deg)}}
   .tabs{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .tabs::-webkit-scrollbar{display:none}
   .tabs button{
@@ -249,6 +257,7 @@
   @media (prefers-reduced-motion:reduce){
     .route-draw,.stopg,.stat,.livebar,.card,section,.hero .inner,.navdot{animation:none}
     .tile:hover{transform:none}
+    .ydring{animation:none}
   }
 </style>
 </head>
@@ -263,7 +272,17 @@
     <button role="tab" data-tab="places" aria-selected="false">Place guide</button>
     <button role="tab" data-tab="logi" aria-selected="false">Car, stay, money</button>
   </div>
-  <span class="devtag">Created &amp; developed by <b>Yuvraj</b></span>
+  <span class="devtag" title="Yuvraj Deshmukh">
+    <svg class="ydmark" viewBox="0 0 72 72" role="img" aria-label="Yuvraj Deshmukh mark">
+      <circle class="ydring" cx="36" cy="36" r="33" fill="none" stroke="currentColor" stroke-width="2.5"/>
+      <circle cx="36" cy="36" r="28.5" fill="none" stroke="currentColor" stroke-width=".8" opacity=".45" stroke-dasharray="2 2.4"/>
+      <path d="M36 8 L39.2 14.6 L46.8 12.8 L42.2 18.8 L46.6 25.2 L36 21.2 L25.4 25.2 L29.8 18.8 L25.2 12.8 L32.8 14.6 Z" fill="currentColor"/>
+      <path d="M24 24 L36 38 L48 24" fill="none" stroke="currentColor" stroke-width="5.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M36 38 V55.5" fill="none" stroke="currentColor" stroke-width="5.4" stroke-linecap="round"/>
+      <path d="M36 33.5 C53.5 33.5 53.5 56 36 56" fill="none" stroke="currentColor" stroke-width="5.4" stroke-linecap="round"/>
+    </svg>
+    Created &amp; developed by <b>Yuvraj</b>
+  </span>
   <div class="navclock"><span class="navdot"></span><b id="navtime">--:--:--</b> IST</div>
 </nav>
 
@@ -271,7 +290,7 @@
   <div class="heroart" id="heroart"></div>
   <div class="scrim"></div>
   <div class="inner">
-    <p class="kicker">A Family Original · 7 people · Innova Crysta · Created &amp; developed by Yuvraj</p>
+    <p class="kicker">A Family Original · 7 people · Innova Crysta · Mark of Yuvraj Deshmukh</p>
     <h1>South India,<br />drawn as a circle</h1>
     <div class="herometa">
       <span class="matchpct">98% match</span><span class="dotsep"></span>
@@ -410,7 +429,19 @@
 </section>
 
 <footer class="pad">
-  <p class="byline"><span class="devtag">Created &amp; developed by <b>Yuvraj</b></span></p>
+  <p class="byline">
+    <span class="yd-seal">
+      <svg class="ydmark lg" viewBox="0 0 72 72" role="img" aria-label="Yuvraj Deshmukh mark">
+        <circle class="ydring" cx="36" cy="36" r="33" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <circle cx="36" cy="36" r="28.5" fill="none" stroke="currentColor" stroke-width=".8" opacity=".45" stroke-dasharray="2 2.4"/>
+        <path d="M36 8 L39.2 14.6 L46.8 12.8 L42.2 18.8 L46.6 25.2 L36 21.2 L25.4 25.2 L29.8 18.8 L25.2 12.8 L32.8 14.6 Z" fill="currentColor"/>
+        <path d="M24 24 L36 38 L48 24" fill="none" stroke="currentColor" stroke-width="5.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M36 38 V55.5" fill="none" stroke="currentColor" stroke-width="5.4" stroke-linecap="round"/>
+        <path d="M36 33.5 C53.5 33.5 53.5 56 36 56" fill="none" stroke="currentColor" stroke-width="5.4" stroke-linecap="round"/>
+      </svg>
+      <span class="who">Created &amp; developed by <b>Yuvraj Deshmukh</b></span>
+    </span>
+  </p>
   Temple hours shift on festivals. Recheck Srisailam, TTD Tirupati, Meenakshi, Rameswaram, Padmanabhaswamy and Isha a week before you roll.
   <details class="credits">
     <summary>Photo credits and licences</summary>
