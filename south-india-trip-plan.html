@@ -253,7 +253,40 @@
     .grid2{grid-template-columns:1fr 1fr}
     .mapgrid{display:grid;grid-template-columns:minmax(0,520px) minmax(0,1fr);gap:26px;align-items:start}
     .nights{grid-template-columns:repeat(4,1fr)}
+    .teamgrid{grid-template-columns:repeat(3,1fr)}
   }
+  .teamgrid{display:grid;grid-template-columns:1fr;gap:14px;margin:16px 0 8px}
+  @media(min-width:640px){.teamgrid{grid-template-columns:repeat(2,1fr)}}
+  .member{
+    background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;
+    display:flex;flex-direction:column;transition:transform .2s,border-color .2s,box-shadow .2s;
+  }
+  .member:hover{transform:translateY(-4px);border-color:#4a4a5a;box-shadow:0 14px 30px rgba(0,0,0,.45)}
+  .member .portrait{
+    position:relative;aspect-ratio:3/4;background:#121218;display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  .member .portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top}
+  .member .initials{
+    font-size:42px;font-weight:900;letter-spacing:.08em;color:#fff;text-shadow:0 8px 24px rgba(0,0,0,.5);
+  }
+  .member .portrait:after{
+    content:"";position:absolute;inset:auto 0 0 0;height:42%;
+    background:linear-gradient(0deg,#17171d,transparent);
+  }
+  .member .mbody{padding:12px 14px 16px}
+  .member .mrole{
+    display:inline-block;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;
+    color:var(--red);margin:0 0 6px;
+  }
+  .member h3{margin:0 0 8px;font-size:18px;letter-spacing:-.02em}
+  .member .mduty{margin:0;padding:0;list-style:none}
+  .member .mduty li{
+    position:relative;padding:4px 0 4px 14px;margin:0;font-size:13.5px;color:var(--ink2);border-bottom:1px solid var(--line);
+  }
+  .member .mduty li:last-child{border-bottom:0}
+  .member .mduty li:before{content:"";position:absolute;left:0;top:12px;width:6px;height:6px;border-radius:50%;background:var(--red)}
+  .member .wait{font-size:13px;color:var(--ink3);margin:0}
   @media (prefers-reduced-motion:reduce){
     .route-draw,.stopg,.stat,.livebar,.card,section,.hero .inner,.navdot{animation:none}
     .tile:hover{transform:none}
@@ -271,6 +304,7 @@
     <button role="tab" data-tab="plan" aria-selected="false">Day by day</button>
     <button role="tab" data-tab="places" aria-selected="false">Place guide</button>
     <button role="tab" data-tab="logi" aria-selected="false">Car, stay, money</button>
+    <button role="tab" data-tab="team" aria-selected="false">Our team</button>
   </div>
   <span class="devtag" title="Yuvraj Deshmukh">
     <svg class="ydmark" viewBox="0 0 72 72" role="img" aria-label="Yuvraj Deshmukh mark">
@@ -304,6 +338,7 @@
       <button class="btn play" id="startbtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Start Day 1</button>
       <button class="btn ghost" id="mapbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>See the map</button>
       <button class="btn redbtn" id="bookbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5v14"/></svg>What to book first</button>
+      <button class="btn ghost" id="teambtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><circle cx="16" cy="9" r="2.4"/><path d="M3.5 19c.6-3 3-5 5.5-5s4.9 2 5.5 5M14 14.2c2.1.3 3.9 1.8 4.5 4.8"/></svg>Our team</button>
     </div>
   </div>
 </header>
@@ -426,6 +461,13 @@
   <h3>Correct road order</h3>
   <p>Pune — Srisailam — Tirupati — Madurai — Rameswaram — Dhanushkodi — Kanyakumari — Thiruvananthapuram — Jatayu — (skip Kolli) — Adiyogi — Ooty — Mysore — Kolhapur — Pune.</p>
   <p class="sub">If you add Kolli Hills, insert it only by adding a 13th day between Jatayu and Adiyogi, and accept 70 hairpin bends in a fully loaded Crysta.</p>
+</section>
+
+<section id="tab-team" class="pad" hidden>
+  <h2>Our team · 7 people, one Crysta</h2>
+  <p class="sub">The crew on this loop. Photos, roles and day-to-day duties will fill in as you send them. Until then each card shows initials.</p>
+  <div class="teamgrid" id="teamgrid"></div>
+  <div class="note"><b>Next from you.</b> Send a photo for each person, plus their role title and 3–5 responsibilities. Spellings used here: Yuvraj Deshmukh, Aditya Jadhav, Vaibhav Kushare, Vaibhav Sonawane, Ashish Mahale, Chaityna Jadhav, Vishal Gawali.</div>
 </section>
 
 <footer class="pad">
@@ -770,6 +812,16 @@ var DROPS=[
  ["Ooty toy train and boating","Time sinks with poor payoff on a road trip."],
  ["Mysore market and KRS dam","Palace plus Chamundi is enough."],
  ["Padmanabhaswamy if the ferry runs late","Kanyakumari sunrise happens once. TVM can be a morning instead."]
+];
+
+var TEAM=[
+ {id:"yuvraj",name:"Yuvraj Deshmukh",initials:"YD",color:"#e50914",photo:"team/yuvraj.jpg",role:"",duties:[]},
+ {id:"aditya",name:"Aditya Jadhav",initials:"AJ",color:"#f59e0b",photo:"team/aditya.jpg",role:"",duties:[]},
+ {id:"kushare",name:"Vaibhav Kushare",initials:"VK",color:"#22c55e",photo:"team/vaibhav-kushare.jpg",role:"",duties:[]},
+ {id:"sonawane",name:"Vaibhav Sonawane",initials:"VS",color:"#38bdf8",photo:"team/vaibhav-sonawane.jpg",role:"",duties:[]},
+ {id:"ashish",name:"Ashish Mahale",initials:"AM",color:"#a78bfa",photo:"team/ashish.jpg",role:"",duties:[]},
+ {id:"chaityna",name:"Chaityna Jadhav",initials:"CJ",color:"#fb7185",photo:"team/chaityna.jpg",role:"",duties:[]},
+ {id:"vishal",name:"Vishal Gawali",initials:"VG",color:"#fbbf24",photo:"team/vishal.jpg",role:"",duties:[]}
 ];
 
 var MAP_W=520,MAP_H=760,LON_MIN=72.5,LON_SPAN=9.7,LAT_MAX=20,LAT_SPAN=14.2;
@@ -1388,9 +1440,24 @@ function drawTables(){
   el("droptable").innerHTML='<tr><th>Cut</th><th>Why</th></tr>'+DROPS.map(function(r){
     return '<tr><td>'+esc(r[0])+'</td><td>'+esc(r[1])+'</td></tr>';}).join("");
 }
+function drawTeam(){
+  el("teamgrid").innerHTML=TEAM.map(function(m){
+    var duties=m.duties&&m.duties.length
+      ? '<ul class="mduty"><li>'+m.duties.map(esc).join("</li><li>")+"</li></ul>"
+      : '<p class="wait">Role and responsibilities coming next.</p>';
+    var role=m.role?'<div class="mrole">'+esc(m.role)+"</div>":'<div class="mrole">Crew</div>';
+    var photo=m.photo
+      ? '<img src="'+esc(m.photo)+'" alt="'+esc(m.name)+'" onerror="this.remove()">'
+      : "";
+    return '<article class="member">'
+      +'<div class="portrait" style="background:radial-gradient(circle at 50% 30%,'+m.color+' 0%,#0b0b10 72%)">'
+      +'<span class="initials">'+esc(m.initials)+"</span>"+photo
+      +"</div><div class=\"mbody\">"+role+"<h3>"+esc(m.name)+"</h3>"+duties+"</div></article>";
+  }).join("");
+}
 function showTab(t){
   state.tab=t;
-  ["dest","map","plan","places","logi"].forEach(function(x){el("tab-"+x).hidden=(x!==t);});
+  ["dest","map","plan","places","logi","team"].forEach(function(x){el("tab-"+x).hidden=(x!==t);});
   Array.prototype.forEach.call(el("tabs").children,function(b){
     b.setAttribute("aria-selected",b.getAttribute("data-tab")===t?"true":"false");
   });
@@ -1422,8 +1489,9 @@ el("bookbtn").addEventListener("click",function(){
   var h=el("booktable");
   if(h)window.scrollTo(0,h.getBoundingClientRect().top+window.pageYOffset-70);
 });
+el("teambtn").addEventListener("click",function(){showTab("team");});
 
-drawHero();drawMap();drawStop();drawLegs();drawDays();drawPlaces();drawTables();drawRows();drawPhotoCredits();showTab("dest");
+drawHero();drawMap();drawStop();drawLegs();drawDays();drawPlaces();drawTables();drawRows();drawPhotoCredits();drawTeam();showTab("dest");
 tickLive();
 setInterval(tickLive,1000);
 setInterval(function(){heroIndex=(heroIndex+1)%HERO_KEYS.length;drawHero();},7000);
