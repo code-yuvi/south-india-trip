@@ -7,142 +7,253 @@
 <meta name="description" content="Pune to Srisailam, Tirupati, Madurai, Rameswaram, Dhanushkodi, Kanyakumari, Thiruvananthapuram, Jatayu, Adiyogi, Ooty, Mysore, Kolhapur and back. Route map, day plan, food and stay." />
 <style>
   :root{
-    color-scheme: light;
-    --bg:#f4efe6;
-    --panel:#fffaf2;
-    --panel2:#efe6d6;
-    --ink:#1c1610;
-    --ink2:#5a5146;
-    --ink3:#8a7d6e;
-    --line:#e4d8c4;
-    --accent:#b45309;
-    --accent-soft:#fde8c8;
-    --sea:#d7e6ee;
-    --land:#e8dcc4;
-    --lanka:#efe6d4;
-    --warn:#8a5a00;
-    --warn-bg:#fdf3dc;
-    --open:#166534;
-    --closed:#9f1239;
-    --sky:#c9dce8;
+    color-scheme: dark;
+    --bg:#08080b;
+    --bg2:#101014;
+    --panel:#17171d;
+    --panel2:#20202a;
+    --ink:#f7f7f9;
+    --ink2:#b6b6c0;
+    --ink3:#83838f;
+    --line:#2a2a35;
+    --red:#e50914;
+    --red-dim:#b0060f;
+    --accent:#e50914;
+    --accent-soft:#2a1013;
+    --sea:#12233a;
+    --land:#1d2a20;
+    --lanka:#242c22;
+    --warn:#f0b429;
+    --warn-bg:#241c08;
+    --open:#4ade80;
+    --closed:#fb7185;
+    --sky:#0f1a2b;
   }
-  body[data-sky="dawn"]{--sky:#f3c9a3;--sea:#f0d6c4;--bg:#f7eee4}
-  body[data-sky="day"]{--sky:#b9d4e8;--sea:#cfe0ea;--bg:#f4efe6}
-  body[data-sky="dusk"]{--sky:#e8b08a;--sea:#e3c7b4;--bg:#f6ebe0}
-  body[data-sky="night"]{--sky:#1e2a3a;--sea:#243244;--bg:#121820;--panel:#1b2430;--panel2:#243040;--ink:#f3eee6;--ink2:#c5b9a8;--ink3:#8e8578;--line:#314155;--accent:#f59e0b;--accent-soft:#3a2e18;color-scheme:dark}
-  body[data-sky="night"] .mapwrap{background:#1a2432}
+  body[data-sky="dawn"]{--sky:#2a1d33;--sea:#2b2237;--land:#242a22}
+  body[data-sky="day"]{--sky:#12233a;--sea:#16283f;--land:#1d2a20}
+  body[data-sky="dusk"]{--sky:#2b1a24;--sea:#2a1f2c;--land:#22261f}
+  body[data-sky="night"]{--sky:#0a1220;--sea:#0d1728;--land:#141c18}
   *{box-sizing:border-box;-webkit-text-size-adjust:100%}
   html,body{margin:0;padding:0}
   body{
     background:var(--bg);color:var(--ink);
-    font-family:Georgia,"Times New Roman",serif;
+    font-family:"Helvetica Neue",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
     font-size:16px;line-height:1.55;
-    transition:background .8s ease,color .8s ease;
+    -webkit-font-smoothing:antialiased;
   }
-  h1,h2,h3,.tabs,.chip,.tag,.stat span,.card .hd,nav,button,th{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  .wrap{max-width:1180px;margin:0 auto;padding:0 0 70px}
+  .pad{padding:0 16px}
+  @media(min-width:900px){.pad{padding:0 34px}}
+
+  /* ---------- top nav ---------- */
+  .topnav{
+    position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:14px;
+    padding:12px 16px;background:linear-gradient(180deg,rgba(8,8,11,.97),rgba(8,8,11,.72) 70%,transparent);
+    backdrop-filter:saturate(140%) blur(6px);
   }
-  .wrap{max-width:980px;margin:0 auto;padding:18px 16px 64px}
-  header.top{padding-bottom:14px;border-bottom:1px solid var(--line)}
-  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 8px;font-weight:700}
-  h1{font-size:26px;line-height:1.2;margin:0 0 8px;font-family:Georgia,serif}
-  h2{font-size:19px;margin:26px 0 8px}
-  h3{font-size:16px;margin:18px 0 6px}
-  p{margin:0 0 10px}
-  .sub{color:var(--ink2);font-size:14.5px}
-  .livebar{
-    display:grid;grid-template-columns:1fr;gap:8px;margin:14px 0 4px;
-    animation:rise .6s ease both;
+  @media(min-width:900px){.topnav{padding:14px 34px}}
+  .brand{font-weight:900;letter-spacing:.16em;font-size:15px;color:var(--red);text-transform:uppercase;white-space:nowrap}
+  .brand span{color:var(--ink);letter-spacing:.14em}
+  .tabs{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tabs button{
+    flex:0 0 auto;font:inherit;font-size:13.5px;padding:7px 14px;border-radius:4px;
+    border:1px solid transparent;background:transparent;color:var(--ink2);cursor:pointer;
+    transition:color .18s,background .18s,transform .12s;white-space:nowrap;
   }
-  .livecard{
-    background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;
-  }
-  .livecard .label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);font-family:sans-serif}
-  #istclock{font-variant-numeric:tabular-nums;font-size:28px;font-weight:700;letter-spacing:.02em;display:block;margin-top:4px}
-  #istmeta,#skyline{color:var(--ink2);font-size:13.5px}
-  .openlist{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-  .pill-live{font-size:12px;padding:4px 9px;border-radius:999px;font-family:sans-serif}
-  .pill-live.on{background:#dcfce7;color:var(--open)}
-  .pill-live.off{background:#ffe4e6;color:var(--closed)}
-  body[data-sky="night"] .pill-live.on{background:#14532d;color:#bbf7d0}
-  body[data-sky="night"] .pill-live.off{background:#4c0519;color:#fecdd3}
-  .route-line{font-size:13.5px;color:var(--ink2);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:10px}
-  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:14px 0 0}
-  .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:11px 12px;animation:rise .5s ease both}
-  .stat:nth-child(2){animation-delay:.05s}
-  .stat:nth-child(3){animation-delay:.1s}
-  .stat:nth-child(4){animation-delay:.15s}
-  .stat b{display:block;font-size:18px}
-  .stat span{font-size:11px;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em}
-  .note{background:var(--warn-bg);border:1px solid #ecd9a8;border-left:4px solid var(--warn);border-radius:8px;padding:11px 13px;margin:16px 0;font-size:14.5px}
-  .note b{color:var(--warn)}
-  .tabs{position:sticky;top:0;z-index:20;background:var(--bg);padding:10px 0;border-bottom:1px solid var(--line);display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-  .tabs button{flex:0 0 auto;font:inherit;font-size:14px;padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--ink2);cursor:pointer;transition:transform .15s ease,background .2s}
+  .tabs button:hover{color:#fff;background:#1d1d25}
   .tabs button:active{transform:scale(.97)}
-  .tabs button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
-  .chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
-  .chip{font:inherit;font-size:13.5px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--ink2);cursor:pointer;transition:transform .12s ease}
+  .tabs button[aria-selected="true"]{background:#fff;color:#000;font-weight:700}
+  .navclock{margin-left:auto;font-variant-numeric:tabular-nums;font-size:13px;color:var(--ink2);white-space:nowrap;display:none}
+  @media(min-width:720px){.navclock{display:block}}
+  .navclock b{color:#fff;font-weight:700}
+  .navdot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--open);margin-right:6px;animation:blink 2s ease-in-out infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;min-height:76vh;display:flex;align-items:flex-end;overflow:hidden;margin-top:-64px}
+  @media(max-width:720px){.hero{min-height:58vh}}
+  .hero .heroart{position:absolute;inset:0}
+  .hero .heroart svg{width:100%;height:100%;display:block}
+  .hero .scrim{position:absolute;inset:0;background:
+     linear-gradient(90deg,rgba(8,8,11,.94) 0%,rgba(8,8,11,.72) 42%,rgba(8,8,11,.22) 72%,rgba(8,8,11,.55) 100%),
+     linear-gradient(0deg,var(--bg) 2%,rgba(8,8,11,.35) 32%,transparent 62%);}
+  .hero .inner{position:relative;padding:26px 16px 34px;max-width:660px;animation:rise .7s ease both}
+  @media(min-width:900px){.hero .inner{padding:34px 34px 46px}}
+  .kicker{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin:0 0 10px;font-weight:800}
+  h1{font-size:34px;line-height:1.04;margin:0 0 12px;font-weight:900;letter-spacing:-.02em;text-shadow:0 3px 18px rgba(0,0,0,.6)}
+  @media(min-width:900px){h1{font-size:60px}}
+  .herometa{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13.5px;color:var(--ink2);margin:0 0 12px}
+  .herometa .dotsep{width:4px;height:4px;border-radius:50%;background:var(--ink3)}
+  .matchpct{color:var(--open);font-weight:800}
+  .hero .sub{font-size:15px;color:#dcdce2;max-width:56ch;margin:0 0 18px;text-shadow:0 2px 12px rgba(0,0,0,.7)}
+  .btnrow{display:flex;flex-wrap:wrap;gap:10px}
+  .btn{
+    font:inherit;font-size:14.5px;font-weight:700;padding:11px 20px;border-radius:5px;border:0;cursor:pointer;
+    display:inline-flex;align-items:center;gap:9px;transition:transform .14s,filter .18s,background .18s;
+  }
+  .btn:hover{transform:translateY(-1px)}
+  .btn:active{transform:scale(.98)}
+  .btn.play{background:#fff;color:#0b0b0f}
+  .btn.play:hover{background:#e6e6e6}
+  .btn.ghost{background:rgba(109,109,110,.55);color:#fff;backdrop-filter:blur(4px)}
+  .btn.ghost:hover{background:rgba(109,109,110,.78)}
+  .btn.redbtn{background:var(--red);color:#fff}
+  .btn.redbtn:hover{background:#f6121d}
+  .btn svg{width:17px;height:17px;flex:0 0 auto}
+
+  /* ---------- live strip ---------- */
+  .livebar{display:grid;grid-template-columns:1fr;gap:10px;margin:22px 0 6px}
+  .livecard{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:13px 15px;transition:border-color .2s,transform .2s}
+  .livecard:hover{border-color:#3a3a48;transform:translateY(-2px)}
+  .livecard .label{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);font-weight:700}
+  #istclock{font-variant-numeric:tabular-nums;font-size:32px;font-weight:900;letter-spacing:.01em;display:block;margin-top:5px;color:#fff}
+  #istmeta,#skyline{color:var(--ink2);font-size:13px}
+  .openlist{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+  .pill-live{font-size:11.5px;padding:4px 10px;border-radius:4px;font-weight:600;border:1px solid transparent}
+  .pill-live.on{background:#0d2b1a;color:var(--open);border-color:#1d5136}
+  .pill-live.off{background:#2b1016;color:var(--closed);border-color:#54202c}
+
+  /* ---------- rows / tiles ---------- */
+  .rowhead{display:flex;align-items:center;gap:10px;margin:30px 0 2px}
+  .rowhead h2{margin:0}
+  h2{font-size:19px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;gap:9px}
+  h2:before{content:"";width:4px;height:19px;background:var(--red);border-radius:2px;flex:0 0 auto}
+  h3{font-size:15.5px;margin:20px 0 6px;font-weight:800}
+  p{margin:0 0 10px}
+  .sub{color:var(--ink2);font-size:14px}
+  .rowscroll{display:flex;gap:10px;overflow-x:auto;padding:14px 2px 18px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+  .rowscroll::-webkit-scrollbar{height:8px}
+  .rowscroll::-webkit-scrollbar-thumb{background:#2c2c38;border-radius:8px}
+  .tile{
+    flex:0 0 232px;scroll-snap-align:start;background:var(--panel);border:1px solid var(--line);
+    border-radius:8px;overflow:hidden;cursor:pointer;text-align:left;padding:0;color:inherit;font:inherit;
+    transition:transform .26s cubic-bezier(.2,.7,.3,1),border-color .2s,box-shadow .26s;
+  }
+  .tile:hover,.tile:focus-visible{transform:scale(1.07) translateY(-3px);border-color:#4a4a5a;box-shadow:0 14px 34px rgba(0,0,0,.6);z-index:3;outline:none}
+  .tile[aria-pressed="true"]{border-color:var(--red);box-shadow:0 0 0 1px var(--red) inset}
+  .tile .artwrap{position:relative;aspect-ratio:16/9;background:#0e0e13}
+  .tile .artwrap svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .tile .num{position:absolute;left:8px;top:7px;background:rgba(0,0,0,.72);color:#fff;font-size:11px;font-weight:800;padding:2px 7px;border-radius:3px;letter-spacing:.04em}
+  .tile .when{position:absolute;right:8px;top:7px;background:rgba(229,9,20,.92);color:#fff;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:3px}
+  .tile .meta{padding:9px 11px 12px}
+  .tile h4{margin:0 0 5px;font-size:14.5px;font-weight:800;letter-spacing:-.01em}
+  .tile .tline{font-size:12px;color:var(--ink3);margin:0}
+  .tile .badges{display:flex;gap:5px;margin-top:7px;flex-wrap:wrap}
+  .mini{font-size:10.5px;padding:2px 7px;border-radius:3px;background:var(--panel2);color:var(--ink2);font-weight:600}
+  .mini.on{background:#0d2b1a;color:var(--open)}
+  .mini.off{background:#2b1016;color:var(--closed)}
+
+  /* ---------- misc ---------- */
+  .route-line{font-size:13px;color:var(--ink2);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:11px 13px;margin-top:12px;line-height:1.7}
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:16px 0 0}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:13px 14px;transition:transform .2s,border-color .2s}
+  .stat:hover{transform:translateY(-3px);border-color:var(--red)}
+  .stat b{display:block;font-size:22px;font-weight:900;color:#fff}
+  .stat span{font-size:10.5px;color:var(--ink3);text-transform:uppercase;letter-spacing:.12em;font-weight:700}
+  .note{background:var(--warn-bg);border:1px solid #4a3a10;border-left:4px solid var(--warn);border-radius:6px;padding:12px 14px;margin:16px 0;font-size:14px;color:#f0e6cf}
+  .note b{color:var(--warn)}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+  .chip{font:inherit;font-size:13px;padding:7px 13px;border-radius:4px;border:1px solid var(--line);background:var(--panel);color:var(--ink2);cursor:pointer;transition:transform .12s,background .18s,color .18s}
+  .chip:hover{background:#22222c;color:#fff}
   .chip:active{transform:scale(.97)}
-  .chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:600}
-  .tag{display:inline-block;font-size:12.5px;padding:3px 9px;border-radius:999px;background:var(--panel2);color:var(--ink2);margin:0 5px 5px 0}
-  .tag.solid{background:var(--accent);color:#fff}
-  .tag.open{background:#dcfce7;color:var(--open)}
-  .tag.closed{background:#ffe4e6;color:var(--closed)}
+  .chip[aria-pressed="true"]{background:#fff;border-color:#fff;color:#000;font-weight:800}
+  .tag{display:inline-block;font-size:12px;padding:4px 10px;border-radius:4px;background:var(--panel2);color:var(--ink2);margin:0 5px 5px 0;font-weight:600}
+  .tag.solid{background:var(--red);color:#fff}
+  .tag.open{background:#0d2b1a;color:var(--open)}
+  .tag.closed{background:#2b1016;color:var(--closed)}
   section[hidden]{display:none}
-  .mapwrap{background:var(--sky);border:1px solid var(--line);border-radius:16px;padding:6px;transition:background .8s ease;overflow:hidden}
-  svg.map{width:100%;height:auto;display:block;border-radius:12px;touch-action:manipulation}
+  section{animation:rise .4s ease both}
+  .mapwrap{background:var(--sky);border:1px solid var(--line);border-radius:12px;padding:6px;transition:background .8s ease;overflow:hidden}
+  svg.map{width:100%;height:auto;display:block;border-radius:8px;touch-action:manipulation}
   .route-draw{stroke-dasharray:1800;stroke-dashoffset:1800;animation:draw 2.6s ease forwards}
   .stopg{animation:pop .35s ease both}
   @keyframes draw{to{stroke-dashoffset:0}}
   @keyframes pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
-  @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-  @keyframes pulse{0%,100%{r:10}50%{r:13}}
-  .pulse-ring{fill:none;stroke:var(--accent);stroke-width:1.6;opacity:.7;animation:ring 1.8s ease-out infinite}
-  @keyframes ring{from{r:10;opacity:.55}to{r:22;opacity:0}}
-  .maplegend{display:flex;flex-wrap:wrap;gap:12px;font-size:12.5px;color:var(--ink2);margin:8px 2px 0;font-family:sans-serif}
-  .maplegend i{display:inline-block;width:11px;height:11px;border-radius:50%;border:2px solid var(--accent);background:#fff;vertical-align:-1px;margin-right:5px}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .pulse-ring{fill:none;stroke:var(--red);stroke-width:1.8;opacity:.7;animation:ring 1.8s ease-out infinite}
+  @keyframes ring{from{r:10;opacity:.6}to{r:24;opacity:0}}
+  .maplegend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--ink2);margin:10px 2px 0}
+  .maplegend i{display:inline-block;width:11px;height:11px;border-radius:50%;border:2px solid var(--red);background:var(--panel);vertical-align:-1px;margin-right:6px}
   .maplegend i.small{width:7px;height:7px}
   .maplegend i.dash{width:16px;height:0;border:0;border-top:2px dashed var(--ink3);border-radius:0;vertical-align:3px}
-  .tiny{font-size:12.5px;color:var(--ink3);margin-top:8px}
-  .card{border:1px solid var(--line);border-radius:12px;margin:10px 0;overflow:hidden;background:var(--panel);animation:rise .35s ease both}
-  .card .hd{background:transparent;padding:8px 12px 0;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink3);display:flex;justify-content:space-between;gap:8px}
-  .card .bd{padding:8px 12px 12px;font-size:14.5px;color:var(--ink)}
+  .tiny{font-size:12px;color:var(--ink3);margin-top:8px}
+  .detailart{border-radius:10px;overflow:hidden;border:1px solid var(--line);margin:0 0 12px;aspect-ratio:16/9;position:relative;background:#0e0e13;max-width:560px}
+  .detailart svg{position:absolute;inset:0;width:100%;height:100%}
+  .card{border:1px solid var(--line);border-radius:8px;margin:10px 0;overflow:hidden;background:var(--panel);animation:rise .35s ease both;transition:border-color .2s}
+  .card:hover{border-color:#3a3a48}
+  .card .hd{background:transparent;padding:10px 13px 0;font-size:10.5px;text-transform:uppercase;letter-spacing:.14em;color:var(--ink3);display:flex;justify-content:space-between;gap:8px;font-weight:700}
+  .card .bd{padding:7px 13px 13px;font-size:14px;color:#e6e6ec}
   .cards3{display:grid;grid-template-columns:1fr;gap:10px}
   ul{margin:6px 0 12px;padding-left:20px}
-  li{margin:4px 0;font-size:14.5px}
-  .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin:10px 0;background:var(--panel)}
-  table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:420px;font-family:sans-serif}
-  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
-  th{background:var(--panel2);font-size:12px;text-transform:uppercase;letter-spacing:.03em;color:var(--ink3);position:sticky;top:0}
+  li{margin:5px 0;font-size:14px;color:#e6e6ec}
+  .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0;background:var(--panel)}
+  table{border-collapse:collapse;width:100%;font-size:13px;min-width:420px}
+  th,td{text-align:left;padding:10px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:var(--panel2);font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);position:sticky;top:0;font-weight:800}
+  tbody tr:hover td,tr:hover td{background:#1d1d25}
   tr:last-child td{border-bottom:0}
   td.num,th.num{text-align:right;white-space:nowrap}
-  tr.hard td:first-child{box-shadow:inset 3px 0 0 var(--warn)}
-  .grid2{display:grid;grid-template-columns:1fr;gap:14px}
-  .nights{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-  .nights div{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:13px}
-  .nights b{display:block;font-size:14px}
-  footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--ink3)}
+  tr.hard td:first-child{box-shadow:inset 3px 0 0 var(--red)}
+  .grid2{display:grid;grid-template-columns:1fr;gap:16px}
+  .nights{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+  .nights div{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 11px;font-size:12.5px;color:var(--ink2);transition:border-color .2s,transform .2s}
+  .nights div:hover{border-color:var(--red);transform:translateY(-2px)}
+  .nights b{display:block;font-size:14px;color:#fff}
+  footer{margin-top:40px;padding:18px 0 0;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink3)}
   @media (min-width:820px){
     .stats{grid-template-columns:repeat(4,1fr)}
-    .livebar{grid-template-columns:220px 1fr 1.2fr}
+    .livebar{grid-template-columns:230px 1fr 1.25fr}
     .cards3{grid-template-columns:repeat(3,1fr)}
     .grid2{grid-template-columns:1fr 1fr}
-    .mapgrid{display:grid;grid-template-columns:minmax(0,520px) minmax(0,1fr);gap:22px;align-items:start}
+    .mapgrid{display:grid;grid-template-columns:minmax(0,520px) minmax(0,1fr);gap:26px;align-items:start}
     .nights{grid-template-columns:repeat(4,1fr)}
-    h1{font-size:34px}
   }
   @media (prefers-reduced-motion:reduce){
-    .route-draw,.stopg,.stat,.livebar,.card{animation:none}
+    .route-draw,.stopg,.stat,.livebar,.card,section,.hero .inner,.navdot{animation:none}
+    .tile:hover{transform:none}
   }
 </style>
 </head>
 <body>
+
+<nav class="topnav">
+  <div class="brand">South<span>India</span></div>
+  <div class="tabs" id="tabs" role="tablist">
+    <button role="tab" data-tab="dest" aria-selected="true">Destinations</button>
+    <button role="tab" data-tab="map" aria-selected="false">Route map</button>
+    <button role="tab" data-tab="plan" aria-selected="false">Day by day</button>
+    <button role="tab" data-tab="places" aria-selected="false">Place guide</button>
+    <button role="tab" data-tab="logi" aria-selected="false">Car, stay, money</button>
+  </div>
+  <div class="navclock"><span class="navdot"></span><b id="navtime">--:--:--</b> IST</div>
+</nav>
+
+<header class="hero">
+  <div class="heroart" id="heroart"></div>
+  <div class="scrim"></div>
+  <div class="inner">
+    <p class="kicker">A Family Original · 7 people · Innova Crysta</p>
+    <h1>South India,<br />drawn as a circle</h1>
+    <div class="herometa">
+      <span class="matchpct">98% match</span><span class="dotsep"></span>
+      <span>12 days</span><span class="dotsep"></span>
+      <span>3,601 km</span><span class="dotsep"></span>
+      <span>13 stops</span><span class="dotsep"></span>
+      <span>4 Jyotirlinga &amp; Shakti sites</span>
+    </div>
+    <p class="sub">Pune down to the tip of India and back — Srisailam, Tirumala, Meenakshi, the 22 wells of Rameswaram, sunrise at three seas, Jatayu, Adiyogi, the Nilgiri ghats and Mysore Palace.</p>
+    <div class="btnrow">
+      <button class="btn play" id="startbtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Start Day 1</button>
+      <button class="btn ghost" id="mapbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>See the map</button>
+      <button class="btn redbtn" id="bookbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5v14"/></svg>What to book first</button>
+    </div>
+  </div>
+</header>
+
 <div class="wrap">
 
-<header class="top">
-  <p class="kicker">Family road loop · 7 people · Innova Crysta</p>
-  <h1>South India, drawn as a circle</h1>
-  <p class="sub">12 days recommended. 10 days only as a squeeze. Book Tirupati and Srisailam before anything else.</p>
+<div class="pad">
   <div class="livebar">
     <div class="livecard">
       <div class="label">Live · India time</div>
@@ -158,24 +269,33 @@
       <div class="openlist" id="opennow"></div>
     </div>
   </div>
-  <div class="route-line" id="routeline"></div>
+</div>
+
+<section id="tab-dest" class="pad">
+  <div class="rowhead"><h2>Overnight halts</h2></div>
+  <p class="sub">Where you actually sleep. Tap a card for hours, food, stay and live open status.</p>
+  <div class="rowscroll" id="rowNights"></div>
+
+  <div class="rowhead"><h2>Day visits — in and out</h2></div>
+  <p class="sub">No bed here. Time them right or you lose them.</p>
+  <div class="rowscroll" id="rowDay"></div>
+
+  <div class="rowhead"><h2>Open right now in India</h2></div>
+  <p class="sub">Live from the clock above. Useful when you are actually on the road.</p>
+  <div class="rowscroll" id="rowOpen"></div>
+
+  <div class="rowhead"><h2>Trip at a glance</h2></div>
   <div class="stats">
     <div class="stat"><b>12 days</b><span>Recommended length</span></div>
     <div class="stat"><b>3,601 km</b><span>Driving legs</span></div>
     <div class="stat"><b>14–16 h</b><span>Longest drive (Day 1)</span></div>
     <div class="stat"><b>3 rooms</b><span>Every night, 7 adults</span></div>
   </div>
+  <div class="route-line" id="routeline"></div>
   <div class="note"><b>10 days is too short for this list.</b> The loop is about 4,000 km of temple towns plus two ghat climbs. In 10 days you sit in the Crysta more than you stand at the places. Use 12 days and drop Kolli Hills — it sits 400 km off this line.</div>
-</header>
+</section>
 
-<nav class="tabs" id="tabs" role="tablist">
-  <button role="tab" data-tab="map" aria-selected="true">Route map</button>
-  <button role="tab" data-tab="plan" aria-selected="false">Day by day</button>
-  <button role="tab" data-tab="places" aria-selected="false">Place guide</button>
-  <button role="tab" data-tab="logi" aria-selected="false">Car, stay, money</button>
-</nav>
-
-<section id="tab-map">
+<section id="tab-map" class="pad" hidden>
   <h2>The loop on a map</h2>
   <p class="sub">Tap any numbered stop. Big circles are overnight halts, small circles are day visits. The dashed line is the Kolli Hills detour.</p>
   <div class="mapgrid">
@@ -200,7 +320,7 @@
   <div class="nights" id="nightsgrid"></div>
 </section>
 
-<section id="tab-plan" hidden>
+<section id="tab-plan" class="pad" hidden>
   <h2 id="plantitle">12-day itinerary</h2>
   <div class="chips">
     <button class="chip" data-plan="12" aria-pressed="true">12-day recommended</button>
@@ -212,14 +332,14 @@
   <div class="tblwrap"><table id="daytable"></table></div>
 </section>
 
-<section id="tab-places" hidden>
+<section id="tab-places" class="pad" hidden>
   <h2>Where to go, and why it matters</h2>
   <p class="sub">Road order is Kanyakumari, then Thiruvananthapuram, then Jatayu, then north to Coimbatore. Do not reverse TVM and Jatayu.</p>
   <div class="chips" id="placechips"></div>
   <div id="placedetail"></div>
 </section>
 
-<section id="tab-logi" hidden>
+<section id="tab-logi" class="pad" hidden>
   <h2>Vehicle, group, money</h2>
   <div class="note"><b>Innova Crysta with 7 people.</b> Seven adults plus 10 days of bags fills the boot. Soft duffels only, not hard suitcases; a roof carrier helps. If you also hire a driver that is 8 bodies and the car is over capacity, so one of the seven should drive.</div>
 
@@ -251,7 +371,7 @@
   <p class="sub">If you add Kolli Hills, insert it only by adding a 13th day between Jatayu and Adiyogi, and accept 70 hairpin bends in a fully loaded Crysta.</p>
 </section>
 
-<footer>
+<footer class="pad">
   Temple hours shift on festivals. Recheck Srisailam, TTD Tirupati, Meenakshi, Rameswaram, Padmanabhaswamy and Isha a week before you roll.
 </footer>
 </div>
@@ -635,11 +755,18 @@ function liveStatus(place){
   var on=isOpen(place,t.minutes);
   return {on:on,label:on?"Open now (IST)":"Closed now (IST)",hint:nextChange(place,t.minutes)};
 }
+var lastMinute=-1,lastSky="";
 function tickLive(){
   var t=istNow();
   var sky=skyName(t.h);
   document.body.setAttribute("data-sky",sky);
   if(el("istclock"))el("istclock").textContent=t.clock;
+  if(el("navtime"))el("navtime").textContent=t.clock;
+  if(t.minutes!==lastMinute){
+    lastMinute=t.minutes;
+    if(typeof drawRows==="function"&&el("rowNights"))drawRows();
+    if(sky!==lastSky){lastSky=sky;if(el("heroart"))drawHero();}
+  }
   if(el("istmeta"))el("istmeta").textContent=t.date+" \u00b7 Asia/Kolkata \u00b7 updates every second";
   if(el("skyline"))el("skyline").textContent=skyCopy(sky,t.h);
   if(el("opennow")){
@@ -651,6 +778,372 @@ function tickLive(){
 }
 
 el("routeline").textContent="Pune \u2192 Srisailam \u2192 Tirupati \u2192 Madurai \u2192 Rameswaram \u2192 Dhanushkodi \u2192 Kanyakumari \u2192 Thiruvananthapuram \u2192 Jatayu \u2192 Adiyogi \u2192 Ooty \u2192 Mysore \u2192 Kolhapur \u2192 Pune";
+
+/* ------------------------------------------------------------------
+   Destination artwork. Original vector scenes, drawn inline so the file
+   stays self-contained and works with no network. Each poster is tinted
+   to the time of day you actually stand there.
+------------------------------------------------------------------ */
+var ART={
+ pune:      {motif:"city",    when:"4:00 AM",  sky:["#070d18","#2a3f5c"], hue:"#f59e0b"},
+ srisailam: {motif:"forest",  when:"Dawn",     sky:["#3a2350","#e0864f"], hue:"#fcd34d"},
+ tirupati:  {motif:"seven",   when:"Booked",   sky:["#123a5c","#8fbcd8"], hue:"#fde68a"},
+ madurai:   {motif:"gopuram", when:"9 PM",     sky:["#080c28","#3a1f52"], hue:"#f59e0b"},
+ rameswaram:{motif:"corridor",when:"5:30 AM",  sky:["#1b2a4a","#d99a58"], hue:"#fcd34d"},
+ dhanushkodi:{motif:"ruins",  when:"Noon",     sky:["#1668a8","#8fd3f4"], hue:"#ffffff"},
+ kanyakumari:{motif:"seas",   when:"Sunrise",  sky:["#37204f","#ff9a55"], hue:"#ffd28a"},
+ tvm:       {motif:"tank",    when:"5 PM",     sky:["#1b1034","#c2603f"], hue:"#fbbf24"},
+ jatayu:    {motif:"bird",    when:"9:30 AM",  sky:["#175a78","#a7dcc6"], hue:"#e5e7eb"},
+ kolli:     {motif:"hairpin", when:"Dropped",  sky:["#22333c","#7d9c92"], hue:"#a7f3d0"},
+ adiyogi:   {motif:"face",    when:"7 PM",     sky:["#120b20","#57305f"], hue:"#f59e0b"},
+ ooty:      {motif:"tea",     when:"7 AM",     sky:["#2b4450","#c3d9dc"], hue:"#d1fae5"},
+ mysore:    {motif:"palace",  when:"Lit up",   sky:["#0d162f","#432f61"], hue:"#fbbf24"},
+ kolhapur:  {motif:"shikhara",when:"Aarti",    sky:["#241a2e","#d98a5f"], hue:"#fcd34d"}
+};
+function rnd(seed){var r=seed;return function(){r=(r*9301+49297)%233280;return r/233280;};}
+function stars(n,seed,maxY,maxX){
+  var g=rnd(seed),s="",i,x,y;
+  for(i=0;i<n;i++){x=g()*(maxX||320);y=g()*(maxY||78);s+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(0.5+g()*0.9).toFixed(1)+'" fill="#fff" opacity="'+(0.25+g()*0.6).toFixed(2)+'"/>';}
+  return s;
+}
+function sun(x,y,r,c){
+  return '<circle cx="'+x+'" cy="'+y+'" r="'+(r*2.6)+'" fill="'+c+'" opacity=".16"/>'
+        +'<circle cx="'+x+'" cy="'+y+'" r="'+(r*1.7)+'" fill="'+c+'" opacity=".22"/>'
+        +'<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+c+'"/>';
+}
+function lamps(y,n,c){
+  var s="",i,x;
+  for(i=0;i<n;i++){x=14+i*(292/(n-1));s+='<circle cx="'+x.toFixed(0)+'" cy="'+y+'" r="1.7" fill="'+c+'" opacity=".9"/>';}
+  return s;
+}
+function tier(cx,baseY,w,h,c,edge){
+  return '<path d="M'+(cx-w/2)+' '+baseY+' L'+(cx-w/2+w*0.14)+' '+(baseY-h)+' L'+(cx+w/2-w*0.14)+' '+(baseY-h)+' L'+(cx+w/2)+' '+baseY+' Z" fill="'+c+'" stroke="'+edge+'" stroke-width=".8"/>';
+}
+function gopuramTower(cx,baseY,w,h,tiers,c,edge,hue){
+  var s="",i,tw=w,th=h/tiers,y=baseY;
+  for(i=0;i<tiers;i++){
+    s+=tier(cx,y,tw,th*0.96,c,edge);
+    s+='<rect x="'+(cx-tw*0.30).toFixed(1)+'" y="'+(y-th*0.66).toFixed(1)+'" width="'+(tw*0.60).toFixed(1)+'" height="'+(th*0.34).toFixed(1)+'" fill="'+edge+'" opacity=".45"/>';
+    y-=th*0.96;tw*=0.80;
+  }
+  s+='<rect x="'+(cx-tw*0.62).toFixed(1)+'" y="'+(y-5).toFixed(1)+'" width="'+(tw*1.24).toFixed(1)+'" height="5" rx="2" fill="'+c+'" stroke="'+edge+'" stroke-width=".8"/>';
+  s+='<circle cx="'+(cx-tw*0.4).toFixed(1)+'" cy="'+(y-8).toFixed(1)+'" r="2" fill="'+hue+'"/>';
+  s+='<circle cx="'+cx+'" cy="'+(y-9).toFixed(1)+'" r="2.4" fill="'+hue+'"/>';
+  s+='<circle cx="'+(cx+tw*0.4).toFixed(1)+'" cy="'+(y-8).toFixed(1)+'" r="2" fill="'+hue+'"/>';
+  return s;
+}
+var SCENE={
+ city:function(a){
+  return stars(40,7,84)+sun(262,30,8,"#e8e4d0")
+   +'<path d="M0 132 V98 H16 V86 H32 V106 H50 V74 H68 V102 H90 V90 H108 V114 H130 V80 H148 V106 H170 V92 H194 V118 H218 V86 H236 V108 H260 V96 H282 V116 H304 V100 H320 V132 Z" fill="#0b111b"/>'
+   +'<g fill="'+a.hue+'" opacity=".75"><rect x="54" y="80" width="3" height="4"/><rect x="61" y="88" width="3" height="4"/><rect x="94" y="96" width="3" height="4"/><rect x="136" y="86" width="3" height="4"/><rect x="152" y="112" width="3" height="4"/><rect x="224" y="92" width="3" height="4"/><rect x="240" y="114" width="3" height="4"/><rect x="288" y="122" width="3" height="4"/></g>'
+   +'<rect y="132" width="320" height="48" fill="#12181f"/>'
+   +'<path d="M0 158 H320" stroke="#33404f" stroke-width="2.4" stroke-dasharray="18 14"/>'
+   +'<path d="M96 148 h44 l12 -12 h34 l10 12 h14 v14 h-114 z" fill="#1c2530" stroke="#2f3d4c" stroke-width="1"/>'
+   +'<circle cx="205" cy="156" r="3" fill="'+a.hue+'"/><path d="M208 156 L246 148 L246 164 Z" fill="'+a.hue+'" opacity=".28"/>';
+ },
+ forest:function(a){
+  return sun(232,54,13,"#ffd9a0")
+   +'<path d="M0 96 L46 68 L92 96 L138 62 L192 98 L246 70 L292 96 L320 82 V180 H0 Z" fill="#1d3326" opacity=".85"/>'
+   +'<path d="M0 112 L54 88 L104 114 L156 86 L214 116 L268 92 L320 112 V180 H0 Z" fill="#16261c"/>'
+   +'<path d="M0 138 C60 128 110 148 170 140 C230 132 276 148 320 138 V180 H0 Z" fill="#0f1a14"/>'
+   +'<path d="M0 150 C70 142 130 160 200 152 C258 146 290 156 320 150 V166 C250 174 170 160 96 168 C56 172 24 166 0 168 Z" fill="#2a4a63" opacity=".8"/>'
+   +gopuramTower(158,138,44,54,4,"#2b1f2a","#4a3448",a.hue)
+   +'<g fill="#0d1712"><path d="M28 140 l7 -30 l7 30 z"/><path d="M52 144 l6 -24 l6 24 z"/><path d="M262 142 l7 -28 l7 28 z"/><path d="M288 146 l6 -22 l6 22 z"/></g>'
+   +lamps(174,9,a.hue);
+ },
+ seven:function(a){
+  var s=sun(48,36,11,"#fff3c4"),i,x;
+  /* Tirumala: one ridge with seven distinct summits, temple on the seventh */
+  var peaks=[122,108,128,100,114,88,64],ridge="M-14 180 L-14 154";
+  for(i=0;i<7;i++){x=-14+i*44;ridge+=" Q"+(x+22)+" "+peaks[i]+" "+(x+44)+" 154";}
+  ridge+=" L334 180 Z";
+  s+='<path d="M-10 180 L-10 138 Q60 104 130 140 Q200 176 334 128 L334 180 Z" fill="#3d7148" opacity=".55"/>';
+  s+='<path d="'+ridge+'" fill="#1d3f2a" stroke="#4e8a60" stroke-width="1" stroke-opacity=".55"/>';
+  s+='<g fill="#122b1f" opacity=".8"><path d="M-6 180 Q80 158 168 176 Q250 192 334 172 L334 180 Z"/></g>';
+  s+=gopuramTower(250,88,38,46,5,"#2a2118","#5e4722",a.hue);
+  s+='<path d="M267 42 v-13 h14 l-4 3.5 l4 3.5 h-14" fill="'+a.hue+'"/>';
+  s+='<path d="M267 44 v-16" stroke="'+a.hue+'" stroke-width="1.2"/>';
+  s+='<g stroke="#dfe7ea" stroke-width="1.1" fill="none" opacity=".6"><path d="M96 46 q6 -5 12 0"/><path d="M118 38 q6 -5 12 0"/><path d="M140 50 q6 -5 12 0"/></g>';
+  s+='<g stroke="#c9c2ac" stroke-width="2" fill="none" opacity=".5"><path d="M0 176 C60 170 90 162 140 158 C200 153 240 140 268 122"/></g>';
+  return s;
+ },
+ gopuram:function(a){
+  return stars(46,3,92)
+   +'<path d="M268 26 a13 13 0 1 0 6 22 a15 15 0 1 1 -6 -22" fill="#f4ecd8" opacity=".9"/>'
+   +'<rect y="150" width="320" height="30" fill="#0c0a18"/>'
+   +gopuramTower(66,150,40,58,4,"#1a1226","#3b2748",a.hue)
+   +gopuramTower(254,150,40,58,4,"#1a1226","#3b2748",a.hue)
+   +gopuramTower(160,152,74,116,7,"#241733","#553a63",a.hue)
+   +'<g opacity=".55" stroke="'+a.hue+'" stroke-width=".9" fill="none"><path d="M104 150 Q160 120 216 150"/><path d="M104 150 Q160 136 216 150"/></g>'
+   +'<g fill="'+a.hue+'">'+lamps(158,13,a.hue)+'</g>'
+   +'<g fill="#f8d38a" opacity=".85"><circle cx="130" cy="166" r="2.6"/><circle cx="160" cy="168" r="3.2"/><circle cx="190" cy="166" r="2.6"/></g>';
+ },
+ corridor:function(a){
+  var s='',i,x,h;
+  s+=sun(44,58,12,"#ffd9a0");
+  s+='<path d="M120 96 h180 v6 h-180 z" fill="#1b2534" opacity=".9"/>';
+  s+='<g stroke="#1b2534" stroke-width="3">';
+  for(i=0;i<7;i++){x=124+i*26;s+='<path d="M'+x+' 96 V78"/>';}
+  s+='</g>';
+  s+='<rect y="104" width="320" height="76" fill="#181420"/>';
+  s+='<path d="M0 104 H320 V112 H0 Z" fill="#2a2233"/>';
+  for(i=0;i<9;i++){
+    x=8+i*38;h=52-Math.abs(4-i)*3;
+    s+='<rect x="'+x+'" y="'+(168-h)+'" width="15" height="'+h+'" rx="2" fill="#2f2637" stroke="#463a52" stroke-width=".9"/>';
+    s+='<rect x="'+(x-3)+'" y="'+(168-h-6)+'" width="21" height="6" rx="1.5" fill="#3b3047"/>';
+  }
+  s+='<rect y="168" width="320" height="12" fill="#221b2b"/>';
+  s+='<g fill="'+a.hue+'" opacity=".85"><circle cx="60" cy="174" r="2.4"/><circle cx="160" cy="174" r="2.4"/><circle cx="262" cy="174" r="2.4"/></g>';
+  return s;
+ },
+ ruins:function(a){
+  return '<g fill="#fff" opacity=".5"><ellipse cx="70" cy="34" rx="26" ry="7"/><ellipse cx="150" cy="24" rx="34" ry="8"/><ellipse cx="252" cy="40" rx="28" ry="7"/></g>'
+   +'<rect y="86" width="320" height="26" fill="#0f5f96"/>'
+   +'<rect y="112" width="320" height="18" fill="#1f8fb8"/>'
+   +'<path d="M0 130 C60 124 120 136 190 130 C250 125 290 134 320 129 V180 H0 Z" fill="#d8c8a2"/>'
+   +'<path d="M0 138 C70 132 130 144 200 138 C256 133 292 141 320 137 V148 C240 154 150 144 74 150 C44 152 20 150 0 152 Z" fill="#c9b489" opacity=".7"/>'
+   +'<g fill="#e7ddc6" stroke="#b9ab8c" stroke-width="1">'
+   +'<path d="M96 132 V86 q20 -18 40 0 V132 h-12 V96 q-8 -10 -16 0 V132 Z"/>'
+   +'<path d="M150 132 V94 h14 v14 h10 V132 Z"/>'
+   +'<path d="M60 132 V108 h12 v10 h8 V132 Z"/>'
+   +'<path d="M196 132 V100 h11 v32 Z"/>'
+   +'</g>'
+   +'<g stroke="#1b2b3a" stroke-width="1.4" fill="none" opacity=".7"><path d="M232 40 q6 -6 12 0"/><path d="M248 52 q6 -6 12 0"/><path d="M262 34 q6 -6 12 0"/></g>';
+ },
+ seas:function(a){
+  return sun(72,60,17,"#ffe3ab")
+   +'<rect y="104" width="320" height="20" fill="#5d4a6b" opacity=".85"/>'
+   +'<rect y="124" width="320" height="20" fill="#3f5878" opacity=".9"/>'
+   +'<rect y="144" width="320" height="36" fill="#26364f"/>'
+   +'<g stroke="#ffcf95" stroke-width="1" opacity=".55" fill="none"><path d="M40 112 q10 -4 20 0 t20 0"/><path d="M120 132 q10 -4 20 0 t20 0"/><path d="M40 158 q12 -5 24 0 t24 0"/></g>'
+   +'<path d="M186 144 q22 -10 44 0 z" fill="#1b1c26"/>'
+   +'<g fill="#1b1c26"><rect x="196" y="118" width="26" height="26" rx="2"/><path d="M192 118 h34 l-17 -13 z"/><rect x="205" y="100" width="8" height="8" rx="1"/><path d="M203 100 h12 l-6 -8 z"/></g>'
+   +'<path d="M266 146 q16 -8 32 0 z" fill="#191a24"/>'
+   +'<g fill="#191a24"><rect x="278" y="110" width="8" height="36" rx="3"/><path d="M282 110 q-7 -6 0 -12 q7 6 0 12"/><rect x="272" y="122" width="20" height="4" rx="2"/></g>'
+   +'<g fill="#2a2233" opacity=".8"><path d="M0 150 q18 -8 36 0 z"/><path d="M300 152 q12 -7 24 0 z"/></g>';
+ },
+ tank:function(a){
+  return sun(258,44,14,"#ffc79a")
+   +'<rect y="118" width="320" height="62" fill="#0f1620"/>'
+   +gopuramTower(112,118,66,74,6,"#241a20","#4a3038",a.hue)
+   +'<rect x="164" y="96" width="46" height="22" fill="#241a20" stroke="#4a3038" stroke-width=".8"/>'
+   +'<path d="M162 96 h50 l-25 -12 z" fill="#2c2028"/>'
+   +'<rect y="126" width="320" height="42" fill="#16283a"/>'
+   +'<g opacity=".32">'+gopuramTower(112,128,60,-46,5,"#1d3348","#2b4964",a.hue)+'</g>'
+   +'<g stroke="#3a5a78" stroke-width="1" opacity=".7"><path d="M0 138 H320"/><path d="M0 150 H320"/></g>'
+   +'<g fill="#22323f"><rect y="168" width="320" height="4"/><rect y="174" width="320" height="6"/></g>'
+   +'<g fill="'+a.hue+'"><circle cx="86" cy="130" r="2.2"/><circle cx="138" cy="130" r="2.2"/><circle cx="188" cy="130" r="2"/><circle cx="86" cy="140" r="1.4" opacity=".5"/><circle cx="138" cy="140" r="1.4" opacity=".5"/></g>';
+ },
+ bird:function(a){
+  return '<g fill="#fff" opacity=".45"><ellipse cx="96" cy="30" rx="30" ry="8"/><ellipse cx="238" cy="22" rx="26" ry="7"/></g>'
+   +'<path d="M0 116 L54 84 L108 118 L168 88 L230 120 L286 92 L320 112 V180 H0 Z" fill="#22352a" opacity=".9"/>'
+   +'<path d="M0 140 C58 130 112 150 176 142 C238 134 280 150 320 140 V180 H0 Z" fill="#182519"/>'
+   +'<path d="M74 152 q34 -22 78 -14 q40 8 76 14 z" fill="#3f3e38"/>'
+   +'<g stroke="#cfd6d2" stroke-width="1.2" fill="none" opacity=".75"><path d="M0 70 L320 44"/></g>'
+   +'<rect x="52" y="66" width="17" height="12" rx="2.5" fill="#b9c2bd" stroke="#7d857f" stroke-width="1"/>'
+   +'<path d="M60 66 V58" stroke="#7d857f" stroke-width="1.4"/>'
+   /* the sculpture: head and hooked beak to the left, one wing raised */
+   +'<path d="M238 142 q32 -8 50 2 q-26 12 -52 8 z" fill="#6b6455" stroke="#4b4438" stroke-width="1"/>'
+   +'<path d="M118 142 q4 -36 46 -44 q48 -10 76 14 q16 16 4 32 q-44 12 -126 -2 z" fill="#7a7362" stroke="#4b4438" stroke-width="1.1"/>'
+   +'<path d="M152 110 q34 -32 78 -24 q26 6 24 24 q-30 -12 -52 2 q-24 14 -50 -2 z" fill="#8d8574" stroke="#4b4438" stroke-width="1.1"/>'
+   +'<g stroke="#5b5446" stroke-width="1" fill="none"><path d="M166 104 q30 -14 58 -4"/><path d="M172 114 q28 -12 52 -4"/><path d="M180 122 q24 -9 44 -3"/></g>'
+   +'<path d="M124 136 q-18 -14 -20 -36 q-2 -18 14 -21 q17 -2 19 17 q2 21 -5 38 z" fill="#7a7362" stroke="#4b4438" stroke-width="1.1"/>'
+   +'<circle cx="116" cy="74" r="12" fill="#847c6a" stroke="#4b4438" stroke-width="1.1"/>'
+   +'<path d="M105 70 q-19 2 -23 10 q11 6 21 2 q6 -4 2 -12 z" fill="#d1a52c"/>'
+   +'<path d="M83 80 q-4 7 3 8 q3 -4 -3 -8 z" fill="#a8801c"/>'
+   +'<circle cx="113" cy="70" r="2.1" fill="#0d120d"/>';
+ },
+ hairpin:function(a){
+  var s='<path d="M0 92 L64 52 L128 96 L196 58 L262 100 L320 74 V180 H0 Z" fill="#2c4034" opacity=".9"/>'
+   +'<path d="M0 118 C60 108 118 130 182 122 C244 114 284 130 320 120 V180 H0 Z" fill="#1e2d24"/>';
+  s+='<g stroke="#cdc6b0" stroke-width="3.4" fill="none" stroke-linejoin="round" opacity=".92">'
+   +'<path d="M-8 178 L96 168 L18 154 L134 142 L44 130 L156 120 L74 110 L182 102"/></g>';
+  s+='<g fill="#cdc6b0" opacity=".5"><circle cx="96" cy="168" r="2"/><circle cx="134" cy="142" r="2"/><circle cx="156" cy="120" r="2"/></g>';
+  s+='<path d="M262 56 q8 36 -2 66" stroke="#a8ded6" stroke-width="4.5" fill="none" opacity=".85"/>';
+  s+='<ellipse cx="259" cy="124" rx="13" ry="4.5" fill="#a8ded6" opacity=".5"/>';
+  s+='<g fill="#16211a"><path d="M28 132 l6 -20 l6 20 z"/><path d="M52 128 l5 -18 l5 18 z"/><path d="M296 136 l6 -20 l6 20 z"/></g>';
+  return s;
+ },
+ face:function(a){
+  return stars(34,11,90)
+   +'<path d="M0 128 L60 96 L124 130 L190 98 L252 132 L320 104 V180 H0 Z" fill="#181022" opacity=".9"/>'
+   +'<g opacity=".18" fill="'+a.hue+'"><path d="M160 46 L96 180 H224 Z"/></g>'
+   +'<path d="M160 132 q-40 6 -54 30 q-6 10 -8 18 h124 q-2 -8 -8 -18 q-14 -24 -54 -30 z" fill="#0d0916" stroke="#33234a" stroke-width="1"/>'
+   +'<path d="M160 40 q26 0 26 34 q0 30 -26 54 q-26 -24 -26 -54 q0 -34 26 -34 z" fill="#140d20" stroke="#3d2a52" stroke-width="1.2"/>'
+   +'<g stroke="#4a3358" stroke-width="1.5" fill="none" opacity=".95">'
+   +'<path d="M136 56 q24 -20 48 0"/><path d="M133 66 q27 -20 54 0"/><path d="M138 46 q22 -15 44 0"/>'
+   +'<path d="M134 60 q-8 12 -6 26"/><path d="M186 60 q8 12 6 26"/>'
+   +'</g>'
+   +'<path d="M150 40 q10 -11 20 -1 q-10 -6 -20 1" fill="'+a.hue+'"/>'
+   +'<circle cx="160" cy="70" r="1.7" fill="'+a.hue+'"/>'
+   +'<g stroke="#2f2140" stroke-width="1.6" fill="none"><path d="M142 84 q9 -5 17 1"/><path d="M161 85 q9 -6 17 -1"/></g>'
+   +'<path d="M160 88 v11" stroke="#2f2140" stroke-width="1.5"/>'
+   +'<path d="M151 106 q9 -4 18 0 q-9 5 -18 0" fill="#2b1d3a"/>'
+   +lamps(172,13,a.hue);
+ },
+ tea:function(a){
+  var s='<g fill="#fff" opacity=".5"><ellipse cx="80" cy="42" rx="44" ry="9"/><ellipse cx="220" cy="30" rx="50" ry="8"/><ellipse cx="150" cy="60" rx="60" ry="7"/></g>';
+  s+='<path d="M0 88 L58 58 L120 92 L188 60 L250 94 L320 66 V180 H0 Z" fill="#31463a" opacity=".8"/>';
+  var i,y;
+  for(i=0;i<7;i++){
+    y=104+i*11;
+    s+='<path d="M0 '+y+' C70 '+(y-9)+' 160 '+(y+8)+' 320 '+(y-4)+'" stroke="'+(i%2?"#20362a":"#2a4433")+'" stroke-width="8" fill="none"/>';
+  }
+  s+='<g fill="#16261c"><path d="M24 118 l8 -34 l8 34 z"/><path d="M44 112 l7 -28 l7 28 z"/><path d="M276 120 l8 -32 l8 32 z"/><path d="M296 114 l7 -26 l7 26 z"/></g>';
+  s+='<g fill="#8d3b3b" stroke="#5e2626" stroke-width=".8"><rect x="196" y="150" width="26" height="12" rx="2"/><rect x="224" y="150" width="22" height="12" rx="2"/><rect x="248" y="148" width="24" height="14" rx="3"/></g>';
+  s+='<path d="M180 168 H300" stroke="#4d5a4f" stroke-width="2"/>';
+  s+='<circle cx="272" cy="140" r="6" fill="#cfe3d8" opacity=".5"/>';
+  return s;
+ },
+ palace:function(a){
+  var s=stars(30,5,86);
+  s+='<rect y="130" width="320" height="50" fill="#101423"/>';
+  s+='<rect x="34" y="104" width="252" height="30" fill="#1d2136" stroke="#3a3f5c" stroke-width="1"/>';
+  s+='<g fill="#1d2136" stroke="#3a3f5c" stroke-width="1">';
+  s+='<path d="M148 104 h24 v-16 h-24 z"/>';
+  s+='<path d="M160 62 q22 8 20 26 h-40 q-2 -18 20 -26 z"/>';
+  s+='<path d="M76 104 h20 v-14 h-20 z"/><path d="M86 74 q16 6 14 16 h-28 q-2 -10 14 -16 z"/>';
+  s+='<path d="M224 104 h20 v-14 h-20 z"/><path d="M234 74 q16 6 14 16 h-28 q-2 -10 14 -16 z"/>';
+  s+='</g>';
+  s+='<path d="M160 56 v-8" stroke="'+a.hue+'" stroke-width="1.6"/>';
+  var i,x;
+  s+='<g fill="#0e1120">';
+  for(i=0;i<9;i++){x=44+i*28;s+='<path d="M'+x+' 134 v-18 q7 -9 14 0 v18 z"/>';}
+  s+='</g>';
+  s+='<g fill="'+a.hue+'" opacity=".95">';
+  for(i=0;i<26;i++){x=32+i*10;s+='<circle cx="'+x+'" cy="102" r="1.5"/>';}
+  s+='</g>';
+  s+='<g fill="'+a.hue+'" opacity=".7"><circle cx="86" cy="88" r="1.4"/><circle cx="160" cy="84" r="1.6"/><circle cx="234" cy="88" r="1.4"/></g>';
+  s+='<rect y="150" width="320" height="4" fill="#1a1f33"/>';
+  s+='<g fill="'+a.hue+'" opacity=".25"><rect x="34" y="134" width="252" height="16"/></g>';
+  return s;
+ },
+ shikhara:function(a){
+  return sun(52,48,13,"#ffd2a0")
+   +'<path d="M0 122 L70 100 L140 126 L210 102 L278 128 L320 112 V180 H0 Z" fill="#1c1622" opacity=".9"/>'
+   +'<rect y="140" width="320" height="40" fill="#141019"/>'
+   +'<g fill="#2a2030" stroke="#4c3a52" stroke-width="1">'
+   +'<rect x="132" y="112" width="56" height="28"/>'
+   +'<path d="M160 54 q26 30 22 58 h-44 q-4 -28 22 -58 z"/>'
+   +'<path d="M118 140 v-22 q8 -12 18 0 v22 z"/>'
+   +'<path d="M184 140 v-22 q8 -12 18 0 v22 z"/>'
+   +'</g>'
+   +'<circle cx="160" cy="50" r="3" fill="'+a.hue+'"/>'
+   +'<g fill="#241b2a" stroke="#463650" stroke-width="1"><rect x="242" y="96" width="14" height="44" rx="2"/></g>'
+   +'<g fill="'+a.hue+'"><circle cx="245" cy="104" r="1.6"/><circle cx="253" cy="104" r="1.6"/><circle cx="245" cy="116" r="1.6"/><circle cx="253" cy="116" r="1.6"/><circle cx="245" cy="128" r="1.6"/><circle cx="253" cy="128" r="1.6"/></g>'
+   +'<path d="M0 152 C70 146 130 158 200 152 C256 147 292 155 320 150 V162 H0 Z" fill="#20344a" opacity=".75"/>'
+   +lamps(172,11,a.hue);
+ }
+};
+var ART_UID=0;
+function artSVG(key){
+  var a=ART[key]||ART.pune,u=(++ART_UID);
+  var defs='<defs><linearGradient id="sk'+u+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+a.sky[0]+'"/><stop offset="1" stop-color="'+a.sky[1]+'"/></linearGradient>'
+    +'<linearGradient id="vg'+u+'" x1="0" y1="0" x2="0" y2="1"><stop offset=".45" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".6"/></linearGradient></defs>';
+  return '<svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice" aria-hidden="true">'+defs
+    +'<rect width="320" height="180" fill="url(#sk'+u+')"/>'
+    +(SCENE[a.motif]?SCENE[a.motif](a):"")
+    +'<rect width="320" height="180" fill="url(#vg'+u+')"/></svg>';
+}
+function artKeyForStop(st){return st.place||"pune";}
+
+/* ---------- Netflix-style poster rows ---------- */
+function tileHTML(key,num,title,line,badges,onclick){
+  var a=ART[key]||ART.pune;
+  return '<div class="tile" role="button" tabindex="0" data-go="'+onclick+'">'
+    +'<div class="artwrap">'+artSVG(key)
+    +(num?'<span class="num">'+esc(num)+'</span>':'')
+    +'<span class="when">'+esc(a.when)+'</span></div>'
+    +'<div class="meta"><h4>'+esc(title)+'</h4><p class="tline">'+esc(line)+'</p>'
+    +'<div class="badges">'+badges+'</div></div></div>';
+}
+function placeById(id){var i;for(i=0;i<PLACES.length;i++){if(PLACES[i].id===id)return PLACES[i];}return null;}
+function stopBadges(st){
+  var b='<span class="mini">'+(st.nights>0?st.nights+"N stay":"Day visit")+'</span>';
+  var pl=st.place?placeById(st.place):null;
+  if(pl){
+    var s=liveStatus(pl);
+    b+='<span class="mini '+(s.on?"on":"off")+'">'+(s.on?"Open now":"Shut now")+'</span>';
+    b+='<span class="mini">'+esc(pl.timeNeeded)+'</span>';
+  }
+  return b;
+}
+function drawRows(){
+  var nightStops=STOPS.filter(function(s){return s.nights>0;});
+  var dayStops=STOPS.filter(function(s){return s.nights===0&&s.seq!==14;});
+  el("rowNights").innerHTML=nightStops.map(function(s){
+    return tileHTML(artKeyForStop(s),"Stop "+s.seq,s.name,s.when,stopBadges(s),"stop:"+s.seq);
+  }).join("");
+  el("rowDay").innerHTML=dayStops.map(function(s){
+    return tileHTML(artKeyForStop(s),"Stop "+s.seq,s.label||s.name,s.when,stopBadges(s),"stop:"+s.seq);
+  }).join("");
+  var t=istNow();
+  var open=PLACES.filter(function(p){return p.id!=="kolli"&&isOpen(p,t.minutes);});
+  el("rowOpen").innerHTML=open.length?open.map(function(p){
+    var s=liveStatus(p);
+    return tileHTML(p.id,"",p.name,s.hint,'<span class="mini on">Open now</span><span class="mini">'+esc(p.timeNeeded)+'</span>',"place:"+p.id);
+  }).join(""):'<p class="sub" style="padding:8px 2px">Everything on the route is shut at this hour in India. Doors start opening around 4:00–5:00 AM IST.</p>';
+  bindTiles();
+}
+function bindTiles(){
+  Array.prototype.forEach.call(document.querySelectorAll(".tile"),function(b){
+    function open(){
+      var go=b.getAttribute("data-go").split(":");
+      if(go[0]==="stop"){state.stop=parseInt(go[1],10);state.mapAnim=true;drawMap();drawStop();showTab("map");}
+      else{state.place=go[1];drawPlaces();showTab("places");}
+    }
+    b.addEventListener("click",open);
+    b.addEventListener("keydown",function(e){
+      if(e.key==="Enter"||e.key===" "){e.preventDefault();open();}
+    });
+  });
+}
+/* Wide panorama for the hero: the whole loop in one frame, repainted as
+   the Indian sky changes through the day. */
+function heroSVG(){
+  var sky=skyName(istNow().h),u=(++ART_UID),i,x;
+  var pal={dawn:["#2d1a40","#f0a05e"],day:["#0f3557","#a8c9dd"],dusk:["#221333","#e0894f"],night:["#05090f","#221c3a"]}[sky];
+  var hue={dawn:"#ffd28a",day:"#fde68a",dusk:"#ffb56b",night:"#f59e0b"}[sky];
+  var glow={dawn:"#ffdcae",day:"#fff6d2",dusk:"#ffc38f",night:"#e9e5cf"}[sky];
+  var s='<defs><linearGradient id="hs'+u+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+pal[0]+'"/><stop offset="1" stop-color="'+pal[1]+'"/></linearGradient></defs>';
+  s+='<rect width="960" height="540" fill="url(#hs'+u+')"/>';
+  if(sky==="night")s+=stars(110,17,340,960);
+  s+=sun(748,150,sky==="night"?20:26,glow);
+  s+='<g transform="translate(0,120)">';
+  /* far ridge line */
+  s+='<path d="M0 300 L96 226 L188 292 L282 216 L392 296 L486 244 L604 300 L706 232 L830 298 L960 250 V420 H0 Z" fill="#101a20" opacity=".55"/>';
+  /* mid ridge */
+  s+='<path d="M0 330 C118 300 214 350 336 332 C458 314 556 352 692 334 C812 318 898 346 960 332 V420 H0 Z" fill="#0d1519" opacity=".85"/>';
+  /* temple complex, centre */
+  s+=gopuramTower(300,332,58,86,5,"#141019","#33243c",hue);
+  s+=gopuramTower(478,336,104,168,7,"#171220","#3d2b48",hue);
+  s+=gopuramTower(646,332,58,86,5,"#141019","#33243c",hue);
+  /* palms */
+  s+='<g fill="#0b1113"><rect x="88" y="278" width="5" height="58" rx="2"/><rect x="884" y="286" width="5" height="50" rx="2"/></g>';
+  s+='<g stroke="#0b1113" stroke-width="6" fill="none" stroke-linecap="round">'
+   +'<path d="M90 278 q-20 -14 -38 -6"/><path d="M90 278 q20 -16 38 -8"/>'
+   +'<path d="M90 278 q-26 -4 -36 14"/><path d="M90 278 q26 -6 36 12"/><path d="M90 278 q-4 -16 2 -24"/>'
+   +'<path d="M886 286 q-18 -12 -34 -6"/><path d="M886 286 q18 -14 34 -6"/>'
+   +'<path d="M886 286 q-24 -2 -32 14"/><path d="M886 286 q22 -4 30 12"/></g>';
+  /* water strip and lamp string */
+  s+='<path d="M0 352 C160 344 320 360 500 352 C660 345 820 358 960 350 V378 H0 Z" fill="#132738" opacity=".9"/>';
+  s+='<g fill="'+hue+'" opacity=".9">';
+  for(i=0;i<24;i++){x=24+i*40;s+='<circle cx="'+x+'" cy="346" r="2.4"/>';}
+  s+='</g>';
+  s+='<g fill="'+hue+'" opacity=".28">';
+  for(i=0;i<24;i++){x=24+i*40;s+='<ellipse cx="'+x+'" cy="362" rx="2.4" ry="6"/>';}
+  s+='</g>';
+  /* foreground road with the Crysta */
+  s+='<rect y="378" width="960" height="42" fill="#0a0d11"/>';
+  s+='<path d="M0 400 H960" stroke="#2c3844" stroke-width="3" stroke-dasharray="34 26"/>';
+  s+='<path d="M676 392 h58 l16 -16 h44 l14 16 h18 v18 h-150 z" fill="#151d26" stroke="#2b3744" stroke-width="1.2"/>';
+  s+='<circle cx="826" cy="402" r="3.4" fill="'+hue+'"/>';
+  s+='<path d="M830 402 L906 388 L906 416 Z" fill="'+hue+'" opacity=".22"/>';
+  s+='</g>';
+  return '<svg viewBox="0 0 960 540" preserveAspectRatio="xMidYMax slice" aria-hidden="true">'+s+'</svg>';
+}
+function drawHero(){el("heroart").innerHTML=heroSVG();}
 
 function labelPos(s){
   var p=px(s.lon,s.lat);
@@ -703,7 +1196,8 @@ function drawStop(){
   if(st.place){for(i=0;i<PLACES.length;i++){if(PLACES[i].id===st.place)pl=PLACES[i];}}
   var legIn=null,legOut=null;
   for(i=0;i<LEGS.length;i++){if(LEGS[i].to===st.name&&!legIn)legIn=LEGS[i];if(LEGS[i].from===st.name&&!legOut)legOut=LEGS[i];}
-  var h='<h3>'+st.seq+'. '+esc(st.label||st.name)+'</h3>';
+  var h='<div class="detailart">'+artSVG(artKeyForStop(st))+'</div>';
+  h+='<h3>'+st.seq+'. '+esc(st.label||st.name)+'</h3>';
   h+='<div><span class="tag solid">'+esc(st.when)+'</span><span class="tag">'+(st.nights>0?st.nights+" night"+(st.nights>1?"s":""):(st.seq===1?"Start and finish":"Day visit"))+'</span>';
   if(pl){
     var stt=liveStatus(pl);
@@ -770,7 +1264,8 @@ function drawPlaces(){
   });
   var p=PLACES[0],i;
   for(i=0;i<PLACES.length;i++){if(PLACES[i].id===state.place)p=PLACES[i];}
-  var h='<h3>'+esc(p.name)+'</h3><p>'+esc(p.why)+'</p>';
+  var h='<div class="detailart">'+artSVG(p.id)+'</div>';
+  h+='<h3>'+esc(p.name)+'</h3><p>'+esc(p.why)+'</p>';
   var stt=liveStatus(p);
   h+='<div><span class="tag solid">'+esc(p.timeNeeded)+'</span><span class="tag '+(stt.on?"open":"closed")+'">'+esc(stt.label)+' \u00b7 '+esc(stt.hint)+'</span></div>';
   h+=card("Hours",esc(p.hours));
@@ -790,11 +1285,13 @@ function drawTables(){
 }
 function showTab(t){
   state.tab=t;
-  ["map","plan","places","logi"].forEach(function(x){el("tab-"+x).hidden=(x!==t);});
+  ["dest","map","plan","places","logi"].forEach(function(x){el("tab-"+x).hidden=(x!==t);});
   Array.prototype.forEach.call(el("tabs").children,function(b){
     b.setAttribute("aria-selected",b.getAttribute("data-tab")===t?"true":"false");
   });
-  window.scrollTo(0,0);
+  var top=document.querySelector(".livebar");
+  if(t==="dest"){window.scrollTo(0,0);}
+  else if(top){window.scrollTo(0,Math.max(0,top.getBoundingClientRect().top+window.pageYOffset-70));}
 }
 Array.prototype.forEach.call(el("tabs").children,function(b){
   b.addEventListener("click",function(){showTab(b.getAttribute("data-tab"));});
@@ -813,7 +1310,15 @@ el("kollitoggle").addEventListener("click",function(){
   el("kollitoggle").textContent=state.kolli?"Hide Kolli detour":"Show Kolli detour";
   drawMap();
 });
-drawMap();drawStop();drawLegs();drawDays();drawPlaces();drawTables();showTab("map");
+el("startbtn").addEventListener("click",function(){state.plan="12";state.day=1;drawDays();showTab("plan");});
+el("mapbtn").addEventListener("click",function(){state.mapAnim=true;drawMap();showTab("map");});
+el("bookbtn").addEventListener("click",function(){
+  showTab("logi");
+  var h=el("booktable");
+  if(h)window.scrollTo(0,h.getBoundingClientRect().top+window.pageYOffset-70);
+});
+
+drawHero();drawMap();drawStop();drawLegs();drawDays();drawPlaces();drawTables();drawRows();showTab("dest");
 tickLive();
 setInterval(tickLive,1000);
 </script>
