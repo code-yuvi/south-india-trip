@@ -8,68 +8,112 @@
 <style>
   :root{
     color-scheme: light;
-    --bg:#ffffff;
-    --panel:#f7f6f3;
-    --panel2:#efede8;
-    --ink:#17191c;
-    --ink2:#4a5158;
-    --ink3:#7b838c;
-    --line:#e2ded6;
-    --accent:#a8500f;
-    --accent-soft:#f6ead9;
-    --sea:#eef3f6;
-    --land:#e7e3d9;
-    --lanka:#eeebe3;
+    --bg:#f4efe6;
+    --panel:#fffaf2;
+    --panel2:#efe6d6;
+    --ink:#1c1610;
+    --ink2:#5a5146;
+    --ink3:#8a7d6e;
+    --line:#e4d8c4;
+    --accent:#b45309;
+    --accent-soft:#fde8c8;
+    --sea:#d7e6ee;
+    --land:#e8dcc4;
+    --lanka:#efe6d4;
     --warn:#8a5a00;
     --warn-bg:#fdf3dc;
+    --open:#166534;
+    --closed:#9f1239;
+    --sky:#c9dce8;
   }
+  body[data-sky="dawn"]{--sky:#f3c9a3;--sea:#f0d6c4;--bg:#f7eee4}
+  body[data-sky="day"]{--sky:#b9d4e8;--sea:#cfe0ea;--bg:#f4efe6}
+  body[data-sky="dusk"]{--sky:#e8b08a;--sea:#e3c7b4;--bg:#f6ebe0}
+  body[data-sky="night"]{--sky:#1e2a3a;--sea:#243244;--bg:#121820;--panel:#1b2430;--panel2:#243040;--ink:#f3eee6;--ink2:#c5b9a8;--ink3:#8e8578;--line:#314155;--accent:#f59e0b;--accent-soft:#3a2e18;color-scheme:dark}
+  body[data-sky="night"] .mapwrap{background:#1a2432}
   *{box-sizing:border-box;-webkit-text-size-adjust:100%}
   html,body{margin:0;padding:0}
   body{
     background:var(--bg);color:var(--ink);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-family:Georgia,"Times New Roman",serif;
     font-size:16px;line-height:1.55;
+    transition:background .8s ease,color .8s ease;
   }
-  .wrap{max-width:960px;margin:0 auto;padding:18px 16px 64px}
+  h1,h2,h3,.tabs,.chip,.tag,.stat span,.card .hd,nav,button,th{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:18px 16px 64px}
   header.top{padding-bottom:14px;border-bottom:1px solid var(--line)}
-  h1{font-size:23px;line-height:1.25;margin:0 0 8px}
+  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 8px;font-weight:700}
+  h1{font-size:26px;line-height:1.2;margin:0 0 8px;font-family:Georgia,serif}
   h2{font-size:19px;margin:26px 0 8px}
   h3{font-size:16px;margin:18px 0 6px}
   p{margin:0 0 10px}
   .sub{color:var(--ink2);font-size:14.5px}
+  .livebar{
+    display:grid;grid-template-columns:1fr;gap:8px;margin:14px 0 4px;
+    animation:rise .6s ease both;
+  }
+  .livecard{
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;
+  }
+  .livecard .label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);font-family:sans-serif}
+  #istclock{font-variant-numeric:tabular-nums;font-size:28px;font-weight:700;letter-spacing:.02em;display:block;margin-top:4px}
+  #istmeta,#skyline{color:var(--ink2);font-size:13.5px}
+  .openlist{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .pill-live{font-size:12px;padding:4px 9px;border-radius:999px;font-family:sans-serif}
+  .pill-live.on{background:#dcfce7;color:var(--open)}
+  .pill-live.off{background:#ffe4e6;color:var(--closed)}
+  body[data-sky="night"] .pill-live.on{background:#14532d;color:#bbf7d0}
+  body[data-sky="night"] .pill-live.off{background:#4c0519;color:#fecdd3}
   .route-line{font-size:13.5px;color:var(--ink2);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:10px}
   .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:14px 0 0}
-  .stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
-  .stat b{display:block;font-size:17px}
-  .stat span{font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:.03em}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:11px 12px;animation:rise .5s ease both}
+  .stat:nth-child(2){animation-delay:.05s}
+  .stat:nth-child(3){animation-delay:.1s}
+  .stat:nth-child(4){animation-delay:.15s}
+  .stat b{display:block;font-size:18px}
+  .stat span{font-size:11px;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em}
   .note{background:var(--warn-bg);border:1px solid #ecd9a8;border-left:4px solid var(--warn);border-radius:8px;padding:11px 13px;margin:16px 0;font-size:14.5px}
   .note b{color:var(--warn)}
   .tabs{position:sticky;top:0;z-index:20;background:var(--bg);padding:10px 0;border-bottom:1px solid var(--line);display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-  .tabs button{flex:0 0 auto;font:inherit;font-size:14px;padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink2);cursor:pointer}
+  .tabs button{flex:0 0 auto;font:inherit;font-size:14px;padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--ink2);cursor:pointer;transition:transform .15s ease,background .2s}
+  .tabs button:active{transform:scale(.97)}
   .tabs button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
   .chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
-  .chip{font:inherit;font-size:13.5px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink2);cursor:pointer}
+  .chip{font:inherit;font-size:13.5px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--ink2);cursor:pointer;transition:transform .12s ease}
+  .chip:active{transform:scale(.97)}
   .chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:600}
   .tag{display:inline-block;font-size:12.5px;padding:3px 9px;border-radius:999px;background:var(--panel2);color:var(--ink2);margin:0 5px 5px 0}
   .tag.solid{background:var(--accent);color:#fff}
+  .tag.open{background:#dcfce7;color:var(--open)}
+  .tag.closed{background:#ffe4e6;color:var(--closed)}
   section[hidden]{display:none}
-  .mapwrap{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:6px}
-  svg.map{width:100%;height:auto;display:block;border-radius:8px;touch-action:manipulation}
-  .maplegend{display:flex;flex-wrap:wrap;gap:12px;font-size:12.5px;color:var(--ink2);margin:8px 2px 0}
+  .mapwrap{background:var(--sky);border:1px solid var(--line);border-radius:16px;padding:6px;transition:background .8s ease;overflow:hidden}
+  svg.map{width:100%;height:auto;display:block;border-radius:12px;touch-action:manipulation}
+  .route-draw{stroke-dasharray:1800;stroke-dashoffset:1800;animation:draw 2.6s ease forwards}
+  .stopg{animation:pop .35s ease both}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  @keyframes pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @keyframes pulse{0%,100%{r:10}50%{r:13}}
+  .pulse-ring{fill:none;stroke:var(--accent);stroke-width:1.6;opacity:.7;animation:ring 1.8s ease-out infinite}
+  @keyframes ring{from{r:10;opacity:.55}to{r:22;opacity:0}}
+  .maplegend{display:flex;flex-wrap:wrap;gap:12px;font-size:12.5px;color:var(--ink2);margin:8px 2px 0;font-family:sans-serif}
   .maplegend i{display:inline-block;width:11px;height:11px;border-radius:50%;border:2px solid var(--accent);background:#fff;vertical-align:-1px;margin-right:5px}
   .maplegend i.small{width:7px;height:7px}
   .maplegend i.dash{width:16px;height:0;border:0;border-top:2px dashed var(--ink3);border-radius:0;vertical-align:3px}
   .tiny{font-size:12.5px;color:var(--ink3);margin-top:8px}
-  .card{border:1px solid var(--line);border-radius:10px;margin:10px 0;overflow:hidden;background:var(--bg)}
-  .card .hd{background:var(--panel);padding:7px 12px;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink3);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:8px}
-  .card .bd{padding:11px 12px;font-size:14.5px;color:var(--ink)}
+  .card{border:1px solid var(--line);border-radius:12px;margin:10px 0;overflow:hidden;background:var(--panel);animation:rise .35s ease both}
+  .card .hd{background:transparent;padding:8px 12px 0;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink3);display:flex;justify-content:space-between;gap:8px}
+  .card .bd{padding:8px 12px 12px;font-size:14.5px;color:var(--ink)}
   .cards3{display:grid;grid-template-columns:1fr;gap:10px}
   ul{margin:6px 0 12px;padding-left:20px}
   li{margin:4px 0;font-size:14.5px}
-  .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin:10px 0}
-  table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:420px}
+  .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin:10px 0;background:var(--panel)}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:420px;font-family:sans-serif}
   th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
-  th{background:var(--panel);font-size:12px;text-transform:uppercase;letter-spacing:.03em;color:var(--ink3);position:sticky;top:0}
+  th{background:var(--panel2);font-size:12px;text-transform:uppercase;letter-spacing:.03em;color:var(--ink3);position:sticky;top:0}
   tr:last-child td{border-bottom:0}
   td.num,th.num{text-align:right;white-space:nowrap}
   tr.hard td:first-child{box-shadow:inset 3px 0 0 var(--warn)}
@@ -80,11 +124,15 @@
   footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--ink3)}
   @media (min-width:820px){
     .stats{grid-template-columns:repeat(4,1fr)}
+    .livebar{grid-template-columns:220px 1fr 1.2fr}
     .cards3{grid-template-columns:repeat(3,1fr)}
     .grid2{grid-template-columns:1fr 1fr}
     .mapgrid{display:grid;grid-template-columns:minmax(0,520px) minmax(0,1fr);gap:22px;align-items:start}
     .nights{grid-template-columns:repeat(4,1fr)}
-    h1{font-size:27px}
+    h1{font-size:34px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .route-draw,.stopg,.stat,.livebar,.card{animation:none}
   }
 </style>
 </head>
@@ -92,8 +140,24 @@
 <div class="wrap">
 
 <header class="top">
-  <h1>South India loop — 7 people, Innova Crysta</h1>
+  <p class="kicker">Family road loop · 7 people · Innova Crysta</p>
+  <h1>South India, drawn as a circle</h1>
   <p class="sub">12 days recommended. 10 days only as a squeeze. Book Tirupati and Srisailam before anything else.</p>
+  <div class="livebar">
+    <div class="livecard">
+      <div class="label">Live · India time</div>
+      <span id="istclock">--:--:--</span>
+      <div id="istmeta"></div>
+    </div>
+    <div class="livecard">
+      <div class="label">Sky over the loop</div>
+      <div id="skyline"></div>
+    </div>
+    <div class="livecard">
+      <div class="label">Open on this route, right now</div>
+      <div class="openlist" id="opennow"></div>
+    </div>
+  </div>
   <div class="route-line" id="routeline"></div>
   <div class="stats">
     <div class="stat"><b>12 days</b><span>Recommended length</span></div>
@@ -383,7 +447,7 @@ var DAYS10=[
 ];
 
 var PLACES=[
- {id:"srisailam",name:"Srisailam",
+ {id:"srisailam",name:"Srisailam",windows:[[270,780],[1080,1260]],
   why:"A rare place that is both a Jyotirlinga (Mallikarjuna) and a Shakti Peetha (Bhramaramba), set in the Nallamala forest above the Krishna river.",
   hours:"Temple 4:30 AM to 1:00 PM and 6:00 to 9:00 PM. Ghat road closed 9:00 PM to 6:00 AM.",
   visit:["Mallikarjuna Sparsha or Seeghra darshan","Bhramaramba Devi","Sakshi Ganapathi on the approach road","Srisailam Dam and Pathala Ganga if you have a spare hour"],
@@ -391,7 +455,7 @@ var PLACES=[
   stay:"Official cottages via srisailadevasthanam.org, or AP Tourism Haritha. Book 15 or more days ahead for 3 rooms.",
   timeNeeded:"One night, morning darshan, then leave.",
   tips:["Seeghra or VIP is worth it for 7 people.","Traditional dress only.","Do not plan a night arrival after 9 PM."]},
- {id:"tirupati",name:"Tirupati",
+ {id:"tirupati",name:"Tirupati",windows:[[150,1410]],
   why:"Sri Venkateswara on the seven hills is the busiest Vishnu temple in the world. For many families this is the spiritual centre of the whole trip.",
   hours:"The temple runs almost round the clock. Your booked slot is what matters. Report 1 hour early.",
   visit:["Tirumala main darshan","Laddu prasadam","Padmavathi Temple at Tiruchanur","Kapila Theertham waterfall temple"],
@@ -399,7 +463,7 @@ var PLACES=[
   stay:"Tirupati town suits an Innova group. Hill rooms fill fast and car access is restricted.",
   timeNeeded:"One full day on the 12-day plan, a morning slot only on the squeeze.",
   tips:["Book 300 rupee special entry at ttdevasthanams.ap.gov.in the moment the month opens.","Never gamble on free Sarva Darshan with a fixed road itinerary.","Park in town and use TTD buses."]},
- {id:"madurai",name:"Madurai",
+ {id:"madurai",name:"Madurai",windows:[[300,750],[960,1320]],
   why:"Meenakshi Sundareswarar Temple is a living Dravidian city-temple: 14 gopurams, a goddess who is the city's queen, and a nightly ritual where Shiva is carried to her chamber.",
   hours:"5:00 AM to 12:30 PM and 4:00 PM to 9:30 or 10:00 PM.",
   visit:["Meenakshi and Sundareswarar shrines","Thousand Pillar Hall","Golden Lotus Tank","9:00 PM Palliyarai procession","Thirumalai Nayakkar Palace"],
@@ -407,7 +471,7 @@ var PLACES=[
   stay:"East or West Masi periphery, or KK Nagar. A Crysta cannot sit in the innermost temple streets.",
   timeNeeded:"Evening plus the next morning is the right dose.",
   tips:["Go twice: night for the drama, morning for the darshan.","Inner shrines are for Hindus; outer corridors are open to all.","Shoes off, and floors get hot by 10 AM."]},
- {id:"rameswaram",name:"Rameswaram",
+ {id:"rameswaram",name:"Rameswaram",windows:[[300,780],[900,1260]],
   why:"The Jyotirlinga where Rama worshipped Shiva after Lanka, and a Char Dham site. The 22 wells are a physical pilgrimage, not just a viewing.",
   hours:"Temple about 5:00 AM to 1:00 PM and 3:00 to 8:00 or 9:00 PM. Wells 5:30 AM to 12:30 PM and 3:00 to 7:00 PM.",
   visit:["22 Theertham bath, hire the temple helper with the brass pots","Ramanathaswamy sanctum after changing into dry clothes","Agni Theertham sea bath","Pamban Bridge","Kalam Memorial (optional)"],
@@ -415,7 +479,7 @@ var PLACES=[
   stay:"One night near East Car Street. Confirm a parking slot when you book.",
   timeNeeded:"Morning temple plus afternoon Dhanushkodi.",
   tips:["Carry two sets of clothes and a plastic bag.","Wet clothes are not allowed in the main shrine.","Start at opening or you will queue through the wells."]},
- {id:"dhanushkodi",name:"Dhanushkodi",
+ {id:"dhanushkodi",name:"Dhanushkodi",windows:[[360,1080]],
   why:"A town wiped out by the 1964 cyclone. The road ends at the tip of India looking towards Sri Lanka, believed to be the start of Ram Setu.",
   hours:"About 6:00 AM to 6:00 PM.",
   visit:["Ruined church and water tank","Land's end beach","Where the Bay of Bengal meets the Indian Ocean"],
@@ -423,7 +487,7 @@ var PLACES=[
   stay:"Do not stay. Return to Rameswaram or continue to Kanyakumari.",
   timeNeeded:"2 to 2.5 hours including the 18 km drive.",
   tips:["The Crysta handles the tar road that now runs all the way.","Wind is fierce, hold on to children and phones.","No shade and no usable toilets. Go after lunch and leave by 4 PM."]},
- {id:"kanyakumari",name:"Kanyakumari",
+ {id:"kanyakumari",name:"Kanyakumari",windows:[[330,960]],
   why:"The southern tip where three seas meet. Sunrise over the Bay of Bengal is the reason you halt a night here, not the bazaar.",
   hours:"Sunrise about 6:00 AM. Vivekananda ferry 8:00 AM to 4:00 PM, sea permitting.",
   visit:["Sunrise point","Vivekananda Rock Memorial","Thiruvalluvar Statue on the same ferry","Kumari Amman Temple","Gandhi Mandapam"],
@@ -431,7 +495,7 @@ var PLACES=[
   stay:"One night, sea view if the budget allows. 3 rooms.",
   timeNeeded:"Night, sunrise and the 8 AM ferry. Leave by late morning.",
   tips:["Book the first ferry. Later boats mean heat and queues.","Sunset is famous but clashes with the TVM drive. Skip it here.","Suchindram Thanumalayan Temple is a high value 30 minute stop on the TVM road."]},
- {id:"tvm",name:"Thiruvananthapuram",
+ {id:"tvm",name:"Thiruvananthapuram",windows:[[210,720],[1020,1160]],
   why:"Padmanabhaswamy is Vishnu in Anantha Shayana, one of the most important and most strictly run temples in India.",
   hours:"Roughly 3:30 AM to 12:00 PM and 5:00 to 7:20 PM, in short darshan windows.",
   visit:["Padmanabhaswamy Temple","Kuthiramalika Palace Museum if you have a spare hour","Shanghumugham Beach if the group is tired of temples"],
@@ -439,7 +503,7 @@ var PLACES=[
   stay:"Fort or Palayam, easy for evening darshan.",
   timeNeeded:"One evening darshan, or a morning if you overnight.",
   tips:["Men: mundu, bare chest. Women: saree or set mundu. No western wear.","Mobile phones are often not allowed inside.","Do not combine a late Padmanabhaswamy visit with a late Jatayu visit on the same afternoon."]},
- {id:"jatayu",name:"Jatayu Earth's Center",
+ {id:"jatayu",name:"Jatayu Earth's Center",windows:[[570,1050]],
   why:"At Chadayamangalam in Kollam. The world's largest bird sculpture, on the hill where Jatayu is said to have fallen after fighting Ravana to save Sita.",
   hours:"About 9:30 AM to 5:30 PM. The ticket window effectively closes around 5:00 PM.",
   visit:["Cable car to the sculpture","The view from Jatayu's wing and talon","Short adventure activities only if you have spare time"],
@@ -447,7 +511,7 @@ var PLACES=[
   stay:"Do not overnight here on this trip. Use TVM or Coimbatore as anchors.",
   timeNeeded:"2.5 to 3 hours including ropeway queues.",
   tips:["Take the ropeway package rather than only the walkway if there are elders.","It sits north of TVM, so visit after Kanyakumari and TVM, never before.","Morning light photographs better than harsh noon."]},
- {id:"kolli",name:"Kolli Hills (dropped)",
+ {id:"kolli",name:"Kolli Hills (dropped)",windows:[[360,1080]],
   why:"Eastern Ghats hill of the Kollipavai goddess, with 70 hairpin bends, Agaya Gangai falls and the Arapaleeswarar Temple. Beautiful, and in the wrong place on this loop.",
   hours:"Viewpoints in daylight only. The falls sometimes close after heavy rain or dry up in summer.",
   visit:["70 hairpins from Karavalli","Agaya Gangai, steep steps","Seekuparai viewpoint","Arapaleeswarar Temple"],
@@ -455,7 +519,7 @@ var PLACES=[
   stay:"Homestays. Three rooms are harder to find than in Coimbatore or Ooty.",
   timeNeeded:"One full night minimum. Not a drive-through.",
   tips:["From Jatayu it is about 400 km east, then 220 km back west to Adiyogi — roughly a 10 hour penalty.","Drop it unless you add a 13th day.","If you insist: after Jatayu sleep at Kolli, next day Adiyogi, and give up a Mysore morning."]},
- {id:"adiyogi",name:"Adiyogi, Coimbatore",
+ {id:"adiyogi",name:"Adiyogi, Coimbatore",windows:[[360,1200]],
   why:"The 112 foot face of Shiva at the Velliangiri foothills, built as a consecrated yogic space rather than a classical temple town.",
   hours:"Campus about 6:00 AM to 8:00 PM. Light show about 7:00 PM.",
   visit:["Adiyogi statue and lawn","Divya Darshanam evening show","Dhyanalinga, in silence with no phones","Linga Bhairavi"],
@@ -463,7 +527,7 @@ var PLACES=[
   stay:"Isha cottages if you book early, otherwise Coimbatore for better parking, dinner and fuel.",
   timeNeeded:"Evening show plus next morning Dhyanalinga is the ideal split.",
   tips:["Modest clothing. Dhyanalinga is shoe-free, phone-free and quiet.","The Crysta is fine, follow Isha parking directions.","Do not climb to Ooty the same night as the 7 PM show. Sleep and move at 9:30 AM."]},
- {id:"ooty",name:"Ooty",
+ {id:"ooty",name:"Ooty",windows:[[480,1080]],
   why:"A Nilgiri hill station after days of plains temples. This is the trip's weather reset: tea, cold air and a slow ghat.",
   hours:"Lake, garden and Doddabetta are daytime, roughly 8:00 AM to 5:30 or 6:00 PM.",
   visit:["Government Botanical Garden","Doddabetta Peak","Ooty Lake, boating only if queues are short","A tea estate viewpoint on the Coonoor road"],
@@ -471,7 +535,7 @@ var PLACES=[
   stay:"One night off the bazaar with parking. Carry warm layers.",
   timeNeeded:"One afternoon plus the next morning, then drop to Mysore.",
   tips:["Toy train tickets sell out. Treat it as a bonus, not a plan.","On the ghat: low gear, no night driving, no overtaking buses on blind bends.","Pick two sights, not five."]},
- {id:"mysore",name:"Mysore",
+ {id:"mysore",name:"Mysore",windows:[[600,1050]],
   why:"The Wodeyar palace city. The palace is the visual climax of the Karnataka leg and Chamundi Hill is the spiritual one.",
   hours:"Palace 10:00 AM to 5:30 PM. Illumination on Sundays and public holidays, 7:00 to 8:00 PM.",
   visit:["Mysore Palace interiors","Evening illumination or the sound and light show","Chamundeshwari Temple","Devaraja Market, quickly"],
@@ -479,7 +543,7 @@ var PLACES=[
   stay:"One night near the palace with parking.",
   timeNeeded:"Evening palace plus morning Chamundi on the 12-day plan.",
   tips:["If you can choose dates, time the overnight so a Sunday hits the palace lights.","Chamundi before 8 AM beats both the heat and the school buses."]},
- {id:"kolhapur",name:"Kolhapur",
+ {id:"kolhapur",name:"Kolhapur",windows:[[240,1320]],
   why:"Mahalaxmi is a major Shakti Peetha and the natural last temple before Pune. It also breaks the long Mysore to Pune drive.",
   hours:"About 4:00 or 5:00 AM to 10:00 PM with a short midday pause. Kakad aarti about 4:30 AM.",
   visit:["Mahalaxmi Temple","Rankala Lake","New Palace museum if you overnight"],
@@ -523,9 +587,68 @@ function pathFrom(pts,close){
 var PENINSULA=[[72.85,19.6],[73.05,18.6],[73.3,17.6],[73.5,16.6],[74.0,15.6],[74.4,14.6],[74.7,13.6],[74.9,12.8],[75.2,12.1],[75.6,11.4],[75.9,10.8],[76.2,10.0],[76.4,9.5],[76.6,9.0],[76.9,8.6],[77.2,8.3],[77.55,8.08],[78.0,8.5],[78.25,8.95],[78.55,9.2],[79.05,9.3],[79.5,9.18],[79.35,9.62],[79.0,9.92],[79.35,10.3],[79.85,10.4],[79.8,11.0],[79.95,11.9],[80.15,12.6],[80.3,13.2],[80.2,14.0],[80.15,14.6],[80.5,15.4],[80.9,15.9],[81.2,16.4],[80.9,17.4],[80.2,18.4],[79.0,19.2],[77.5,19.7],[76.0,19.8],[74.5,19.7]];
 var LANKA=[[79.9,9.8],[80.5,9.6],[81.0,8.8],[81.5,8.0],[81.9,7.2],[81.6,6.5],[80.9,5.95],[80.2,6.2],[79.85,7.2],[79.75,8.2]];
 
-var state={tab:"map",plan:"12",day:1,stop:2,place:"srisailam",kolli:true};
+var state={tab:"map",plan:"12",day:1,stop:2,place:"srisailam",kolli:true,mapAnim:true};
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 function el(id){return document.getElementById(id);}
+
+function istNow(){
+  var parts=new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Kolkata",hour:"2-digit",minute:"2-digit",second:"2-digit",weekday:"short",day:"2-digit",month:"short",hour12:false,hourCycle:"h23"}).formatToParts(new Date());
+  var g={};
+  parts.forEach(function(p){g[p.type]=p.value;});
+  var h=parseInt(g.hour,10),m=parseInt(g.minute,10),sec=parseInt(g.second,10);
+  return {h:h,m:m,s:sec,minutes:h*60+m,clock:g.hour+":"+g.minute+":"+g.second,date:g.weekday+" "+g.day+" "+g.month};
+}
+function skyName(h){
+  if(h>=5&&h<7)return "dawn";
+  if(h>=7&&h<17)return "day";
+  if(h>=17&&h<19)return "dusk";
+  return "night";
+}
+function skyCopy(sky,h){
+  if(sky==="dawn")return "Dawn over the peninsula \u2014 temple doors are opening. Best window for Srisailam, Rameswaram wells and Kanyakumari sunrise.";
+  if(sky==="day")return "Daylight. Drive the long legs now. Jatayu, Ooty and Mysore Palace are daytime stops.";
+  if(sky==="dusk")return "Dusk. Meenakshi evening darshan, Adiyogi light show around 7 PM, Padmanabhaswamy last windows.";
+  return "Night on the loop. Avoid ghats. Srisailam ghat is shut 9 PM\u20136 AM. Rest the drivers.";
+}
+function isOpen(place,minutes){
+  if(!place.windows)return false;
+  return place.windows.some(function(w){return minutes>=w[0]&&minutes<w[1];});
+}
+function nextChange(place,minutes){
+  if(!place.windows)return "";
+  var i,w;
+  for(i=0;i<place.windows.length;i++){
+    w=place.windows[i];
+    if(minutes<w[0])return "opens in "+fmtMins(w[0]-minutes);
+    if(minutes>=w[0]&&minutes<w[1])return "closes in "+fmtMins(w[1]-minutes);
+  }
+  var first=place.windows[0][0]+24*60;
+  return "opens in "+fmtMins(first-minutes);
+}
+function fmtMins(n){
+  var h=Math.floor(n/60),m=n%60;
+  if(h<=0)return m+" min";
+  return h+" h "+m+" min";
+}
+function liveStatus(place){
+  var t=istNow();
+  var on=isOpen(place,t.minutes);
+  return {on:on,label:on?"Open now (IST)":"Closed now (IST)",hint:nextChange(place,t.minutes)};
+}
+function tickLive(){
+  var t=istNow();
+  var sky=skyName(t.h);
+  document.body.setAttribute("data-sky",sky);
+  if(el("istclock"))el("istclock").textContent=t.clock;
+  if(el("istmeta"))el("istmeta").textContent=t.date+" \u00b7 Asia/Kolkata \u00b7 updates every second";
+  if(el("skyline"))el("skyline").textContent=skyCopy(sky,t.h);
+  if(el("opennow")){
+    el("opennow").innerHTML=PLACES.filter(function(p){return p.id!=="kolli";}).map(function(p){
+      var on=isOpen(p,t.minutes);
+      return '<span class="pill-live '+(on?"on":"off")+'">'+(on?"Open":"Shut")+" \u00b7 "+esc(p.name)+"</span>";
+    }).join("");
+  }
+}
 
 el("routeline").textContent="Pune \u2192 Srisailam \u2192 Tirupati \u2192 Madurai \u2192 Rameswaram \u2192 Dhanushkodi \u2192 Kanyakumari \u2192 Thiruvananthapuram \u2192 Jatayu \u2192 Adiyogi \u2192 Ooty \u2192 Mysore \u2192 Kolhapur \u2192 Pune";
 
@@ -538,33 +661,34 @@ function labelPos(s){
 }
 function drawMap(){
   var s=[];
-  s.push('<rect x="0" y="0" width="520" height="760" fill="#eef3f6"/>');
-  s.push('<path d="'+pathFrom(PENINSULA,true)+'" fill="#e7e3d9" stroke="#cfc9bb" stroke-width="1"/>');
-  s.push('<path d="'+pathFrom(LANKA,true)+'" fill="#eeebe3" stroke="#d6d0c2" stroke-width="1"/>');
+  s.push('<rect x="0" y="0" width="520" height="760" fill="var(--sea)"/>');
+  s.push('<path d="'+pathFrom(PENINSULA,true)+'" fill="var(--land)" stroke="var(--line)" stroke-width="1"/>');
+  s.push('<path d="'+pathFrom(LANKA,true)+'" fill="var(--lanka)" stroke="var(--line)" stroke-width="1"/>');
   var a=px(73.4,11.5),b=px(80.9,12.6),c=px(77.6,6.6),d=px(80.75,7.6);
-  s.push('<text x="'+a.x+'" y="'+a.y+'" fill="#9aa6ad" font-size="12" text-anchor="middle" transform="rotate(-90 '+a.x+' '+a.y+')">ARABIAN SEA</text>');
-  s.push('<text x="'+b.x+'" y="'+b.y+'" fill="#9aa6ad" font-size="12" text-anchor="middle" transform="rotate(-90 '+b.x+' '+b.y+')">BAY OF BENGAL</text>');
-  s.push('<text x="'+c.x+'" y="'+c.y+'" fill="#9aa6ad" font-size="12" text-anchor="middle">INDIAN OCEAN</text>');
-  s.push('<text x="'+d.x+'" y="'+d.y+'" fill="#8d949b" font-size="11" text-anchor="middle">SRI LANKA</text>');
+  s.push('<text x="'+a.x+'" y="'+a.y+'" fill="var(--ink3)" font-size="12" text-anchor="middle" transform="rotate(-90 '+a.x+' '+a.y+')">ARABIAN SEA</text>');
+  s.push('<text x="'+b.x+'" y="'+b.y+'" fill="var(--ink3)" font-size="12" text-anchor="middle" transform="rotate(-90 '+b.x+' '+b.y+')">BAY OF BENGAL</text>');
+  s.push('<text x="'+c.x+'" y="'+c.y+'" fill="var(--ink3)" font-size="12" text-anchor="middle">INDIAN OCEAN</text>');
+  s.push('<text x="'+d.x+'" y="'+d.y+'" fill="var(--ink2)" font-size="11" text-anchor="middle">SRI LANKA</text>');
   if(state.kolli){
     var j=STOPS[8],ad=STOPS[9],k=px(KOLLI.lon,KOLLI.lat);
-    s.push('<path d="'+pathFrom([[j.lon,j.lat],[KOLLI.lon,KOLLI.lat],[ad.lon,ad.lat]],false)+'" fill="none" stroke="#8d949b" stroke-width="1.6" stroke-dasharray="6 5"/>');
-    s.push('<circle cx="'+k.x+'" cy="'+k.y+'" r="4.5" fill="#fff" stroke="#8d949b" stroke-width="1.6"/>');
-    s.push('<text x="'+(k.x+10)+'" y="'+(k.y+5)+'" fill="#6f767d" font-size="11.5">Kolli Hills \u2014 dropped, +10 h</text>');
+    s.push('<path d="'+pathFrom([[j.lon,j.lat],[KOLLI.lon,KOLLI.lat],[ad.lon,ad.lat]],false)+'" fill="none" stroke="var(--ink3)" stroke-width="1.6" stroke-dasharray="6 5"/>');
+    s.push('<circle cx="'+k.x+'" cy="'+k.y+'" r="4.5" fill="var(--panel)" stroke="var(--ink3)" stroke-width="1.6"/>');
+    s.push('<text x="'+(k.x+10)+'" y="'+(k.y+5)+'" fill="var(--ink2)" font-size="11.5">Kolli Hills \u2014 dropped, +10 h</text>');
   }
-  s.push('<path d="'+pathFrom(STOPS.map(function(x){return [x.lon,x.lat];}),false)+'" fill="none" stroke="#a8500f" stroke-width="2.4" stroke-linejoin="round"/>');
-  STOPS.forEach(function(st){
+  s.push('<path class="'+(state.mapAnim?"route-draw":"")+'" d="'+pathFrom(STOPS.map(function(x){return [x.lon,x.lat];}),false)+'" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round"/>');
+  STOPS.forEach(function(st,idx){
     if(st.seq===14)return;
     var p=px(st.lon,st.lat),act=st.seq===state.stop,r=st.nights>0?10:7,lp=labelPos(st);
-    s.push('<g class="stopg" data-seq="'+st.seq+'" style="cursor:pointer">');
-    if(act)s.push('<circle cx="'+p.x+'" cy="'+p.y+'" r="'+(r+6)+'" fill="none" stroke="#a8500f" stroke-width="1.6"/>');
-    s.push('<circle cx="'+p.x+'" cy="'+p.y+'" r="'+r+'" fill="'+(act?"#a8500f":"#ffffff")+'" stroke="#a8500f" stroke-width="2"/>');
-    s.push('<text x="'+p.x+'" y="'+(p.y+3.8)+'" fill="'+(act?"#ffffff":"#17191c")+'" font-size="'+(st.nights>0?11:9.5)+'" font-weight="600" text-anchor="middle">'+st.seq+'</text>');
-    s.push('<text x="'+lp.x+'" y="'+lp.y+'" fill="'+(act?"#17191c":"#4a5158")+'" font-size="13" font-weight="'+(act?600:400)+'" text-anchor="'+lp.a+'">'+esc(st.label||st.name)+'</text>');
+    s.push('<g class="stopg" data-seq="'+st.seq+'" style="cursor:pointer;animation-delay:'+(idx*0.06)+'s">');
+    if(act)s.push('<circle class="pulse-ring" cx="'+p.x+'" cy="'+p.y+'" r="'+(r+4)+'"/>');
+    s.push('<circle cx="'+p.x+'" cy="'+p.y+'" r="'+r+'" fill="'+(act?"var(--accent)":"var(--panel)")+'" stroke="var(--accent)" stroke-width="2"/>');
+    s.push('<text x="'+p.x+'" y="'+(p.y+3.8)+'" fill="'+(act?"#fff":"var(--ink)")+'" font-size="'+(st.nights>0?11:9.5)+'" font-weight="600" text-anchor="middle">'+st.seq+'</text>');
+    s.push('<text x="'+lp.x+'" y="'+lp.y+'" fill="'+(act?"var(--ink)":"var(--ink2)")+'" font-size="13" font-weight="'+(act?600:400)+'" text-anchor="'+lp.a+'">'+esc(st.label||st.name)+'</text>');
     s.push('<circle cx="'+p.x+'" cy="'+p.y+'" r="20" fill="transparent"/>');
     s.push('</g>');
   });
   el("svgmap").innerHTML=s.join("");
+  state.mapAnim=false;
   Array.prototype.forEach.call(document.querySelectorAll(".stopg"),function(g){
     g.addEventListener("click",function(){state.stop=parseInt(g.getAttribute("data-seq"),10);drawMap();drawStop();});
   });
@@ -580,7 +704,12 @@ function drawStop(){
   var legIn=null,legOut=null;
   for(i=0;i<LEGS.length;i++){if(LEGS[i].to===st.name&&!legIn)legIn=LEGS[i];if(LEGS[i].from===st.name&&!legOut)legOut=LEGS[i];}
   var h='<h3>'+st.seq+'. '+esc(st.label||st.name)+'</h3>';
-  h+='<div><span class="tag solid">'+esc(st.when)+'</span><span class="tag">'+(st.nights>0?st.nights+" night"+(st.nights>1?"s":""):(st.seq===1?"Start and finish":"Day visit"))+'</span></div>';
+  h+='<div><span class="tag solid">'+esc(st.when)+'</span><span class="tag">'+(st.nights>0?st.nights+" night"+(st.nights>1?"s":""):(st.seq===1?"Start and finish":"Day visit"))+'</span>';
+  if(pl){
+    var stt=liveStatus(pl);
+    h+='<span class="tag '+(stt.on?"open":"closed")+'">'+esc(stt.label)+' \u00b7 '+esc(stt.hint)+'</span>';
+  }
+  h+='</div>';
   h+='<p>'+esc(st.headline)+'</p>';
   if(legIn||legOut){
     h+='<div class="tblwrap"><table><tr><th>Leg</th><th class="num">Km</th><th>Drive</th></tr>';
@@ -642,7 +771,8 @@ function drawPlaces(){
   var p=PLACES[0],i;
   for(i=0;i<PLACES.length;i++){if(PLACES[i].id===state.place)p=PLACES[i];}
   var h='<h3>'+esc(p.name)+'</h3><p>'+esc(p.why)+'</p>';
-  h+='<div><span class="tag solid">'+esc(p.timeNeeded)+'</span></div>';
+  var stt=liveStatus(p);
+  h+='<div><span class="tag solid">'+esc(p.timeNeeded)+'</span><span class="tag '+(stt.on?"open":"closed")+'">'+esc(stt.label)+' \u00b7 '+esc(stt.hint)+'</span></div>';
   h+=card("Hours",esc(p.hours));
   h+=card("What to see","<ul><li>"+p.visit.map(esc).join("</li><li>")+"</li></ul>");
   h+=card("Food",esc(p.food));
@@ -684,6 +814,8 @@ el("kollitoggle").addEventListener("click",function(){
   drawMap();
 });
 drawMap();drawStop();drawLegs();drawDays();drawPlaces();drawTables();showTab("map");
+tickLive();
+setInterval(tickLive,1000);
 </script>
 </body>
 </html>
