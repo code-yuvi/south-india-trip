@@ -131,6 +131,17 @@
   .btn.redbtn{background:var(--red);color:#fff}
   .btn.redbtn:hover{background:#f6121d}
   .btn svg{width:17px;height:17px;flex:0 0 auto}
+  .btn.maplink{background:#1a73e8;color:#fff;text-decoration:none}
+  .btn.maplink:hover{background:#4285f4}
+  .btn.maplink.sm{font-size:12.5px;padding:7px 12px;border-radius:4px}
+  .mapbtn-row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  .tile .mapicon{
+    position:absolute;z-index:2;right:8px;bottom:8px;width:28px;height:28px;border-radius:50%;
+    background:rgba(26,115,232,.92);border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:transform .15s,background .15s;box-shadow:0 2px 8px rgba(0,0,0,.4);
+  }
+  .tile .mapicon:hover{background:#4285f4;transform:scale(1.12)}
+  .tile .mapicon svg{width:15px;height:15px;fill:#fff}
 
   /* ---------- live strip ---------- */
   .livebar{display:grid;grid-template-columns:1fr;gap:10px;margin:22px 0 6px}
@@ -440,7 +451,8 @@
         <span><i class="dash"></i>Kolli detour (dropped)</span>
       </div>
       <div class="chips"><button class="chip" id="kollitoggle" aria-pressed="true">Hide Kolli detour</button></div>
-      <p class="tiny">Schematic map: stops plotted from real coordinates, coastline and route lines simplified. Not for navigation.</p>
+      <div class="mapbtn-row" id="mapRouteBtn"></div>
+      <p class="tiny">Schematic map: stops plotted from real coordinates, coastline and route lines simplified. Tap any stop to see details, or tap the pin 📍 to open in Google Maps.</p>
     </div>
     <div id="stopdetail"></div>
   </div>
@@ -1255,13 +1267,53 @@ function drawPhotoCredits(){
   }).join("");
 }
 
+/* ---------- Google Maps helpers ---------- */
+function coordsFor(key){
+  var i;
+  for(i=0;i<STOPS.length;i++){if(STOPS[i].name.toLowerCase()===key||STOPS[i].place===key)return{lat:STOPS[i].lat,lon:STOPS[i].lon,name:STOPS[i].label||STOPS[i].name};}
+  for(i=0;i<PLACES.length;i++){if(PLACES[i].id===key)return coordsForPlace(PLACES[i]);}
+  if(key==="kolli")return{lat:KOLLI.lat,lon:KOLLI.lon,name:KOLLI.name};
+  return null;
+}
+function coordsForPlace(p){
+  var i;for(i=0;i<STOPS.length;i++){if(STOPS[i].place===p.id)return{lat:STOPS[i].lat,lon:STOPS[i].lon,name:p.name};}
+  if(p.id==="kolli")return{lat:KOLLI.lat,lon:KOLLI.lon,name:p.name};
+  return null;
+}
+function mapsUrl(lat,lon,name){
+  return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(name)+"&query_place_id="+lat+","+lon;
+}
+function mapsUrlLatLon(lat,lon,name){
+  return "https://www.google.com/maps/search/"+encodeURIComponent(name)+"/@"+lat+","+lon+",13z";
+}
+function mapsDirectionsUrl(){
+  var origin=STOPS[0].lat+","+STOPS[0].lon;
+  var dest=STOPS[STOPS.length-1].lat+","+STOPS[STOPS.length-1].lon;
+  var wps=STOPS.slice(1,-1).map(function(s){return s.lat+","+s.lon;}).join("|");
+  return "https://www.google.com/maps/dir/?api=1&origin="+origin+"&destination="+dest+"&waypoints="+encodeURIComponent(wps)+"&travelmode=driving";
+}
+function mapBtnHTML(lat,lon,name,cls){
+  cls=cls||"";
+  var url=mapsUrlLatLon(lat,lon,name);
+  return '<a href="'+url+'" target="_blank" rel="noopener" class="btn maplink '+cls+'" title="Open '+esc(name)+' in Google Maps">'
+    +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 13-9 13S3 16 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg>'
+    +'Open in Maps</a>';
+}
+var MAP_ICON_SVG='<svg viewBox="0 0 24 24"><path d="M21 10c0 6-9 13-9 13S3 16 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3" fill="rgba(255,255,255,.4)"/></svg>';
+
 /* ---------- Netflix-style poster rows ---------- */
 function tileHTML(key,num,title,line,badges,onclick){
   var a=ART[key]||ART.pune;
+  var c=coordsFor(key);
+  var pin='';
+  if(c){
+    var mu=mapsUrlLatLon(c.lat,c.lon,c.name);
+    pin='<a href="'+mu+'" target="_blank" rel="noopener" class="mapicon" title="Open in Maps" onclick="event.stopPropagation()">'+MAP_ICON_SVG+'</a>';
+  }
   return '<div class="tile" role="button" tabindex="0" data-go="'+onclick+'">'
     +'<div class="artwrap">'+artSVG(key)+photoHTML(key)
     +(num?'<span class="num">'+esc(num)+'</span>':'')
-    +'<span class="when">'+esc(a.when)+'</span></div>'
+    +'<span class="when">'+esc(a.when)+'</span>'+pin+'</div>'
     +'<div class="meta"><h4>'+esc(title)+'</h4><p class="tline">'+esc(line)+'</p>'
     +'<div class="badges">'+badges+'</div></div></div>';
 }
@@ -1398,6 +1450,16 @@ function drawMap(){
   state.mapAnim=false;
   Array.prototype.forEach.call(document.querySelectorAll(".stopg"),function(g){
     g.addEventListener("click",function(){state.stop=parseInt(g.getAttribute("data-seq"),10);drawMap();drawStop();});
+    g.addEventListener("dblclick",function(e){
+      e.preventDefault();
+      var seq=parseInt(g.getAttribute("data-seq"),10);
+      for(var i=0;i<STOPS.length;i++){
+        if(STOPS[i].seq===seq){
+          window.open(mapsUrlLatLon(STOPS[i].lat,STOPS[i].lon,STOPS[i].label||STOPS[i].name),"_blank");
+          break;
+        }
+      }
+    });
   });
 }
 function card(hd,bd,trail){
@@ -1413,6 +1475,7 @@ function drawStop(){
   var photoKey=artKeyForStop(st);
   var h='<div class="detailart">'+artSVG(photoKey)+photoHTML(photoKey)+'</div>'+photoCreditHTML(photoKey);
   h+='<h3>'+st.seq+'. '+esc(st.label||st.name)+'</h3>';
+  h+='<div class="mapbtn-row">'+mapBtnHTML(st.lat,st.lon,st.label||st.name,"sm")+'</div>';
   h+='<div><span class="tag solid">'+esc(st.when)+'</span><span class="tag">'+(st.nights>0?st.nights+" night"+(st.nights>1?"s":""):(st.seq===1?"Start and finish":"Day visit"))+'</span>';
   if(pl){
     var stt=liveStatus(pl);
@@ -1481,6 +1544,8 @@ function drawPlaces(){
   for(i=0;i<PLACES.length;i++){if(PLACES[i].id===state.place)p=PLACES[i];}
   var h='<div class="detailart">'+artSVG(p.id)+photoHTML(p.id)+'</div>'+photoCreditHTML(p.id);
   h+='<h3>'+esc(p.name)+'</h3><p>'+esc(p.why)+'</p>';
+  var pc=coordsForPlace(p);
+  if(pc){h+='<div class="mapbtn-row">'+mapBtnHTML(pc.lat,pc.lon,p.name,"sm")+'</div>';}
   var stt=liveStatus(p);
   h+='<div><span class="tag solid">'+esc(p.timeNeeded)+'</span><span class="tag '+(stt.on?"open":"closed")+'">'+esc(stt.label)+' \u00b7 '+esc(stt.hint)+'</span></div>';
   h+=card("Hours",esc(p.hours));
@@ -1503,7 +1568,7 @@ function drawTeamLegend(){
   var keys=["Finance & Treasure Head","Media & Memories Head","Expedition Lead","Transportation Head","Navigation & Route Intelligence","Food and Hospitality","Safety & Logistics Head"];
   el("teamlegend").innerHTML=keys.map(function(k){
     var r=roleMeta(k);
-    return '<span class="chip role-'+r.key+'"><i>'+esc(r.legend.split(" ")[0])+'</i> '+esc(r.legend.slice(r.legend.indexOf(" ")+1))+'</span>';
+    return '<span class="chip role-'+r.key+'">'+esc(r.legend)+'</span>';
   }).join("");
 }
 function drawTeam(){
@@ -1560,6 +1625,7 @@ el("bookbtn").addEventListener("click",function(){
 });
 el("teambtn").addEventListener("click",function(){showTab("team");});
 
+el("mapRouteBtn").innerHTML='<a href="'+mapsDirectionsUrl()+'" target="_blank" rel="noopener" class="btn maplink" title="Open full route in Google Maps"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 13-9 13S3 16 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg>Navigate full route on Google Maps</a>';
 drawHero();drawMap();drawStop();drawLegs();drawDays();drawPlaces();drawTables();drawRows();drawPhotoCredits();drawTeamLegend();drawTeam();showTab("dest");
 tickLive();
 setInterval(tickLive,1000);
