@@ -371,6 +371,74 @@
   .member[data-accent="nav"]:before{background:linear-gradient(90deg,#0891b2,#67e8f9)}
   .member[data-accent="food"]:before{background:linear-gradient(90deg,#ca8a04,#fde68a)}
   .member[data-accent="safety"]:before{background:linear-gradient(90deg,#15803d,#bbf7d0)}
+
+  /* ---------- memories / gallery ---------- */
+  .memform{
+    display:grid;grid-template-columns:1fr;gap:10px;margin:14px 0 18px;padding:16px;
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  }
+  @media(min-width:720px){.memform{grid-template-columns:1fr 1fr;align-items:end}}
+  .memform .full{grid-column:1/-1}
+  .memform label{display:block;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);font-weight:800;margin-bottom:6px}
+  .memform input,.memform select,.memform textarea{
+    width:100%;font:inherit;color:#fff;background:#121218;border:1px solid var(--line);
+    border-radius:6px;padding:10px 11px;
+  }
+  .memform textarea{min-height:86px;resize:vertical}
+  .dropzone{
+    display:flex;align-items:center;justify-content:center;gap:10px;min-height:92px;
+    border:1.5px dashed #3a3a48;border-radius:8px;background:#121218;color:var(--ink2);
+    cursor:pointer;text-align:center;padding:12px;transition:border-color .18s,background .18s;
+  }
+  .dropzone:hover,.dropzone.drag{border-color:var(--red);background:#1a1014;color:#fff}
+  .dropzone input{display:none}
+  .mempreview{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .mempreview img{width:72px;height:72px;object-fit:cover;border-radius:6px;border:1px solid var(--line)}
+  .memstats{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
+  .memgrid{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0 8px;
+  }
+  @media(min-width:720px){.memgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  @media(min-width:1100px){.memgrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+  .memcard{
+    position:relative;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;
+    cursor:pointer;text-align:left;padding:0;color:inherit;font:inherit;
+    transition:transform .22s,border-color .2s,box-shadow .22s;
+  }
+  .memcard:hover{transform:translateY(-4px);border-color:#4a4a5a;box-shadow:0 14px 32px rgba(0,0,0,.45)}
+  .memcard .shot{position:relative;aspect-ratio:4/3;background:#101016;overflow:hidden}
+  .memcard .shot img{width:100%;height:100%;object-fit:cover;display:block}
+  .memcard .nophoto{
+    width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:16px;
+    color:#fff;font-weight:800;font-size:15px;line-height:1.25;text-align:center;
+    background:linear-gradient(145deg,#2a1013,#17171d 55%,#1a2430);
+  }
+  .memcard .shot:after{
+    content:"";position:absolute;inset:auto 0 0 0;height:55%;
+    background:linear-gradient(0deg,rgba(8,8,11,.92),transparent);pointer-events:none;
+  }
+  .memcard .cap{position:absolute;left:10px;right:10px;bottom:10px;z-index:1}
+  .memcard .cap h4{margin:0 0 3px;font-size:14px;color:#fff}
+  .memcard .cap p{margin:0;font-size:11.5px;color:#cfcfd6}
+  .memcard .del{
+    position:absolute;top:8px;right:8px;z-index:2;width:28px;height:28px;border:0;border-radius:50%;
+    background:rgba(0,0,0,.72);color:#fff;cursor:pointer;font-size:16px;line-height:1;
+  }
+  .memcard .del:hover{background:var(--red)}
+  .lightbox{
+    position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.88);display:flex;flex-direction:column;
+    align-items:center;justify-content:center;padding:18px;gap:10px;
+  }
+  .lightbox[hidden]{display:none}
+  .lightbox img{max-width:min(96vw,980px);max-height:72vh;object-fit:contain;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+  .lightbox .lb-meta{max-width:min(96vw,720px);text-align:center;color:#eee}
+  .lightbox .lb-meta h3{margin:0 0 4px;font-size:18px}
+  .lightbox .lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;font-size:26px;cursor:pointer}
+  .lightbox .lb-nav.prev{left:12px}
+  .lightbox .lb-nav.next{right:12px}
+  .lightbox .lb-close{position:absolute;top:12px;right:12px;width:40px;height:40px;border:0;border-radius:50%;background:#fff;color:#111;font-size:22px;cursor:pointer;font-weight:800}
+  .memempty{padding:28px 16px;text-align:center;color:var(--ink2);border:1px dashed var(--line);border-radius:10px;margin:10px 0}
+  #memStatus{font-size:12.5px;color:var(--ink2);min-height:1.2em}
   @media (prefers-reduced-motion:reduce){
     .route-draw,.stopg,.stat,.livebar,.card,section,.hero .inner,.navdot,.countdown:before,.count-status i{animation:none}
     .tile:hover{transform:none}
@@ -389,6 +457,7 @@
     <button role="tab" data-tab="places" aria-selected="false">Place guide</button>
     <button role="tab" data-tab="logi" aria-selected="false">Car, stay, money</button>
     <button role="tab" data-tab="team" aria-selected="false">Our team</button>
+    <button role="tab" data-tab="mem" aria-selected="false">Memories</button>
   </div>
   <span class="devtag" title="Yuvraj Deshmukh">
     <svg class="ydmark" viewBox="0 0 72 72" role="img" aria-label="Yuvraj Deshmukh mark">
@@ -423,6 +492,7 @@
       <button class="btn ghost" id="mapbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>See the map</button>
       <button class="btn redbtn" id="bookbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5v14"/></svg>What to book first</button>
       <button class="btn ghost" id="teambtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><circle cx="16" cy="9" r="2.4"/><path d="M3.5 19c.6-3 3-5 5.5-5s4.9 2 5.5 5M14 14.2c2.1.3 3.9 1.8 4.5 4.8"/></svg>Our team</button>
+      <button class="btn ghost" id="membtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.6"/><path d="M21 16l-5.2-5.2a1.5 1.5 0 00-2.1 0L6 18"/></svg>Memories</button>
     </div>
   </div>
 </header>
@@ -571,6 +641,70 @@
   <div class="teamlegend" id="teamlegend"></div>
   <div class="teamgrid" id="teamgrid"></div>
 </section>
+
+<section id="tab-mem" class="pad" hidden>
+  <h2>Photo gallery &amp; trip memories</h2>
+  <p class="sub">Add photos and notes from the road. They stay on this phone or laptop (this browser), so they still work offline. Export a backup if you want to keep a copy.</p>
+  <div class="memstats">
+    <span class="tag solid" id="memCount">0 memories</span>
+    <span class="tag">Saved on this device</span>
+  </div>
+
+  <form class="memform" id="memForm">
+    <div class="full">
+      <label>Photos (optional — notes work without one)</label>
+      <label class="dropzone" id="memDrop">
+        <input type="file" id="memFiles" accept="image/*" multiple>
+        Tap to add photos from camera or gallery
+      </label>
+      <div class="mempreview" id="memPreview"></div>
+    </div>
+    <div>
+      <label for="memTitle">Title</label>
+      <input id="memTitle" maxlength="80" placeholder="Sunrise at three seas">
+    </div>
+    <div>
+      <label for="memPlace">Place</label>
+      <select id="memPlace"></select>
+    </div>
+    <div>
+      <label for="memWho">Who added it</label>
+      <select id="memWho"></select>
+    </div>
+    <div>
+      <label for="memDate">Date</label>
+      <input id="memDate" type="date">
+    </div>
+    <div class="full">
+      <label for="memNote">Memory</label>
+      <textarea id="memNote" maxlength="600" placeholder="What happened, what we ate, who laughed first…"></textarea>
+    </div>
+    <div class="full btnrow">
+      <button class="btn redbtn" type="submit">Save memory</button>
+      <button class="btn ghost" type="button" id="memExport">Download backup</button>
+      <button class="btn ghost" type="button" id="memImportBtn">Import backup</button>
+      <input type="file" id="memImport" accept="application/json" hidden>
+    </div>
+    <p class="full" id="memStatus"></p>
+  </form>
+
+  <div class="chips" id="memFilters"></div>
+  <h3 id="memUserHead">Our photos &amp; notes</h3>
+  <div id="memUserEmpty" class="memempty" hidden>No memories yet. Add the first photo or a note from the form above.</div>
+  <div class="memgrid" id="memUserGrid"></div>
+
+  <h3 id="memRouteHead">Route album · destination stills</h3>
+  <p class="sub" id="memRouteSub">Built-in photos of the loop, so the gallery is never empty before you start shooting.</p>
+  <div class="memgrid" id="memRouteGrid"></div>
+</section>
+
+<div class="lightbox" id="memLightbox" hidden>
+  <button type="button" class="lb-close" id="lbClose" aria-label="Close">×</button>
+  <button type="button" class="lb-nav prev" id="lbPrev" aria-label="Previous">‹</button>
+  <img id="lbImg" alt="">
+  <div class="lb-meta" id="lbMeta"></div>
+  <button type="button" class="lb-nav next" id="lbNext" aria-label="Next">›</button>
+</div>
 
 <footer class="pad">
   <p class="byline">
@@ -1668,9 +1802,251 @@ function drawTeam(){
       +'</div><div class="mbody"><h3>'+esc(m.name)+'</h3><div class="rolestack">'+roles+'</div></div></article>';
   }).join("");
 }
+
+/* ---------- Photo gallery & trip memories ---------- */
+var MEM_KEY="southIndiaTripMemories.v1";
+var memPending=[];
+var memFilter="ours";
+var memLightbox=[];
+var memLightIdx=0;
+function memPlaces(){
+  var seen={},out=[{id:"road",name:"On the road"}];
+  STOPS.forEach(function(s){
+    var id=s.place||s.name.toLowerCase();
+    if(!seen[id]){seen[id]=1;out.push({id:id,name:s.label||s.name});}
+  });
+  out.push({id:"kolli",name:"Kolli Hills"});
+  return out;
+}
+function loadMemories(){
+  try{return JSON.parse(localStorage.getItem(MEM_KEY)||"[]");}catch(e){return [];}
+}
+function saveMemories(list){
+  try{localStorage.setItem(MEM_KEY,JSON.stringify(list));return true;}
+  catch(e){return false;}
+}
+function compressFile(file){
+  return new Promise(function(resolve,reject){
+    if(!file||!file.type||file.type.indexOf("image")!==0){reject(new Error("not image"));return;}
+    var img=new Image();
+    var url=URL.createObjectURL(file);
+    img.onload=function(){
+      var max=1280,w=img.width,h=img.height;
+      if(w>max||h>max){var r=Math.min(max/w,max/h);w=Math.round(w*r);h=Math.round(h*r);}
+      var c=document.createElement("canvas");
+      c.width=w;c.height=h;
+      c.getContext("2d").drawImage(img,0,0,w,h);
+      URL.revokeObjectURL(url);
+      resolve(c.toDataURL("image/jpeg",0.72));
+    };
+    img.onerror=function(){URL.revokeObjectURL(url);reject(new Error("read"));};
+    img.src=url;
+  });
+}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
+function fillMemSelects(){
+  el("memPlace").innerHTML=memPlaces().map(function(p){
+    return '<option value="'+esc(p.id)+'">'+esc(p.name)+'</option>';
+  }).join("");
+  el("memWho").innerHTML='<option value="Whole crew">Whole crew</option>'+TEAM.map(function(m){
+    return '<option value="'+esc(m.name)+'">'+esc(m.name)+'</option>';
+  }).join("");
+  var t=new Date();
+  var y=t.getFullYear(),mo=("0"+(t.getMonth()+1)).slice(-2),d=("0"+t.getDate()).slice(-2);
+  el("memDate").value=y+"-"+mo+"-"+d;
+}
+function setMemStatus(msg,ok){
+  var n=el("memStatus");
+  n.textContent=msg||"";
+  n.style.color=ok===false?"#fb7185":"";
+}
+function drawMemFilters(){
+  var chips=[{id:"ours",label:"Our memories"},{id:"all",label:"All"},{id:"route",label:"Route album"}].concat(
+    memPlaces().slice(1).map(function(p){return {id:"place:"+p.id,label:p.name};})
+  );
+  el("memFilters").innerHTML=chips.map(function(c){
+    return '<button type="button" class="chip" data-memfilter="'+esc(c.id)+'" aria-pressed="'+(memFilter===c.id)+'">'+esc(c.label)+'</button>';
+  }).join("");
+  Array.prototype.forEach.call(el("memFilters").children,function(b){
+    b.addEventListener("click",function(){memFilter=b.getAttribute("data-memfilter");drawMemories();});
+  });
+}
+function openLightbox(items,idx){
+  memLightbox=items.filter(function(x){return x.src;});
+  if(!memLightbox.length)return;
+  memLightIdx=Math.max(0,memLightbox.indexOf(items[idx]));
+  if(memLightIdx<0)memLightIdx=0;
+  showLightbox();
+}
+function showLightbox(){
+  var item=memLightbox[memLightIdx];
+  if(!item)return;
+  el("memLightbox").hidden=false;
+  el("lbImg").src=item.src;
+  el("lbImg").alt=item.title||"Trip photo";
+  el("lbMeta").innerHTML="<h3>"+esc(item.title||"Trip photo")+"</h3><p>"+esc((item.placeName||"")+((item.who)?" · "+item.who:""))+((item.date)?" · "+item.date:"")+"</p>"+(item.note?"<p>"+esc(item.note)+"</p>":"");
+  document.body.style.overflow="hidden";
+}
+function closeLightbox(){
+  el("memLightbox").hidden=true;
+  document.body.style.overflow="";
+}
+function placeNameFor(id){
+  var p=memPlaces().filter(function(x){return x.id===id;})[0];
+  return p?p.name:id;
+}
+function drawMemories(){
+  var list=loadMemories();
+  el("memCount").textContent=list.length+" memor"+(list.length===1?"y":"ies");
+  drawMemFilters();
+  var showUser=memFilter!=="route";
+  var showRoute=memFilter==="route"||memFilter==="all";
+  var user=list.slice().reverse();
+  if(memFilter.indexOf("place:")===0){
+    var pid=memFilter.slice(6);
+    user=user.filter(function(m){return m.place===pid;});
+    showRoute=false;
+  }
+  el("memUserEmpty").hidden=!showUser||user.length>0;
+  if(el("memUserHead"))el("memUserHead").style.display=showUser?"":"none";
+  el("memUserGrid").style.display=showUser?"grid":"none";
+  el("memUserGrid").innerHTML=showUser?user.map(function(m,i){
+    var shot=m.src
+      ?'<img src="'+m.src+'" alt="'+esc(m.title||"Memory")+'">'
+      :'<div class="nophoto">'+esc(m.title||m.note||"Note")+'</div>';
+    return '<article class="memcard" data-kind="user" data-idx="'+i+'">'
+      +'<div class="shot">'+shot+'<div class="cap"><h4>'+esc(m.title||"Untitled")+'</h4><p>'+esc(placeNameFor(m.place))+" · "+esc(m.who||"")+'</p></div></div>'
+      +'<button type="button" class="del" data-id="'+esc(m.id)+'" aria-label="Delete">×</button>'
+      +'</article>';
+  }).join(""):"";
+  var routeItems=Object.keys(PHOTOS).map(function(key){
+    var p=PHOTOS[key];
+    return {src:p.src,title:p.name,placeName:p.name,who:"Route album",note:"Destination still from the trip plan.",key:key};
+  });
+  if(memFilter.indexOf("place:")===0){
+    var want=memFilter.slice(6);
+    routeItems=routeItems.filter(function(r){return r.key===want;});
+    showRoute=routeItems.length>0;
+  }
+  el("memRouteGrid").style.display=showRoute?"grid":"none";
+  if(el("memRouteHead"))el("memRouteHead").style.display=showRoute?"":"none";
+  if(el("memRouteSub"))el("memRouteSub").style.display=showRoute?"":"none";
+  el("memRouteGrid").innerHTML=showRoute?routeItems.map(function(r,i){
+    return '<article class="memcard" data-kind="route" data-idx="'+i+'">'
+      +'<div class="shot"><img src="'+r.src+'" alt="'+esc(r.title)+'"><div class="cap"><h4>'+esc(r.title)+'</h4><p>Route album</p></div></div></article>';
+  }).join(""):"";
+  Array.prototype.forEach.call(el("memUserGrid").querySelectorAll(".memcard"),function(card){
+    var idx=parseInt(card.getAttribute("data-idx"),10);
+    card.addEventListener("click",function(e){
+      if(e.target.closest(".del"))return;
+      var items=user.map(function(m){
+        return {src:m.src,title:m.title,placeName:placeNameFor(m.place),who:m.who,date:m.date,note:m.note};
+      });
+      if(items[idx]&&items[idx].src)openLightbox(items,idx);
+    });
+  });
+  Array.prototype.forEach.call(el("memUserGrid").querySelectorAll(".del"),function(btn){
+    btn.addEventListener("click",function(e){
+      e.stopPropagation();
+      var id=btn.getAttribute("data-id");
+      if(!confirm("Delete this memory from this device?"))return;
+      saveMemories(loadMemories().filter(function(m){return m.id!==id;}));
+      drawMemories();
+    });
+  });
+  Array.prototype.forEach.call(el("memRouteGrid").querySelectorAll(".memcard"),function(card){
+    var idx=parseInt(card.getAttribute("data-idx"),10);
+    card.addEventListener("click",function(){openLightbox(routeItems,idx);});
+  });
+}
+function bindMemories(){
+  fillMemSelects();
+  var drop=el("memDrop");
+  var files=el("memFiles");
+  function addFiles(list){
+    Array.prototype.forEach.call(list,function(file){
+      compressFile(file).then(function(src){
+        memPending.push(src);
+        var img=document.createElement("img");
+        img.src=src;el("memPreview").appendChild(img);
+        setMemStatus(memPending.length+" photo"+(memPending.length>1?"s":"")+" ready.",true);
+      }).catch(function(){setMemStatus("Could not read that photo. Try another image.",false);});
+    });
+  }
+  files.addEventListener("change",function(){addFiles(files.files);files.value="";});
+  ["dragenter","dragover"].forEach(function(ev){
+    drop.addEventListener(ev,function(e){e.preventDefault();drop.classList.add("drag");});
+  });
+  ["dragleave","drop"].forEach(function(ev){
+    drop.addEventListener(ev,function(e){e.preventDefault();drop.classList.remove("drag");});
+  });
+  drop.addEventListener("drop",function(e){if(e.dataTransfer&&e.dataTransfer.files)addFiles(e.dataTransfer.files);});
+  el("memForm").addEventListener("submit",function(e){
+    e.preventDefault();
+    var title=(el("memTitle").value||"").trim();
+    var note=(el("memNote").value||"").trim();
+    if(!title&&!note&&!memPending.length){setMemStatus("Add a photo, a title or a note first.",false);return;}
+    var list=loadMemories();
+    if(memPending.length){
+      memPending.forEach(function(src,i){
+        list.push({id:uid(),src:src,title:title||"Photo",note:i===0?note:note,place:el("memPlace").value,who:el("memWho").value,date:el("memDate").value,created:Date.now()});
+      });
+    }else{
+      list.push({id:uid(),src:"",title:title||"Note",note:note,place:el("memPlace").value,who:el("memWho").value,date:el("memDate").value,created:Date.now()});
+    }
+    if(!saveMemories(list)){
+      setMemStatus("This device is full. Delete an older photo or export a backup, then try a smaller image.",false);
+      return;
+    }
+    memPending=[];el("memPreview").innerHTML="";el("memTitle").value="";el("memNote").value="";
+    memFilter="ours";
+    setMemStatus("Saved on this device.",true);
+    drawMemories();
+  });
+  el("memExport").addEventListener("click",function(){
+    var blob=new Blob([JSON.stringify({trip:"south-india",saved:new Date().toISOString(),memories:loadMemories()},null,2)],{type:"application/json"});
+    var a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download="south-india-trip-memories.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+    setMemStatus("Backup downloaded.",true);
+  });
+  el("memImportBtn").addEventListener("click",function(){el("memImport").click();});
+  el("memImport").addEventListener("change",function(){
+    var f=el("memImport").files[0];if(!f)return;
+    var reader=new FileReader();
+    reader.onload=function(){
+      try{
+        var data=JSON.parse(reader.result);
+        var incoming=data.memories||data;
+        if(!Array.isArray(incoming))throw new Error("bad");
+        var have=loadMemories();
+        var ids={};have.forEach(function(m){ids[m.id]=1;});
+        incoming.forEach(function(m){if(m&&m.id&&!ids[m.id])have.push(m);});
+        if(!saveMemories(have)){setMemStatus("Could not import — storage is full.",false);return;}
+        drawMemories();
+        setMemStatus("Imported. "+have.length+" memories on this device.",true);
+      }catch(err){setMemStatus("That file is not a memories backup.",false);}
+    };
+    reader.readAsText(f);
+    el("memImport").value="";
+  });
+  el("lbClose").addEventListener("click",closeLightbox);
+  el("lbPrev").addEventListener("click",function(){if(!memLightbox.length)return;memLightIdx=(memLightIdx-1+memLightbox.length)%memLightbox.length;showLightbox();});
+  el("lbNext").addEventListener("click",function(){if(!memLightbox.length)return;memLightIdx=(memLightIdx+1)%memLightbox.length;showLightbox();});
+  el("memLightbox").addEventListener("click",function(e){if(e.target===el("memLightbox"))closeLightbox();});
+  document.addEventListener("keydown",function(e){
+    if(el("memLightbox").hidden)return;
+    if(e.key==="Escape")closeLightbox();
+    if(e.key==="ArrowLeft")el("lbPrev").click();
+    if(e.key==="ArrowRight")el("lbNext").click();
+  });
+  drawMemories();
+}
 function showTab(t){
   state.tab=t;
-  ["dest","map","plan","places","logi","team"].forEach(function(x){el("tab-"+x).hidden=(x!==t);});
+  ["dest","map","plan","places","logi","team","mem"].forEach(function(x){el("tab-"+x).hidden=(x!==t);});
   Array.prototype.forEach.call(el("tabs").children,function(b){
     b.setAttribute("aria-selected",b.getAttribute("data-tab")===t?"true":"false");
   });
@@ -1703,9 +2079,10 @@ el("bookbtn").addEventListener("click",function(){
   if(h)window.scrollTo(0,h.getBoundingClientRect().top+window.pageYOffset-70);
 });
 el("teambtn").addEventListener("click",function(){showTab("team");});
+el("membtn").addEventListener("click",function(){showTab("mem");});
 
 el("mapRouteBtn").innerHTML='<a href="'+mapsDirectionsUrl()+'" target="_blank" rel="noopener" class="btn maplink" title="Open full route in Google Maps"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 13-9 13S3 16 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg>Navigate full route on Google Maps</a>';
-drawHero();drawMap();drawStop();drawLegs();drawDays();drawPlaces();drawTables();drawRows();drawPhotoCredits();drawTeamLegend();drawTeam();showTab("dest");
+drawHero();drawMap();drawStop();drawLegs();drawDays();drawPlaces();drawTables();drawRows();drawPhotoCredits();drawTeamLegend();drawTeam();bindMemories();showTab("dest");
 tickLive();
 setInterval(tickLive,1000);
 setInterval(function(){heroIndex=(heroIndex+1)%HERO_KEYS.length;drawHero();},7000);
