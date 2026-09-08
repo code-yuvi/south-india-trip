@@ -691,7 +691,7 @@
         <li>Share it with the crew as Editor (their Gmail addresses).</li>
         <li>Copy the folder link from the browser address bar.</li>
         <li>Open <a href="https://console.cloud.google.com/" target="_blank" rel="noopener">Google Cloud Console</a> → new project → enable <b>Google Drive API</b>.</li>
-        <li>APIs &amp; Services → OAuth consent screen: External, add the 7 emails as test users.</li>
+        <li>APIs &amp; Services → OAuth consent screen → <b>Audience</b>: choose External, then under <b>Test users</b> click <b>Add users</b> and add all 7 Gmail addresses. Miss this and Google shows <i>Error 403: access_denied</i>.</li>
         <li>Create OAuth Client ID → Web application. Add authorised JavaScript origins:
           <br><code>https://code-yuvi.github.io</code>
           <br><code>http://127.0.0.1:8766</code>
@@ -1917,6 +1917,7 @@ function requestDriveToken(prompt){
     try{ensureDriveClient();}catch(e){reject(e);return;}
     driveTokenClient.callback=function(resp){
       if(resp&&resp.access_token){driveToken=resp.access_token;resolve(driveToken);}
+      else if(resp&&resp.error==="access_denied")reject(new Error("Google blocked this account. In Google Cloud Console open OAuth consent screen (Audience) and add this Gmail address under Test users, then try again."));
       else reject(new Error((resp&&resp.error)||"Google sign-in was cancelled."));
     };
     driveTokenClient.requestAccessToken({prompt:prompt||""});
