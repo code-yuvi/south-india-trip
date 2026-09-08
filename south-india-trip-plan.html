@@ -453,6 +453,9 @@
   .drivehelp{margin-top:10px;color:var(--ink2);font-size:13px}
   .drivehelp ol{margin:8px 0 0;padding-left:18px}
   .drivehelp li{margin:6px 0;color:var(--ink2)}
+  #driveSetup{display:none}
+  .drivebox.is-organiser #driveSetup{display:block}
+  .drive-lock{margin-top:10px}
   @media (prefers-reduced-motion:reduce){
     .route-draw,.stopg,.stat,.livebar,.card,section,.hero .inner,.navdot,.countdown:before,.count-status i{animation:none}
     .tile:hover{transform:none}
@@ -664,41 +667,47 @@
     <span class="tag" id="memWhere">Saved on this device</span>
   </div>
 
-  <div class="drivebox">
+  <div class="drivebox" id="driveBox">
     <h3>Shared Google Drive folder</h3>
-    <p class="sub">Create one folder, share it with all 7 Google accounts as <b>Editor</b>, then paste the folder link and Client ID. After that, each person taps Connect and every new photo goes into that folder.</p>
-    <div class="drive-row">
-      <div>
-        <label for="driveFolder">Drive folder link or folder ID</label>
-        <input id="driveFolder" placeholder="https://drive.google.com/drive/folders/...">
+    <p class="sub" id="drivePublicHint">Tap <b>Connect Google Drive</b> with your own Gmail. The folder is already set by Yuvraj. You do not paste any link.</p>
+    <div id="driveSetup">
+      <p class="sub">Organiser only. These values are stored in the site for the whole crew after they are saved into the page. Saving here also keeps a copy on this device.</p>
+      <div class="drive-row">
+        <div>
+          <label for="driveFolder">Drive folder link or folder ID</label>
+          <input id="driveFolder" placeholder="https://drive.google.com/drive/folders/...">
+        </div>
+        <div>
+          <label for="driveClient">Google OAuth Client ID</label>
+          <input id="driveClient" placeholder="123-abc.apps.googleusercontent.com">
+        </div>
       </div>
-      <div>
-        <label for="driveClient">Google OAuth Client ID</label>
-        <input id="driveClient" placeholder="123-abc.apps.googleusercontent.com">
+      <div class="btnrow" style="margin-top:12px">
+        <button type="button" class="btn maplink" id="driveSaveCfg">Save folder settings</button>
       </div>
+      <details class="drivehelp">
+        <summary>How to set this up once</summary>
+        <ol>
+          <li>On Google Drive, create a folder e.g. <b>South India Trip 2026</b>.</li>
+          <li>Share it with the crew as Editor (their Gmail addresses).</li>
+          <li>Copy the folder link from the browser address bar.</li>
+          <li>Open <a href="https://console.cloud.google.com/" target="_blank" rel="noopener">Google Cloud Console</a> → new project → enable <b>Google Drive API</b>.</li>
+          <li>APIs &amp; Services → OAuth consent screen → <b>Audience</b>: choose External, then under <b>Test users</b> click <b>Add users</b> and add all 7 Gmail addresses. Miss this and Google shows <i>Error 403: access_denied</i>.</li>
+          <li>Create OAuth Client ID → Web application. Add authorised JavaScript origins:
+            <br><code>https://code-yuvi.github.io</code>
+            <br><code>http://127.0.0.1:8766</code>
+            <br><code>http://localhost:8766</code></li>
+          <li>Paste the Client ID and folder link above, tap Save. Then send them to put into the site so every phone uses them automatically.</li>
+        </ol>
+      </details>
     </div>
     <div class="btnrow" style="margin-top:12px">
-      <button type="button" class="btn maplink" id="driveSaveCfg">Save folder settings</button>
       <button type="button" class="btn play" id="driveConnect">Connect Google Drive</button>
       <button type="button" class="btn ghost" id="driveRefresh">Refresh from Drive</button>
       <a class="btn ghost" id="driveOpenFolder" href="#" target="_blank" rel="noopener" hidden>Open folder</a>
     </div>
     <div class="drive-status" id="driveStatus"><i></i><span>Drive is not connected yet.</span></div>
-    <details class="drivehelp">
-      <summary>How to set this up once</summary>
-      <ol>
-        <li>On Google Drive, create a folder e.g. <b>South India Trip 2026</b>.</li>
-        <li>Share it with the crew as Editor (their Gmail addresses).</li>
-        <li>Copy the folder link from the browser address bar.</li>
-        <li>Open <a href="https://console.cloud.google.com/" target="_blank" rel="noopener">Google Cloud Console</a> → new project → enable <b>Google Drive API</b>.</li>
-        <li>APIs &amp; Services → OAuth consent screen → <b>Audience</b>: choose External, then under <b>Test users</b> click <b>Add users</b> and add all 7 Gmail addresses. Miss this and Google shows <i>Error 403: access_denied</i>.</li>
-        <li>Create OAuth Client ID → Web application. Add authorised JavaScript origins:
-          <br><code>https://code-yuvi.github.io</code>
-          <br><code>http://127.0.0.1:8766</code>
-          <br><code>http://localhost:8766</code></li>
-        <li>Paste the Client ID and folder link above, tap Save, then Connect Google Drive.</li>
-      </ol>
-    </details>
+    <p class="tiny drive-lock"><button type="button" class="chip" id="driveOrganiserBtn">Organiser settings</button></p>
   </div>
 
   <form class="memform" id="memForm">
@@ -1857,6 +1866,12 @@ function drawTeam(){
 /* ---------- Photo gallery & trip memories ---------- */
 var MEM_KEY="southIndiaTripMemories.v1";
 var DRIVE_CFG_KEY="southIndiaTripDrive.cfg";
+/* Built into the page so the crew never pastes these. Fill both, then the whole group only taps Connect. */
+var DRIVE_BUILT_IN={
+  folderId:"",
+  clientId:""
+};
+var ORGANISER_PIN="YD2026";
 var memPending=[];
 var memFilter="ours";
 var memLightbox=[];
@@ -1880,7 +1895,12 @@ function saveDriveCfg(cfg){
 }
 function driveCfg(){
   var c=loadDriveCfg();
-  return {clientId:(c.clientId||"").trim(),folderId:parseFolderId(c.folderId||c.folder||"")};
+  var builtClient=(DRIVE_BUILT_IN.clientId||"").trim();
+  var builtFolder=parseFolderId(DRIVE_BUILT_IN.folderId||"");
+  return {
+    clientId:(builtClient||c.clientId||"").trim(),
+    folderId:builtFolder||parseFolderId(c.folderId||c.folder||"")
+  };
 }
 function setDriveStatus(msg,ok){
   var box=el("driveStatus");
@@ -1889,14 +1909,23 @@ function setDriveStatus(msg,ok){
   box.innerHTML="<i></i><span>"+esc(msg)+"</span>";
 }
 function fillDriveFields(){
+  var cfg=driveCfg();
   var c=loadDriveCfg();
-  if(el("driveFolder"))el("driveFolder").value=c.folderId||c.folder||"";
-  if(el("driveClient"))el("driveClient").value=c.clientId||"";
-  var id=driveCfg().folderId;
+  if(el("driveFolder"))el("driveFolder").value=c.folder||c.folderId||DRIVE_BUILT_IN.folderId||cfg.folderId||"";
+  if(el("driveClient"))el("driveClient").value=c.clientId||DRIVE_BUILT_IN.clientId||cfg.clientId||"";
+  var id=cfg.folderId;
   if(el("driveOpenFolder")){
     if(id){el("driveOpenFolder").hidden=false;el("driveOpenFolder").href="https://drive.google.com/drive/folders/"+id;}
     else{el("driveOpenFolder").hidden=true;}
   }
+  setOrganiserUi(sessionStorage.getItem("southIndiaTripOrganiser")==="1");
+}
+function setOrganiserUi(on){
+  var box=el("driveBox");
+  if(!box)return;
+  if(on)box.classList.add("is-organiser");
+  else box.classList.remove("is-organiser");
+  if(el("driveOrganiserBtn"))el("driveOrganiserBtn").textContent=on?"Lock organiser settings":"Organiser settings";
 }
 function gisReady(){return !!(window.google&&google.accounts&&google.accounts.oauth2);}
 function ensureDriveClient(){
@@ -2280,7 +2309,23 @@ function bindMemories(){
     if(!clientId||clientId.indexOf(".apps.googleusercontent.com")===-1){setDriveStatus("Paste the OAuth Client ID from Google Cloud Console.",false);return;}
     saveDriveCfg({folderId:folderId,clientId:clientId,folder:folder});
     fillDriveFields();
-    setDriveStatus("Folder saved. Share it with the crew as Editor, then tap Connect.",false);
+    setDriveStatus("Saved on this device. To lock this folder for the whole crew, send the folder link and Client ID to be put in the site.",true);
+  });
+  el("driveOrganiserBtn").addEventListener("click",function(){
+    if(sessionStorage.getItem("southIndiaTripOrganiser")==="1"){
+      sessionStorage.removeItem("southIndiaTripOrganiser");
+      setOrganiserUi(false);
+      setDriveStatus("Organiser settings locked.",true);
+      return;
+    }
+    var pin=window.prompt("Organiser PIN");
+    if(pin===ORGANISER_PIN){
+      sessionStorage.setItem("southIndiaTripOrganiser","1");
+      setOrganiserUi(true);
+      setDriveStatus("Organiser settings unlocked on this phone only.",true);
+    }else if(pin!==null){
+      setDriveStatus("Wrong PIN.",false);
+    }
   });
   el("driveConnect").addEventListener("click",function(){
     requestDriveToken("consent").then(function(){
