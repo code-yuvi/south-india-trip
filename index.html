@@ -379,8 +379,8 @@
   }
   @media(min-width:720px){.memform{grid-template-columns:1fr 1fr;align-items:end}}
   .memform .full{grid-column:1/-1}
-  .memform label{display:block;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);font-weight:800;margin-bottom:6px}
-  .memform input,.memform select,.memform textarea{
+  .memform label,.drivebox label{display:block;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);font-weight:800;margin-bottom:6px}
+  .memform input,.memform select,.memform textarea,.drivebox input{
     width:100%;font:inherit;color:#fff;background:#121218;border:1px solid var(--line);
     border-radius:6px;padding:10px 11px;
   }
@@ -439,6 +439,20 @@
   .lightbox .lb-close{position:absolute;top:12px;right:12px;width:40px;height:40px;border:0;border-radius:50%;background:#fff;color:#111;font-size:22px;cursor:pointer;font-weight:800}
   .memempty{padding:28px 16px;text-align:center;color:var(--ink2);border:1px dashed var(--line);border-radius:10px;margin:10px 0}
   #memStatus{font-size:12.5px;color:var(--ink2);min-height:1.2em}
+  .drivebox{
+    margin:14px 0;padding:16px;border:1px solid #1d4ed8;border-radius:12px;
+    background:linear-gradient(135deg,#101820,#17171d);
+  }
+  .drivebox h3{margin:0 0 6px}
+  .drivebox h3:before{background:#1a73e8}
+  .drive-row{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}
+  @media(min-width:720px){.drive-row{grid-template-columns:1fr 1fr}}
+  .drive-status{display:flex;align-items:center;gap:8px;margin:10px 0 0;font-size:13px;color:var(--ink2)}
+  .drive-status i{width:8px;height:8px;border-radius:50%;background:var(--ink3);flex:0 0 auto}
+  .drive-status.ok i{background:var(--open);box-shadow:0 0 0 5px rgba(70,211,126,.12)}
+  .drivehelp{margin-top:10px;color:var(--ink2);font-size:13px}
+  .drivehelp ol{margin:8px 0 0;padding-left:18px}
+  .drivehelp li{margin:6px 0;color:var(--ink2)}
   @media (prefers-reduced-motion:reduce){
     .route-draw,.stopg,.stat,.livebar,.card,section,.hero .inner,.navdot,.countdown:before,.count-status i{animation:none}
     .tile:hover{transform:none}
@@ -644,10 +658,47 @@
 
 <section id="tab-mem" class="pad" hidden>
   <h2>Photo gallery &amp; trip memories</h2>
-  <p class="sub">Add photos and notes from the road. They stay on this phone or laptop (this browser), so they still work offline. Export a backup if you want to keep a copy.</p>
+  <p class="sub">Add photos and notes from the road. Connect Google Drive so the whole crew sees the same folder. If Drive is off, photos stay only on this phone.</p>
   <div class="memstats">
     <span class="tag solid" id="memCount">0 memories</span>
-    <span class="tag">Saved on this device</span>
+    <span class="tag" id="memWhere">Saved on this device</span>
+  </div>
+
+  <div class="drivebox">
+    <h3>Shared Google Drive folder</h3>
+    <p class="sub">Create one folder, share it with all 7 Google accounts as <b>Editor</b>, then paste the folder link and Client ID. After that, each person taps Connect and every new photo goes into that folder.</p>
+    <div class="drive-row">
+      <div>
+        <label for="driveFolder">Drive folder link or folder ID</label>
+        <input id="driveFolder" placeholder="https://drive.google.com/drive/folders/...">
+      </div>
+      <div>
+        <label for="driveClient">Google OAuth Client ID</label>
+        <input id="driveClient" placeholder="123-abc.apps.googleusercontent.com">
+      </div>
+    </div>
+    <div class="btnrow" style="margin-top:12px">
+      <button type="button" class="btn maplink" id="driveSaveCfg">Save folder settings</button>
+      <button type="button" class="btn play" id="driveConnect">Connect Google Drive</button>
+      <button type="button" class="btn ghost" id="driveRefresh">Refresh from Drive</button>
+      <a class="btn ghost" id="driveOpenFolder" href="#" target="_blank" rel="noopener" hidden>Open folder</a>
+    </div>
+    <div class="drive-status" id="driveStatus"><i></i><span>Drive is not connected yet.</span></div>
+    <details class="drivehelp">
+      <summary>How to set this up once</summary>
+      <ol>
+        <li>On Google Drive, create a folder e.g. <b>South India Trip 2026</b>.</li>
+        <li>Share it with the crew as Editor (their Gmail addresses).</li>
+        <li>Copy the folder link from the browser address bar.</li>
+        <li>Open <a href="https://console.cloud.google.com/" target="_blank" rel="noopener">Google Cloud Console</a> → new project → enable <b>Google Drive API</b>.</li>
+        <li>APIs &amp; Services → OAuth consent screen: External, add the 7 emails as test users.</li>
+        <li>Create OAuth Client ID → Web application. Add authorised JavaScript origins:
+          <br><code>https://code-yuvi.github.io</code>
+          <br><code>http://127.0.0.1:8766</code>
+          <br><code>http://localhost:8766</code></li>
+        <li>Paste the Client ID and folder link above, tap Save, then Connect Google Drive.</li>
+      </ol>
+    </details>
   </div>
 
   <form class="memform" id="memForm">
@@ -1805,10 +1856,174 @@ function drawTeam(){
 
 /* ---------- Photo gallery & trip memories ---------- */
 var MEM_KEY="southIndiaTripMemories.v1";
+var DRIVE_CFG_KEY="southIndiaTripDrive.cfg";
 var memPending=[];
 var memFilter="ours";
 var memLightbox=[];
 var memLightIdx=0;
+var memDriveList=[];
+var driveToken=null;
+var driveTokenClient=null;
+var DRIVE_SCOPE="https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.readonly";
+function parseFolderId(raw){
+  raw=(raw||"").trim();
+  var m=raw.match(/\/folders\/([a-zA-Z0-9_-]+)/)||raw.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if(m)return m[1];
+  if(/^[a-zA-Z0-9_-]{10,}$/.test(raw))return raw;
+  return "";
+}
+function loadDriveCfg(){
+  try{return JSON.parse(localStorage.getItem(DRIVE_CFG_KEY)||"{}");}catch(e){return {};}
+}
+function saveDriveCfg(cfg){
+  localStorage.setItem(DRIVE_CFG_KEY,JSON.stringify(cfg||{}));
+}
+function driveCfg(){
+  var c=loadDriveCfg();
+  return {clientId:(c.clientId||"").trim(),folderId:parseFolderId(c.folderId||c.folder||"")};
+}
+function setDriveStatus(msg,ok){
+  var box=el("driveStatus");
+  if(!box)return;
+  box.className="drive-status"+(ok?" ok":"");
+  box.innerHTML="<i></i><span>"+esc(msg)+"</span>";
+}
+function fillDriveFields(){
+  var c=loadDriveCfg();
+  if(el("driveFolder"))el("driveFolder").value=c.folderId||c.folder||"";
+  if(el("driveClient"))el("driveClient").value=c.clientId||"";
+  var id=driveCfg().folderId;
+  if(el("driveOpenFolder")){
+    if(id){el("driveOpenFolder").hidden=false;el("driveOpenFolder").href="https://drive.google.com/drive/folders/"+id;}
+    else{el("driveOpenFolder").hidden=true;}
+  }
+}
+function gisReady(){return !!(window.google&&google.accounts&&google.accounts.oauth2);}
+function ensureDriveClient(){
+  var cfg=driveCfg();
+  if(!cfg.clientId||!cfg.folderId)throw new Error("Save the folder link and Client ID first.");
+  if(!gisReady())throw new Error("Google sign-in is still loading. Wait a second and tap Connect again.");
+  if(!driveTokenClient||driveTokenClient._cid!==cfg.clientId){
+    driveTokenClient=google.accounts.oauth2.initTokenClient({
+      client_id:cfg.clientId,
+      scope:DRIVE_SCOPE,
+      callback:function(){}
+    });
+    driveTokenClient._cid=cfg.clientId;
+  }
+}
+function requestDriveToken(prompt){
+  return new Promise(function(resolve,reject){
+    try{ensureDriveClient();}catch(e){reject(e);return;}
+    driveTokenClient.callback=function(resp){
+      if(resp&&resp.access_token){driveToken=resp.access_token;resolve(driveToken);}
+      else reject(new Error((resp&&resp.error)||"Google sign-in was cancelled."));
+    };
+    driveTokenClient.requestAccessToken({prompt:prompt||""});
+  });
+}
+function driveFetch(url,opts){
+  opts=opts||{};
+  opts.headers=opts.headers||{};
+  opts.headers.Authorization="Bearer "+driveToken;
+  return fetch(url,opts).then(function(r){
+    if(r.status===401){
+      return requestDriveToken("").then(function(){
+        opts.headers.Authorization="Bearer "+driveToken;
+        return fetch(url,opts);
+      });
+    }
+    return r;
+  });
+}
+function dataUrlToBlob(dataUrl){
+  var parts=dataUrl.split(",");
+  var mime=(parts[0].match(/:(.*?);/)||[])[1]||"image/jpeg";
+  var bin=atob(parts[1]||"");
+  var arr=new Uint8Array(bin.length);
+  var i;for(i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
+  return new Blob([arr],{type:mime});
+}
+function driveUploadFile(name,blob,meta){
+  var cfg=driveCfg();
+  var metadata={
+    name:name,
+    parents:[cfg.folderId],
+    description:JSON.stringify(meta),
+    appProperties:{
+      trip:"south-india",
+      memId:String(meta.id||"").slice(0,64),
+      place:String(meta.place||"").slice(0,64),
+      who:String(meta.who||"").slice(0,64),
+      date:String(meta.date||"").slice(0,32)
+    }
+  };
+  var form=new FormData();
+  form.append("metadata",new Blob([JSON.stringify(metadata)],{type:"application/json"}));
+  form.append("file",blob);
+  return driveFetch("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name",{
+    method:"POST",
+    body:form
+  }).then(function(r){
+    return r.json().then(function(j){
+      if(!r.ok)throw new Error((j.error&&j.error.message)||"Drive upload failed");
+      return j;
+    });
+  });
+}
+function parseDriveMeta(file){
+  var meta={};
+  try{meta=JSON.parse(file.description||"{}")||{};}catch(e){meta={};}
+  var ap=file.appProperties||{};
+  return {
+    id:meta.id||ap.memId||file.id,
+    driveId:file.id,
+    title:meta.title||file.name.replace(/\.[^.]+$/,""),
+    note:meta.note||"",
+    place:meta.place||ap.place||"road",
+    who:meta.who||ap.who||"",
+    date:meta.date||ap.date||(file.createdTime||"").slice(0,10),
+    created:Date.parse(file.createdTime||"")||Date.now(),
+    mime:file.mimeType||"",
+    src:""
+  };
+}
+function driveLoadBlob(fileId){
+  return driveFetch("https://www.googleapis.com/drive/v3/files/"+encodeURIComponent(fileId)+"?alt=media").then(function(r){
+    if(!r.ok)throw new Error("Could not read photo from Drive");
+    return r.blob();
+  }).then(function(b){return URL.createObjectURL(b);});
+}
+function refreshDriveMemories(){
+  var cfg=driveCfg();
+  if(!driveToken||!cfg.folderId)return Promise.resolve([]);
+  var q="'"+cfg.folderId+"' in parents and trashed=false";
+  var url="https://www.googleapis.com/drive/v3/files?pageSize=100&q="+encodeURIComponent(q)+"&fields=files(id,name,mimeType,description,appProperties,createdTime)&orderBy=createdTime desc";
+  return driveFetch(url).then(function(r){
+    return r.json().then(function(j){
+      if(!r.ok)throw new Error((j.error&&j.error.message)||"Could not list Drive folder");
+      return j.files||[];
+    });
+  }).then(function(files){
+    var items=files.map(parseDriveMeta);
+    return Promise.all(items.map(function(m){
+      if(m.mime&&m.mime.indexOf("image/")===0){
+        return driveLoadBlob(m.driveId).then(function(src){m.src=src;return m;}).catch(function(){return m;});
+      }
+      return m;
+    }));
+  }).then(function(items){
+    memDriveList=items;
+    return items;
+  });
+}
+function mergedMemories(){
+  var local=loadMemories();
+  var driveIds={};
+  memDriveList.forEach(function(m){driveIds[m.driveId]=1;if(m.id)driveIds[m.id]=1;});
+  var extra=local.filter(function(m){return !m.driveId||!driveIds[m.driveId];});
+  return memDriveList.concat(extra);
+}
 function memPlaces(){
   var seen={},out=[{id:"road",name:"On the road"}];
   STOPS.forEach(function(s){
@@ -1896,12 +2111,13 @@ function placeNameFor(id){
   return p?p.name:id;
 }
 function drawMemories(){
-  var list=loadMemories();
+  var list=mergedMemories();
   el("memCount").textContent=list.length+" memor"+(list.length===1?"y":"ies");
+  if(el("memWhere"))el("memWhere").textContent=driveToken?"Google Drive + this device":"Saved on this device";
   drawMemFilters();
   var showUser=memFilter!=="route";
   var showRoute=memFilter==="route"||memFilter==="all";
-  var user=list.slice().reverse();
+  var user=list.slice().sort(function(a,b){return (b.created||0)-(a.created||0);});
   if(memFilter.indexOf("place:")===0){
     var pid=memFilter.slice(6);
     user=user.filter(function(m){return m.place===pid;});
@@ -1914,9 +2130,10 @@ function drawMemories(){
     var shot=m.src
       ?'<img src="'+m.src+'" alt="'+esc(m.title||"Memory")+'">'
       :'<div class="nophoto">'+esc(m.title||m.note||"Note")+'</div>';
+    var where=m.driveId?"Drive":"This device";
     return '<article class="memcard" data-kind="user" data-idx="'+i+'">'
-      +'<div class="shot">'+shot+'<div class="cap"><h4>'+esc(m.title||"Untitled")+'</h4><p>'+esc(placeNameFor(m.place))+" · "+esc(m.who||"")+'</p></div></div>'
-      +'<button type="button" class="del" data-id="'+esc(m.id)+'" aria-label="Delete">×</button>'
+      +'<div class="shot">'+shot+'<div class="cap"><h4>'+esc(m.title||"Untitled")+'</h4><p>'+esc(placeNameFor(m.place))+" · "+esc(m.who||"")+" · "+where+'</p></div></div>'
+      +'<button type="button" class="del" data-id="'+esc(m.id||"")+'" data-drive="'+(m.driveId||"")+'" aria-label="Delete">×</button>'
       +'</article>';
   }).join(""):"";
   var routeItems=Object.keys(PHOTOS).map(function(key){
@@ -1949,9 +2166,19 @@ function drawMemories(){
     btn.addEventListener("click",function(e){
       e.stopPropagation();
       var id=btn.getAttribute("data-id");
-      if(!confirm("Delete this memory from this device?"))return;
-      saveMemories(loadMemories().filter(function(m){return m.id!==id;}));
-      drawMemories();
+      var driveId=btn.getAttribute("data-drive");
+      if(!confirm(driveId?"Delete this memory from the shared Drive folder?":"Delete this memory from this device?"))return;
+      var after=function(){
+        saveMemories(loadMemories().filter(function(m){return m.id!==id&&m.driveId!==driveId;}));
+        memDriveList=memDriveList.filter(function(m){return m.driveId!==driveId&&m.id!==id;});
+        drawMemories();
+      };
+      if(driveId&&driveToken){
+        driveFetch("https://www.googleapis.com/drive/v3/files/"+encodeURIComponent(driveId),{method:"DELETE"}).then(function(r){
+          if(!r.ok&&r.status!==204)setMemStatus("Could not delete from Drive.",false);
+          after();
+        }).catch(function(){setMemStatus("Could not delete from Drive.",false);after();});
+      }else after();
     });
   });
   Array.prototype.forEach.call(el("memRouteGrid").querySelectorAll(".memcard"),function(card){
@@ -1961,6 +2188,7 @@ function drawMemories(){
 }
 function bindMemories(){
   fillMemSelects();
+  fillDriveFields();
   var drop=el("memDrop");
   var files=el("memFiles");
   function addFiles(list){
@@ -1981,27 +2209,94 @@ function bindMemories(){
     drop.addEventListener(ev,function(e){e.preventDefault();drop.classList.remove("drag");});
   });
   drop.addEventListener("drop",function(e){if(e.dataTransfer&&e.dataTransfer.files)addFiles(e.dataTransfer.files);});
+  function localPush(item){
+    var list=loadMemories();
+    list.push(item);
+    return saveMemories(list);
+  }
+  function saveOneMemory(item,src){
+    var work=Promise.resolve();
+    if(driveToken&&driveCfg().folderId){
+      work=work.then(function(){
+        var blob,name;
+        if(src){blob=dataUrlToBlob(src);name=(item.title||"photo").replace(/[^\w\- ]+/g,"").slice(0,40)+"-"+item.id+".jpg";}
+        else{blob=new Blob([JSON.stringify(item)],{type:"application/json"});name="note-"+item.id+".json";}
+        setMemStatus("Uploading to Google Drive…",true);
+        return driveUploadFile(name,blob,item).then(function(file){
+          item.driveId=file.id;
+          if(src)item.src=src;
+          memDriveList.unshift(item);
+        });
+      });
+    }
+    return work.then(function(){
+      var stored={id:item.id,driveId:item.driveId||"",title:item.title,note:item.note,place:item.place,who:item.who,date:item.date,created:item.created,src:item.driveId?"":(src||"")};
+      if(!localPush(stored)&&!item.driveId)throw new Error("This device is full. Connect Drive or delete older photos.");
+      return {drive:!!item.driveId};
+    }).catch(function(err){
+      if(src){
+        item.src=src;
+        if(!localPush(item))throw new Error((err&&err.message?err.message+" ":"")+"Also could not save on this phone.");
+        return {drive:false,error:err&&err.message};
+      }
+      throw err;
+    });
+  }
   el("memForm").addEventListener("submit",function(e){
     e.preventDefault();
     var title=(el("memTitle").value||"").trim();
     var note=(el("memNote").value||"").trim();
     if(!title&&!note&&!memPending.length){setMemStatus("Add a photo, a title or a note first.",false);return;}
-    var list=loadMemories();
+    var base={title:title||(memPending.length?"Photo":"Note"),note:note,place:el("memPlace").value,who:el("memWho").value,date:el("memDate").value,created:Date.now()};
+    var jobs;
     if(memPending.length){
-      memPending.forEach(function(src,i){
-        list.push({id:uid(),src:src,title:title||"Photo",note:i===0?note:note,place:el("memPlace").value,who:el("memWho").value,date:el("memDate").value,created:Date.now()});
+      jobs=memPending.map(function(src){
+        var item={};Object.keys(base).forEach(function(k){item[k]=base[k];});
+        item.id=uid();
+        return saveOneMemory(item,src);
       });
     }else{
-      list.push({id:uid(),src:"",title:title||"Note",note:note,place:el("memPlace").value,who:el("memWho").value,date:el("memDate").value,created:Date.now()});
+      var item={};Object.keys(base).forEach(function(k){item[k]=base[k];});
+      item.id=uid();
+      jobs=[saveOneMemory(item,"")];
     }
-    if(!saveMemories(list)){
-      setMemStatus("This device is full. Delete an older photo or export a backup, then try a smaller image.",false);
-      return;
-    }
-    memPending=[];el("memPreview").innerHTML="";el("memTitle").value="";el("memNote").value="";
-    memFilter="ours";
-    setMemStatus("Saved on this device.",true);
-    drawMemories();
+    Promise.all(jobs).then(function(results){
+      memPending=[];el("memPreview").innerHTML="";el("memTitle").value="";el("memNote").value="";
+      memFilter="ours";
+      var failed=results.filter(function(r){return r&&r.error;});
+      var onDrive=results.some(function(r){return r&&r.drive;});
+      if(failed.length)setMemStatus(failed[0].error+" Saved on this phone only.",false);
+      else if(onDrive)setMemStatus("Saved to the shared Google Drive folder.",true);
+      else setMemStatus("Saved on this device. Connect Drive so the crew can see it.",true);
+      drawMemories();
+    }).catch(function(err){setMemStatus(err.message||"Could not save.",false);});
+  });
+  el("driveSaveCfg").addEventListener("click",function(){
+    var folder=el("driveFolder").value;
+    var clientId=el("driveClient").value.trim();
+    var folderId=parseFolderId(folder);
+    if(!folderId){setDriveStatus("Paste the Google Drive folder link first.",false);return;}
+    if(!clientId||clientId.indexOf(".apps.googleusercontent.com")===-1){setDriveStatus("Paste the OAuth Client ID from Google Cloud Console.",false);return;}
+    saveDriveCfg({folderId:folderId,clientId:clientId,folder:folder});
+    fillDriveFields();
+    setDriveStatus("Folder saved. Share it with the crew as Editor, then tap Connect.",false);
+  });
+  el("driveConnect").addEventListener("click",function(){
+    requestDriveToken("consent").then(function(){
+      setDriveStatus("Connected. Loading photos from Drive…",true);
+      return refreshDriveMemories();
+    }).then(function(){
+      setDriveStatus("Connected to the shared Drive folder. New photos go there.",true);
+      drawMemories();
+    }).catch(function(err){setDriveStatus(err.message||"Could not connect Drive.",false);});
+  });
+  el("driveRefresh").addEventListener("click",function(){
+    if(!driveToken){setDriveStatus("Connect Google Drive first.",false);return;}
+    setDriveStatus("Refreshing…",true);
+    refreshDriveMemories().then(function(){
+      setDriveStatus("Folder updated.",true);
+      drawMemories();
+    }).catch(function(err){setDriveStatus(err.message||"Refresh failed.",false);});
   });
   el("memExport").addEventListener("click",function(){
     var blob=new Blob([JSON.stringify({trip:"south-india",saved:new Date().toISOString(),memories:loadMemories()},null,2)],{type:"application/json"});
@@ -2050,6 +2345,9 @@ function showTab(t){
   Array.prototype.forEach.call(el("tabs").children,function(b){
     b.setAttribute("aria-selected",b.getAttribute("data-tab")===t?"true":"false");
   });
+  if(t==="mem"&&driveToken){
+    refreshDriveMemories().then(drawMemories).catch(function(){});
+  }
   var top=document.querySelector(".livebar");
   if(t==="dest"){window.scrollTo(0,0);}
   else if(top){window.scrollTo(0,Math.max(0,top.getBoundingClientRect().top+window.pageYOffset-70));}
@@ -2087,5 +2385,6 @@ tickLive();
 setInterval(tickLive,1000);
 setInterval(function(){heroIndex=(heroIndex+1)%HERO_KEYS.length;drawHero();},7000);
 </script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </body>
 </html>
