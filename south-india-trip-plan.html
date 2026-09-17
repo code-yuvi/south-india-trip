@@ -35,7 +35,7 @@
   body[data-sky="dusk"]{--sky:#2b1a24;--sea:#2a1f2c;--land:#22261f}
   body[data-sky="night"]{--sky:#0a1220;--sea:#0d1728;--land:#141c18}
   *{box-sizing:border-box;-webkit-text-size-adjust:100%}
-  html,body{margin:0;padding:0}
+  html,body{margin:0;padding:0;max-width:100%;overflow-x:hidden}
   body{
     background:var(--bg);color:var(--ink);
     font-family:"Helvetica Neue",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
@@ -73,7 +73,7 @@
   .yd-seal .who b{display:block;color:#fff;font-size:16px;letter-spacing:.16em}
   .ydring{transform-origin:36px 36px;animation:ydspin 22s linear infinite}
   @keyframes ydspin{to{transform:rotate(360deg)}}
-  .tabs{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .tabs{display:flex;flex:1;min-width:0;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .tabs::-webkit-scrollbar{display:none}
   .tabs button{
     flex:0 0 auto;font:inherit;font-size:13.5px;padding:7px 14px;border-radius:4px;
@@ -83,6 +83,24 @@
   .tabs button:hover{color:#fff;background:#1d1d25}
   .tabs button:active{transform:scale(.97)}
   .tabs button[aria-selected="true"]{background:#fff;color:#000;font-weight:700}
+  @media(max-width:520px){
+    .topnav{gap:7px}
+    .brand{font-size:12px}
+    .tabs{gap:2px}
+    .tabs button{font-size:11.5px;padding:6px 8px}
+  }
+  .morewrap{position:relative;flex:0 0 auto}
+  .moremenu{
+    position:absolute;right:0;top:calc(100% + 8px);z-index:60;width:190px;padding:7px;
+    background:#18181f;border:1px solid #393943;border-radius:9px;
+    box-shadow:0 18px 42px rgba(0,0,0,.62);
+  }
+  .moremenu[hidden]{display:none}
+  .moremenu button{
+    width:100%;display:block;text-align:left;padding:10px 11px;border:0;border-radius:6px;
+    background:transparent;color:var(--ink2);font:inherit;font-size:13.5px;cursor:pointer;
+  }
+  .moremenu button:hover{background:#272731;color:#fff}
   .navclock{margin-left:auto;font-variant-numeric:tabular-nums;font-size:13px;color:var(--ink2);white-space:nowrap;display:none}
   @media(min-width:720px){.navclock{display:block}}
   .navclock b{color:#fff;font-weight:700}
@@ -108,7 +126,7 @@
   .hero .scrim{position:absolute;inset:0;background:
      linear-gradient(90deg,rgba(8,8,11,.94) 0%,rgba(8,8,11,.72) 42%,rgba(8,8,11,.22) 72%,rgba(8,8,11,.55) 100%),
      linear-gradient(0deg,var(--bg) 2%,rgba(8,8,11,.35) 32%,transparent 62%);}
-  .hero .inner{position:relative;padding:26px 16px 34px;max-width:660px;animation:rise .7s ease both}
+  .hero .inner{position:relative;width:100%;min-width:0;padding:26px 16px 34px;max-width:660px;animation:rise .7s ease both}
   @media(min-width:900px){.hero .inner{padding:34px 34px 46px}}
   .kicker{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin:0 0 10px;font-weight:800}
   h1{font-size:34px;line-height:1.04;margin:0 0 12px;font-weight:900;letter-spacing:-.02em;text-shadow:0 3px 18px rgba(0,0,0,.6)}
@@ -154,6 +172,13 @@
   .pill-live{font-size:11.5px;padding:4px 10px;border-radius:4px;font-weight:600;border:1px solid transparent}
   .pill-live.on{background:#0d2b1a;color:var(--open);border-color:#1d5136}
   .pill-live.off{background:#2b1016;color:var(--closed);border-color:#54202c}
+  .livepanel{margin:18px 0 4px;border:1px solid var(--line);border-radius:9px;background:var(--panel)}
+  .livepanel summary{padding:11px 14px;cursor:pointer;color:var(--ink2);font-size:13px;font-weight:700}
+  .livepanel[open] summary{border-bottom:1px solid var(--line);color:#fff}
+  .livepanel .livebar{margin:0;padding:12px}
+  .section-disclosure{margin:18px 0;border:1px solid var(--line);border-radius:9px;background:var(--panel)}
+  .section-disclosure summary{padding:11px 14px;cursor:pointer;color:var(--ink2);font-weight:700;font-size:13px}
+  .section-disclosure .inside{padding:0 12px 8px}
 
   /* ---------- departure countdown ---------- */
   .countdown{
@@ -172,7 +197,7 @@
   .count-title:before{display:none}
   .count-date{color:var(--ink2);font-size:13px}
   .count-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
-  .count-unit{padding:13px 8px;text-align:center;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.045);backdrop-filter:blur(6px)}
+  .count-unit{min-width:0;padding:13px 8px;text-align:center;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.045);backdrop-filter:blur(6px)}
   .count-unit b{display:block;color:#fff;font-size:clamp(25px,5vw,42px);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.04em}
   .count-unit span{display:block;margin-top:6px;color:var(--ink3);font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
   .count-status{display:flex;align-items:center;gap:7px;margin-top:13px;color:var(--ink2);font-size:12px}
@@ -183,7 +208,7 @@
   .countdown.started .count-status i{background:var(--open);box-shadow:0 0 0 5px rgba(70,211,126,.12)}
   @media(max-width:480px){
     .countdown{padding:16px 12px}
-    .count-grid{gap:6px}
+    .count-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
     .count-unit{padding:11px 4px}
   }
 
@@ -468,13 +493,18 @@
 <nav class="topnav">
   <div class="brand">South<span>India</span></div>
   <div class="tabs" id="tabs" role="tablist">
-    <button role="tab" data-tab="dest" aria-selected="true">Destinations</button>
-    <button role="tab" data-tab="map" aria-selected="false">Route map</button>
-    <button role="tab" data-tab="plan" aria-selected="false">Day by day</button>
-    <button role="tab" data-tab="places" aria-selected="false">Place guide</button>
-    <button role="tab" data-tab="logi" aria-selected="false">Car, stay, money</button>
-    <button role="tab" data-tab="team" aria-selected="false">Our team</button>
-    <button role="tab" data-tab="mem" aria-selected="false">Memories</button>
+    <button role="tab" data-tab="dest" aria-selected="true">Home</button>
+    <button role="tab" data-tab="plan" aria-selected="false">Plan</button>
+    <button role="tab" data-tab="map" aria-selected="false">Map</button>
+    <button role="tab" data-tab="mem" aria-selected="false">Photos</button>
+    <span class="morewrap">
+      <button type="button" id="moreBtn" aria-expanded="false" aria-selected="false">More</button>
+      <span class="moremenu" id="moreMenu" hidden>
+        <button type="button" data-open-tab="places">Place details</button>
+        <button type="button" data-open-tab="logi">Travel &amp; budget</button>
+        <button type="button" data-open-tab="team">Our team</button>
+      </span>
+    </span>
   </div>
   <span class="devtag" title="Yuvraj Deshmukh">
     <svg class="ydmark" viewBox="0 0 72 72" role="img" aria-label="Yuvraj Deshmukh mark">
@@ -505,11 +535,8 @@
     </div>
     <p class="sub">Pune down to the tip of India and back — Srisailam, Tirumala, Meenakshi, the 22 wells of Rameswaram, sunrise at three seas, Jatayu, Adiyogi, the Nilgiri ghats and Mysore Palace.</p>
     <div class="btnrow">
-      <button class="btn play" id="startbtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Start Day 1</button>
-      <button class="btn ghost" id="mapbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>See the map</button>
-      <button class="btn redbtn" id="bookbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5v14"/></svg>What to book first</button>
-      <button class="btn ghost" id="teambtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><circle cx="16" cy="9" r="2.4"/><path d="M3.5 19c.6-3 3-5 5.5-5s4.9 2 5.5 5M14 14.2c2.1.3 3.9 1.8 4.5 4.8"/></svg>Our team</button>
-      <button class="btn ghost" id="membtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.6"/><path d="M21 16l-5.2-5.2a1.5 1.5 0 00-2.1 0L6 18"/></svg>Memories</button>
+      <button class="btn play" id="startbtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>View trip plan</button>
+      <button class="btn ghost" id="mapbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>Open map</button>
     </div>
   </div>
 </header>
@@ -534,21 +561,24 @@
     <div class="count-status"><i></i><span id="countStatus">Packing excitement… departure is getting closer.</span></div>
   </section>
 
-  <div class="livebar">
-    <div class="livecard">
-      <div class="label">Live · India time</div>
-      <span id="istclock">--:--:--</span>
-      <div id="istmeta"></div>
+  <details class="livepanel">
+    <summary>Live information · India time and places open now</summary>
+    <div class="livebar">
+      <div class="livecard">
+        <div class="label">Live · India time</div>
+        <span id="istclock">--:--:--</span>
+        <div id="istmeta"></div>
+      </div>
+      <div class="livecard">
+        <div class="label">Sky over the loop</div>
+        <div id="skyline"></div>
+      </div>
+      <div class="livecard">
+        <div class="label">Open on this route, right now</div>
+        <div class="openlist" id="opennow"></div>
+      </div>
     </div>
-    <div class="livecard">
-      <div class="label">Sky over the loop</div>
-      <div id="skyline"></div>
-    </div>
-    <div class="livecard">
-      <div class="label">Open on this route, right now</div>
-      <div class="openlist" id="opennow"></div>
-    </div>
-  </div>
+  </details>
 </div>
 
 <section id="tab-dest" class="pad">
@@ -560,9 +590,12 @@
   <p class="sub">No bed here. Time them right or you lose them.</p>
   <div class="rowscroll" id="rowDay"></div>
 
-  <div class="rowhead"><h2>Open right now in India</h2></div>
-  <p class="sub">Live from the clock above. Useful when you are actually on the road.</p>
-  <div class="rowscroll" id="rowOpen"></div>
+  <details class="section-disclosure">
+    <summary>Show places open right now</summary>
+    <div class="inside">
+      <div class="rowscroll" id="rowOpen"></div>
+    </div>
+  </details>
 
   <div class="rowhead"><h2>Trip at a glance</h2></div>
   <div class="stats">
@@ -572,7 +605,7 @@
     <div class="stat"><b>3 rooms</b><span>Every night, 7 adults</span></div>
   </div>
   <div class="route-line" id="routeline"></div>
-  <div class="note"><b>10 days is too short for this list.</b> The loop is about 4,000 km of temple towns plus two ghat climbs. In 10 days you sit in the Crysta more than you stand at the places. Use 12 days and drop Kolli Hills — it sits 400 km off this line.</div>
+  <div class="note"><b>Best choice:</b> use the 12-day plan and skip Kolli Hills.</div>
 </section>
 
 <section id="tab-map" class="pad" hidden>
@@ -2388,18 +2421,37 @@ function bindMemories(){
 function showTab(t){
   state.tab=t;
   ["dest","map","plan","places","logi","team","mem"].forEach(function(x){el("tab-"+x).hidden=(x!==t);});
-  Array.prototype.forEach.call(el("tabs").children,function(b){
+  Array.prototype.forEach.call(document.querySelectorAll("#tabs [data-tab]"),function(b){
     b.setAttribute("aria-selected",b.getAttribute("data-tab")===t?"true":"false");
   });
+  var secondary=["places","logi","team"].indexOf(t)!==-1;
+  el("moreBtn").setAttribute("aria-selected",secondary?"true":"false");
+  el("moreBtn").setAttribute("aria-expanded","false");
+  el("moreMenu").hidden=true;
   if(t==="mem"&&driveToken){
     refreshDriveMemories().then(drawMemories).catch(function(){});
   }
-  var top=document.querySelector(".livebar");
+  var top=document.querySelector(".countdown");
   if(t==="dest"){window.scrollTo(0,0);}
   else if(top){window.scrollTo(0,Math.max(0,top.getBoundingClientRect().top+window.pageYOffset-70));}
 }
-Array.prototype.forEach.call(el("tabs").children,function(b){
+Array.prototype.forEach.call(document.querySelectorAll("#tabs [data-tab]"),function(b){
   b.addEventListener("click",function(){showTab(b.getAttribute("data-tab"));});
+});
+el("moreBtn").addEventListener("click",function(e){
+  e.stopPropagation();
+  var open=el("moreMenu").hidden;
+  el("moreMenu").hidden=!open;
+  el("moreBtn").setAttribute("aria-expanded",open?"true":"false");
+});
+Array.prototype.forEach.call(document.querySelectorAll("#moreMenu [data-open-tab]"),function(b){
+  b.addEventListener("click",function(){showTab(b.getAttribute("data-open-tab"));});
+});
+document.addEventListener("click",function(e){
+  if(!e.target.closest(".morewrap")){
+    el("moreMenu").hidden=true;
+    el("moreBtn").setAttribute("aria-expanded","false");
+  }
 });
 Array.prototype.forEach.call(document.querySelectorAll("[data-plan]"),function(b){
   b.addEventListener("click",function(){
@@ -2417,13 +2469,6 @@ el("kollitoggle").addEventListener("click",function(){
 });
 el("startbtn").addEventListener("click",function(){state.plan="12";state.day=1;drawDays();showTab("plan");});
 el("mapbtn").addEventListener("click",function(){state.mapAnim=true;drawMap();showTab("map");});
-el("bookbtn").addEventListener("click",function(){
-  showTab("logi");
-  var h=el("booktable");
-  if(h)window.scrollTo(0,h.getBoundingClientRect().top+window.pageYOffset-70);
-});
-el("teambtn").addEventListener("click",function(){showTab("team");});
-el("membtn").addEventListener("click",function(){showTab("mem");});
 
 el("mapRouteBtn").innerHTML='<a href="'+mapsDirectionsUrl()+'" target="_blank" rel="noopener" class="btn maplink" title="Open full route in Google Maps"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 13-9 13S3 16 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg>Navigate full route on Google Maps</a>';
 drawHero();drawMap();drawStop();drawLegs();drawDays();drawPlaces();drawTables();drawRows();drawPhotoCredits();drawTeamLegend();drawTeam();bindMemories();showTab("dest");
