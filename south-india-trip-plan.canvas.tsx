@@ -154,7 +154,7 @@ const DAYS_12: DayPlan[] = [
     day: 6,
     title: "Rameswaram, Dhanushkodi, Kanyakumari",
     stay: "Kanyakumari",
-    km: 330,
+    km: 346,
     hours: "7 h plus local",
     pace: "Balanced",
     morning: "5:00 AM Ramanathaswamy. Do 22 Theerthams first (5:30 AM–12:30 PM window), change to dry clothes, then garbha griha darshan.",
@@ -197,15 +197,14 @@ const DAYS_12: DayPlan[] = [
     ],
   },
   {
-    day: 8,
-    title: "Jatayu, then Adiyogi",
+    day: 8,    title: "Jatayu, then Adiyogi",
     stay: "Coimbatore / Isha foothills",
     km: 330,
     hours: "7–8 h",
     pace: "Balanced",
     morning: "Drive TVM → Chadayamangalam (50 km, 1.5 h). Jatayu Earth’s Center 9:30 AM–1:00 PM. Take the ropeway, not only the walkway.",
     afternoon: "Leave by 1:30 PM. Skip Kolli Hills on this loop. Route: NH towards Palakkad → Coimbatore → Isha.",
-    evening: "Adiyogi by 6:30 PM for the 7:00 PM light-and-sound. Dhyanalinga if still open.",
+    evening: "Adiyogi light-and-sound is optional only if arrival and entry timings allow; otherwise visit the site and stay overnight. Dhyanalinga if still open.",
     visits: [
       "Jatayu sculpture (Ramayana — Jatayu vs Ravana)",
       "Adiyogi 112 ft face",
@@ -216,6 +215,7 @@ const DAYS_12: DayPlan[] = [
     notes: [
       "Kolli Hills is a 400 km east detour from here, then 220 km back west to Adiyogi. Drop it.",
       "Jatayu ticket counter effectively closes ~5 PM; morning is mandatory on this day.",
+      "The 7 PM Adiyogi show is not guaranteed after the drive; treat it as optional.",
     ],
   },
   {
@@ -345,7 +345,7 @@ const DAYS_10: DayPlan[] = [
     day: 5,
     title: "Rameswaram + Dhanushkodi to Kanyakumari",
     stay: "Kanyakumari",
-    km: 330,
+    km: 346,
     hours: "7 h plus local",
     pace: "Balanced",
     morning: "5 AM temple + 22 wells. Leave island by 12:30 PM after Dhanushkodi.",
@@ -397,8 +397,7 @@ const DAYS_10: DayPlan[] = [
     afternoon: "Drive to Ooty.",
     evening: "Lake + bazaar chocolates.",
     visits: ["Dhyanalinga", "Ooty Lake"],
-    food: "Isha breakfast, Ooty dinner.",
-    stayHint: "Hotel with parking.",
+    food: "Isha breakfast, Ooty dinner.",    stayHint: "Hotel with parking.",
     notes: ["No Coonoor side quests."],
   },
   {
@@ -597,8 +596,7 @@ const PLACES: Place[] = [
       "Morning light photographs better than harsh noon.",
     ],
   },
-  {
-    id: "kolli",
+  {    id: "kolli",
     name: "Kolli Hills",
     why: "Eastern Ghats hill of the Kollipavai goddess, 70 hairpin bends, Agaya Gangai falls, and Arapaleeswarar Temple. Beautiful — and in the wrong place on this loop.",
     hours: "Viewpoints daylight only. Falls sometimes close after heavy rain or dry up in summer.",
@@ -797,8 +795,7 @@ const STOPS: Stop[] = [
     lat: 8.52,
     when: "Day 7 evening",
     nights: 1,
-    placeId: "tvm",
-    side: "left",
+    placeId: "tvm",    side: "left",
     headline: "Padmanabhaswamy 5:00–7:20 PM. Mundu and saree only.",
   },
   {
@@ -821,7 +818,7 @@ const STOPS: Stop[] = [
     nights: 1,
     placeId: "adiyogi",
     side: "left",
-    headline: "7 PM light show, then Dhyanalinga at 6 AM in silence.",
+    headline: "If arrival permits, the light show; then Dhyanalinga at 6 AM in silence.",
   },
   {
     seq: 11,
@@ -997,8 +994,7 @@ function RouteMap({
           <text x={kolliPt.x + 9} y={kolliPt.y + 4} fill={theme.text.tertiary} fontSize={10.5}>
             Kolli Hills — dropped, +10 h
           </text>
-        </>
-      ) : null}
+        </>      ) : null}
 
       <path d={routePath} fill="none" stroke={theme.accent.primary} strokeWidth={2.2} strokeLinejoin="round" />
 
@@ -1008,7 +1004,20 @@ function RouteMap({
         const lab = labelPos(stop);
         const r = stop.nights > 0 ? 9 : 6.5;
         return (
-          <g key={stop.seq} onClick={() => onSelect(stop.seq)} style={{ cursor: "pointer" }}>
+          <g
+            key={stop.seq}
+            onClick={() => onSelect(stop.seq)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                onSelect(stop.seq);
+              }
+            }}
+            tabIndex={0}
+            role="button"
+            aria-label={`Select ${stop.name}${stop.nights > 0 ? ", overnight stop" : ", day visit"}`}
+            style={{ cursor: "pointer" }}
+          >
             {active ? (
               <circle cx={p.x} cy={p.y} r={r + 6} fill="none" stroke={theme.accent.primary} strokeWidth={1.5} />
             ) : null}
@@ -1085,7 +1094,7 @@ export default function SouthIndiaTripPlan() {
         </Text>
       </Stack>
 
-      <Grid columns={4} gap={12}>
+      <Grid columns="repeat(auto-fit, minmax(180px, 1fr))" gap={12}>
         <Stat value={plan === "12" ? "12 days" : "10 days"} label="Chosen length" />
         <Stat value={`${km} km`} label="Distance in this plan" />
         <Stat value="11–15 h" label="Longest single drive" tone="warning" />
@@ -1132,7 +1141,7 @@ export default function SouthIndiaTripPlan() {
             about — it doubles back across Tamil Nadu.
           </Text>
 
-          <Grid columns="minmax(0, 520px) minmax(0, 1fr)" gap={20} align="start">
+          <Grid columns="repeat(auto-fit, minmax(300px, 1fr))" gap={20} align="start">
             <Stack gap={8}>
               <RouteMap selectedSeq={stopSeq} onSelect={setStopSeq} showKolli={showKolli} />
               <Row gap={8} wrap>
@@ -1197,8 +1206,7 @@ export default function SouthIndiaTripPlan() {
                       <Text size="small">{stopPlace.food}</Text>
                     </CardBody>
                   </Card>
-                  <Card>
-                    <CardHeader>Stay</CardHeader>
+                  <Card>                    <CardHeader>Stay</CardHeader>
                     <CardBody>
                       <Text size="small">{stopPlace.stay}</Text>
                     </CardBody>
@@ -1246,7 +1254,7 @@ export default function SouthIndiaTripPlan() {
           />
 
           <H2>Where the nights go</H2>
-          <Grid columns={4} gap={10}>
+          <Grid columns="repeat(auto-fit, minmax(180px, 1fr))" gap={10}>
             {STOPS.filter((s) => s.nights > 0).map((s) => (
               <div key={s.seq}>
                 <Card>
@@ -1293,7 +1301,7 @@ export default function SouthIndiaTripPlan() {
             </Row>
           </Stack>
 
-          <Grid columns={3} gap={12}>
+          <Grid columns="repeat(auto-fit, minmax(220px, 1fr))" gap={12}>
             <Card>
               <CardHeader>Morning</CardHeader>
               <CardBody>
@@ -1321,7 +1329,7 @@ export default function SouthIndiaTripPlan() {
             striped
           />
 
-          <Grid columns={2} gap={16}>
+          <Grid columns="repeat(auto-fit, minmax(260px, 1fr))" gap={16}>
             <Stack gap={6}>
               <H3>Food</H3>
               <Text>{selected.food}</Text>
@@ -1392,141 +1400,9 @@ export default function SouthIndiaTripPlan() {
             <Text>{place.why}</Text>
           </Stack>
 
-          <Grid columns={3} gap={12}>
+          <Grid columns="repeat(auto-fit, minmax(220px, 1fr))" gap={12}>
             <Stat value={place.timeNeeded} label="Time to give it" />
             <Card>
               <CardHeader>Hours</CardHeader>
               <CardBody>
                 <Text size="small">{place.hours}</Text>
-              </CardBody>
-            </Card>
-            <Card>
-              <CardHeader>Stay</CardHeader>
-              <CardBody>
-                <Text size="small">{place.stay}</Text>
-              </CardBody>
-            </Card>
-          </Grid>
-
-          <H3>What to see</H3>
-          <Table headers={["Stop"]} rows={place.visit.map((v) => [v])} striped />
-
-          <H3>Food</H3>
-          <Text>{place.food}</Text>
-
-          <Callout tone="neutral" title="Practical">
-            {place.tips.join(" ")}
-          </Callout>
-        </Stack>
-      ) : null}
-
-      {tab === "logistics" ? (
-        <Stack gap={16}>
-          <H2>Vehicle, group, money</H2>
-
-          <Callout tone="info" title="Innova Crysta with 7 people">
-            Seven adults plus 10 days of bags will fill the boot. Use soft
-            duffels, not hard suitcases. A roof carrier helps. If you also have
-            a driver, that is 8 bodies — the Crysta is then over capacity. Either
-            the driver is one of the 7, or one traveller sits with bags and you
-            keep luggage brutal.
-          </Callout>
-
-          <Grid columns={2} gap={16}>
-            <Stack gap={8}>
-              <H3>Driving rules for this loop</H3>
-              <Text>
-                Two drivers. Maximum 8–9 hours on visit days, 14 hours only on
-                Day 1 and (if you choose 10 days) the last day. No night ghats:
-                Srisailam, Tirumala approach, Kolli hairpins, Ooty. Fuel at every
-                big town before a forest or hill stretch.
-              </Text>
-              <Text>
-                Tolls roughly ₹10,000–14,000. Diesel roughly 3,800–4,200 km at
-                10–12 km/l, about ₹32,000–40,000. Parking + driver bata extra.
-              </Text>
-            </Stack>
-            <Stack gap={8}>
-              <H3>Stay pattern</H3>
-              <Text>
-                Book 3 rooms everywhere (two triples, or one triple + two
-                doubles). Always ask for parking for a long MPV. Prefer hotels
-                over temple cottages except Srisailam, where Devasthanam rooms
-                are the practical choice.
-              </Text>
-              <Text>
-                Do not stay on Tirumala hill with this car. Do not stay in
-                Dhanushkodi. Isha cottages are optional; Coimbatore is simpler.
-              </Text>
-            </Stack>
-          </Grid>
-
-          <H3>Book before you leave</H3>
-          <Table
-            headers={["Item", "Where", "When"]}
-            rows={[
-              ["Srisailam rooms + Seeghra/VIP", "srisailadevasthanam.org", "2–3 weeks ahead"],
-              ["Tirupati ₹300/₹500 SSD × 7", "ttdevasthanams.ap.gov.in", "The minute the month opens"],
-              ["Hotels with 3 rooms + parking", "Any major booking site", "All 11 nights on the 12-day plan"],
-              ["Jatayu ropeway tickets", "Official Jatayu site / counter", "Weekend mornings sell out"],
-              ["Isha cottage (optional)", "Isha booking", "If you want the 7 PM show + 6 AM Dhyanalinga"],
-            ]}
-            striped
-          />
-
-          <H3>Indicative budget for 7 people, 12 days</H3>
-          <Text size="small" tone="tertiary">
-            Mid-range hotels, mixed veg meals, paid darshan. Not luxury, not
-            dharamshala. Fuel assumed self-driven Crysta.
-          </Text>
-          <Table
-            headers={["Head", "Estimate"]}
-            rows={[
-              ["Diesel", "₹32,000–40,000"],
-              ["Tolls + parking", "₹12,000–16,000"],
-              ["Stay, 11 nights × 3 rooms", "₹90,000–1,40,000"],
-              ["Food", "₹60,000–80,000"],
-              ["Darshan, ferries, Jatayu, palace", "₹15,000–25,000"],
-              ["Total (self-drive)", "₹2.1–3.0 lakh"],
-              ["If the Crysta is hired with driver", "Add ₹45,000–70,000 + driver room"],
-            ]}
-            columnAlign={["left", "right"]}
-            striped
-          />
-
-          <H3>What to drop, in order</H3>
-          <Table
-            headers={["Cut", "Why"]}
-            rows={[
-              ["Kolli Hills", "400 km out, 220 km back. Wrong side of Kerala–Coimbatore."],
-              ["Tirupati extras (Kapila, museum)", "Keep the main darshan intact first."],
-              ["Madurai palace", "Meenakshi is the reason you stopped."],
-              ["Ooty toy train + lake boating", "Time sinks with poor payoff on a road trip."],
-              ["Mysore market / KRS dam", "Palace + Chamundi are enough."],
-              ["Padmanabhaswamy if the ferry runs late", "Kanyakumari sunrise is once. TVM can be morning instead."],
-            ]}
-            striped
-          />
-
-          <Divider />
-
-          <H3>Correct road order</H3>
-          <Text>
-            Pune — Srisailam — Tirupati — Madurai — Rameswaram — Dhanushkodi —
-            Kanyakumari — Thiruvananthapuram — Jatayu — (skip Kolli) — Adiyogi —
-            Ooty — Mysore — Kolhapur — Pune.
-          </Text>
-          <Text tone="secondary">
-            If you add Kolli Hills, insert it only by adding a 13th day between
-            Jatayu and Adiyogi, and accept 70 hairpins in a fully loaded Crysta.
-          </Text>
-        </Stack>
-      ) : null}
-
-      <Text size="small" tone="tertiary">
-        Temple hours shift on festivals. Recheck Srisailam, TTD, Meenakshi,
-        Rameswaram, Padmanabhaswamy, and Isha a week before you roll.
-      </Text>
-    </Stack>
-  );
-}
