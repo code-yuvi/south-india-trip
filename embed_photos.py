@@ -12,8 +12,7 @@ from PIL import Image, ImageOps
 
 
 ROOT = Path(__file__).resolve().parent
-PAGE = ROOT / "index.html"
-ALIAS_PAGE = ROOT / "south-india-trip-plan.html"
+PAGE = ROOT / "south-india-trip-plan.html"
 MANIFEST = ROOT / "_photo_candidates" / "manifest.json"
 OUT = ROOT / "_embedded_photos"
 API = "https://commons.wikimedia.org/w/api.php"
@@ -165,7 +164,6 @@ def main():
     else:
         text = text.replace(marker, js + marker, 1)
     PAGE.write_text(text, encoding="utf-8")
-    ALIAS_PAGE.write_text(text, encoding="utf-8")
     total = sum((OUT / f"{key}.webp").stat().st_size for key in PICKS)
     print(f"Embedded {len(PICKS)} photos, {total / 1024:.0f} KiB total")
 
