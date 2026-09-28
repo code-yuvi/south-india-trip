@@ -78,7 +78,7 @@ def query_thumb(title):
         "titles": title,
         "prop": "imageinfo",
         "iiprop": "url",
-        "iiurlwidth": 1200,
+        "iiurlwidth": 1600,
     }
     url = API + "?" + urllib.parse.urlencode(params)
     req = urllib.request.Request(url, headers={"User-Agent": UA})
@@ -104,14 +104,20 @@ def download(url):
 def make_photo(raw, key):
     with Image.open(BytesIO(raw)) as source:
         source = ImageOps.exif_transpose(source).convert("RGB")
+        # Keep the original detail. Never enlarge a small download.
+        width = min(source.width, 1400)
+        height = max(1, round(width * 9 / 16))
+        if height > source.height:
+            height = source.height
+            width = max(1, round(height * 16 / 9))
         photo = ImageOps.fit(
             source,
-            (900, 506),
+            (width, height),
             method=Image.Resampling.LANCZOS,
             centering=FOCUS[key],
         )
         out = BytesIO()
-        photo.save(out, "WEBP", quality=72, method=6)
+        photo.save(out, "WEBP", quality=82, method=6)
         return out.getvalue()
 
 
