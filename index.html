@@ -489,6 +489,57 @@
   #driveSetup{display:none}
   .drivebox.is-organiser #driveSetup{display:block}
   .drive-lock{margin-top:10px}
+
+  /* ---------- expense tracker ---------- */
+  .expform{
+    display:grid;grid-template-columns:1fr;gap:11px;margin:14px 0 18px;padding:16px;
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  }
+  @media(min-width:720px){.expform{grid-template-columns:repeat(2,minmax(0,1fr));align-items:end}}
+  .expform .full{grid-column:1/-1}
+  .expform label{display:block;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);font-weight:800;margin-bottom:6px}
+  .expform input,.expform select{
+    width:100%;font:inherit;color:#fff;background:#121218;border:1px solid var(--line);
+    border-radius:6px;padding:10px 11px;
+  }
+  .expform input:focus,.expform select:focus{outline:2px solid rgba(229,9,20,.42);border-color:var(--red)}
+  .exp-people{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+  @media(min-width:620px){.exp-people{grid-template-columns:repeat(4,minmax(0,1fr))}}
+  .exp-person{
+    display:flex!important;align-items:center;gap:8px;margin:0!important;padding:9px 10px;
+    border:1px solid var(--line);border-radius:7px;background:#121218;color:var(--ink2)!important;
+    font-size:12px!important;letter-spacing:0!important;text-transform:none!important;cursor:pointer;
+  }
+  .exp-person:has(input:checked){border-color:#3b8258;background:#10251a;color:#fff!important}
+  .exp-person input{width:16px;height:16px;padding:0;accent-color:var(--open)}
+  .exp-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0 18px}
+  @media(min-width:760px){.exp-stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
+  .exp-stat{padding:14px;border:1px solid var(--line);border-radius:10px;background:linear-gradient(145deg,#1b1b23,#121218)}
+  .exp-stat span{display:block;color:var(--ink3);font-size:9.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase}
+  .exp-stat b{display:block;margin-top:7px;color:#fff;font-size:clamp(19px,4vw,28px);font-variant-numeric:tabular-nums}
+  .exp-stat.primary{border-color:rgba(229,9,20,.48);background:linear-gradient(145deg,#311015,#15151b)}
+  .exp-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:14px 0 9px}
+  .exp-toolbar select{font:inherit;font-size:13px;color:#fff;background:#17171e;border:1px solid var(--line);border-radius:6px;padding:8px 10px}
+  .exp-list{display:grid;gap:8px;margin-bottom:20px}
+  .exp-item{
+    display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;padding:13px 14px;
+    border:1px solid var(--line);border-radius:9px;background:var(--panel);
+  }
+  .exp-item h4{margin:0 0 4px;font-size:14.5px;color:#fff}
+  .exp-item p{margin:0;color:var(--ink2);font-size:12px;line-height:1.5}
+  .exp-amount{text-align:right;font-weight:900;font-size:17px;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .exp-delete{grid-column:2;justify-self:end;border:0;background:transparent;color:#ff7a83;cursor:pointer;font:inherit;font-size:12px;padding:2px}
+  .exp-empty{padding:25px 14px;text-align:center;color:var(--ink2);border:1px dashed var(--line);border-radius:9px}
+  .balance-grid{display:grid;grid-template-columns:1fr;gap:8px;margin:10px 0 18px}
+  @media(min-width:650px){.balance-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .balance-card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 13px;background:var(--panel);border:1px solid var(--line);border-radius:8px}
+  .balance-card span{font-size:13px;color:#fff}
+  .balance-card b{font-size:13px;white-space:nowrap}
+  .balance-card .receive{color:var(--open)}
+  .balance-card .pay{color:#ff858d}
+  .settle-list{display:grid;gap:7px;margin:10px 0 18px}
+  .settle-item{padding:11px 13px;border-left:3px solid var(--open);border-radius:6px;background:#111b15;color:#e9f8ee;font-size:13px}
+  #expStatus{font-size:12.5px;color:var(--ink2);min-height:1.2em;margin:0}
   @media (prefers-reduced-motion:reduce){
     .route-draw,.stopg,.stat,.livebar,.card,section,.hero .inner,.navdot,.countdown:before,.count-status i{animation:none}
     .tile:hover{transform:none}
@@ -511,6 +562,7 @@
     <span class="moremenu" id="moreMenu" hidden>
       <button type="button" data-open-tab="places">Place details</button>
       <button type="button" data-open-tab="logi">Travel &amp; budget</button>
+      <button type="button" data-open-tab="expense">Expense tracker</button>
       <button type="button" data-open-tab="team">Our team</button>
     </span>
   </span>
@@ -691,6 +743,70 @@
   <h3>Correct road order</h3>
   <p>Pune — Srisailam — Tirupati — Madurai — Rameswaram — Dhanushkodi — Kanyakumari — Thiruvananthapuram — Jatayu — (skip Kolli) — Adiyogi — Ooty — Mysore — Kolhapur — Pune.</p>
   <p class="sub">If you add Kolli Hills, insert it only by adding a 13th day between Jatayu and Adiyogi, and accept 70 hairpin bends in a fully loaded Crysta.</p>
+</section>
+
+<section id="tab-expense" class="pad" hidden>
+  <h2>Trip expense tracker</h2>
+  <p class="sub">Record every payment, split it among the people involved, and see who should receive or pay money. Data stays on this device; use backup and import to move it.</p>
+
+  <div class="exp-stats">
+    <div class="exp-stat primary"><span>Total spent</span><b id="expTotal">₹0</b></div>
+    <div class="exp-stat"><span>Expenses</span><b id="expCount">0</b></div>
+    <div class="exp-stat"><span>Average / person</span><b id="expAverage">₹0</b></div>
+    <div class="exp-stat"><span>Largest expense</span><b id="expLargest">₹0</b></div>
+  </div>
+
+  <form class="expform" id="expForm">
+    <div>
+      <label for="expTitle">What was paid for?</label>
+      <input id="expTitle" maxlength="80" placeholder="Diesel at Tirupati" required>
+    </div>
+    <div>
+      <label for="expAmount">Amount (₹)</label>
+      <input id="expAmount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="2500" required>
+    </div>
+    <div>
+      <label for="expCategory">Category</label>
+      <select id="expCategory">
+        <option>Fuel</option><option>Stay</option><option>Food</option><option>Toll &amp; parking</option>
+        <option>Tickets &amp; darshan</option><option>Shopping</option><option>Other</option>
+      </select>
+    </div>
+    <div>
+      <label for="expPaidBy">Paid by</label>
+      <select id="expPaidBy"></select>
+    </div>
+    <div>
+      <label for="expDate">Date</label>
+      <input id="expDate" type="date" required>
+    </div>
+    <div>
+      <label for="expPlace">Place / note (optional)</label>
+      <input id="expPlace" maxlength="80" placeholder="Tirupati">
+    </div>
+    <div class="full">
+      <label>Split equally between</label>
+      <div class="exp-people" id="expPeople"></div>
+    </div>
+    <div class="full btnrow">
+      <button class="btn redbtn" type="submit">Add expense</button>
+      <button class="btn ghost" type="button" id="expSelectAll">Select everyone</button>
+      <button class="btn ghost" type="button" id="expExport">Download backup</button>
+      <button class="btn ghost" type="button" id="expImportBtn">Import backup</button>
+      <input type="file" id="expImport" accept="application/json" hidden>
+    </div>
+    <p class="full" id="expStatus"></p>
+  </form>
+
+  <h3>Who owes what</h3>
+  <div class="balance-grid" id="expBalances"></div>
+  <div class="settle-list" id="expSettlements"></div>
+
+  <div class="exp-toolbar">
+    <h3 style="margin:0">Expense history</h3>
+    <select id="expFilter" aria-label="Filter expenses by category"><option value="">All categories</option></select>
+  </div>
+  <div class="exp-list" id="expList"></div>
 </section>
 
 <section id="tab-team" class="pad" hidden>
@@ -2426,13 +2542,196 @@ function bindMemories(){
   });
   drawMemories();
 }
+
+/* ---------- expense tracker ---------- */
+var EXPENSE_KEY="southIndiaTripExpensesV1";
+var EXPENSE_CATEGORIES=["Fuel","Stay","Food","Toll & parking","Tickets & darshan","Shopping","Other"];
+function loadExpenses(){
+  try{
+    var list=JSON.parse(localStorage.getItem(EXPENSE_KEY)||"[]");
+    return Array.isArray(list)?list:[];
+  }catch(e){return [];}
+}
+function saveExpenses(list){
+  try{localStorage.setItem(EXPENSE_KEY,JSON.stringify(list));return true;}
+  catch(e){return false;}
+}
+function money(n){
+  return "\u20b9"+Number(n||0).toLocaleString("en-IN",{minimumFractionDigits:0,maximumFractionDigits:2});
+}
+function expenseDateText(value){
+  if(!value)return "";
+  var p=value.split("-");
+  if(p.length!==3)return value;
+  return p[2]+" "+["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][Number(p[1])-1]+" "+p[0];
+}
+function expenseTotals(list){
+  var paid={},owed={};
+  TEAM.forEach(function(m){paid[m.id]=0;owed[m.id]=0;});
+  list.forEach(function(x){
+    var amount=Number(x.amount)||0;
+    if(Object.prototype.hasOwnProperty.call(paid,x.paidBy))paid[x.paidBy]+=amount;
+    var people=(x.people||[]).filter(function(id){return Object.prototype.hasOwnProperty.call(owed,id);});
+    if(!people.length)return;
+    var share=amount/people.length;
+    people.forEach(function(id){owed[id]+=share;});
+  });
+  return {paid:paid,owed:owed};
+}
+function expenseSettlements(totals){
+  var debtors=[],creditors=[];
+  TEAM.forEach(function(m){
+    var net=(totals.paid[m.id]||0)-(totals.owed[m.id]||0);
+    if(net>0.01)creditors.push({id:m.id,amount:net});
+    if(net<-0.01)debtors.push({id:m.id,amount:-net});
+  });
+  debtors.sort(function(a,b){return b.amount-a.amount;});
+  creditors.sort(function(a,b){return b.amount-a.amount;});
+  var out=[],di=0,ci=0;
+  while(di<debtors.length&&ci<creditors.length){
+    var amount=Math.min(debtors[di].amount,creditors[ci].amount);
+    if(amount>0.01)out.push({from:debtors[di].id,to:creditors[ci].id,amount:amount});
+    debtors[di].amount-=amount;creditors[ci].amount-=amount;
+    if(debtors[di].amount<0.01)di++;
+    if(creditors[ci].amount<0.01)ci++;
+  }
+  return out;
+}
+function teamName(id){
+  var member=TEAM.filter(function(m){return m.id===id;})[0];
+  return member?member.name:id;
+}
+function setExpenseStatus(text,bad){
+  el("expStatus").textContent=text||"";
+  el("expStatus").style.color=bad?"#ff858d":"var(--open)";
+}
+function drawExpenses(){
+  var list=loadExpenses().sort(function(a,b){
+    return String(b.date||"").localeCompare(String(a.date||""))||Number(b.created||0)-Number(a.created||0);
+  });
+  var total=list.reduce(function(sum,x){return sum+(Number(x.amount)||0);},0);
+  var largest=list.reduce(function(max,x){return Math.max(max,Number(x.amount)||0);},0);
+  el("expTotal").textContent=money(total);
+  el("expCount").textContent=String(list.length);
+  el("expAverage").textContent=money(total/TEAM.length);
+  el("expLargest").textContent=money(largest);
+
+  var totals=expenseTotals(list);
+  el("expBalances").innerHTML=TEAM.map(function(m){
+    var net=(totals.paid[m.id]||0)-(totals.owed[m.id]||0);
+    var cls=net>=0?"receive":"pay";
+    var copy=Math.abs(net)<0.01?"Settled":net>0?"Gets "+money(net):"Pays "+money(-net);
+    return '<div class="balance-card"><span>'+esc(m.name)+'</span><b class="'+cls+'">'+copy+'</b></div>';
+  }).join("");
+
+  var settlements=expenseSettlements(totals);
+  el("expSettlements").innerHTML=settlements.length
+    ?settlements.map(function(s){
+      return '<div class="settle-item"><b>'+esc(teamName(s.from))+'</b> pays <b>'+esc(teamName(s.to))+'</b> &middot; '+money(s.amount)+'</div>';
+    }).join("")
+    :'<div class="exp-empty">'+(list.length?"Everyone is settled.":"Add expenses to calculate settlements.")+'</div>';
+
+  var filter=el("expFilter").value;
+  var visible=filter?list.filter(function(x){return x.category===filter;}):list;
+  el("expList").innerHTML=visible.length?visible.map(function(x){
+    var people=(x.people||[]).map(teamName);
+    var split=people.length===TEAM.length?"All 7 members":people.join(", ");
+    return '<article class="exp-item">'
+      +'<div><h4>'+esc(x.title||"Expense")+'</h4><p>'+esc(x.category||"Other")+' &middot; Paid by '+esc(teamName(x.paidBy))+' &middot; '+esc(expenseDateText(x.date))+'</p>'
+      +'<p>Split: '+esc(split||"No members")+(x.place?' &middot; '+esc(x.place):'')+'</p></div>'
+      +'<div class="exp-amount">'+money(x.amount)+'</div>'
+      +'<button type="button" class="exp-delete" data-exp-delete="'+encodeURIComponent(x.id)+'" aria-label="Delete expense">Delete</button>'
+      +'</article>';
+  }).join(""):'<div class="exp-empty">'+(list.length?"No expenses in this category.":"No expenses yet. Add the first payment above.")+'</div>';
+}
+function fillExpenseForm(){
+  el("expPaidBy").innerHTML=TEAM.map(function(m){return '<option value="'+m.id+'">'+esc(m.name)+'</option>';}).join("");
+  el("expPeople").innerHTML=TEAM.map(function(m){
+    return '<label class="exp-person"><input type="checkbox" value="'+m.id+'" checked> '+esc(m.name.split(" ")[0])+'</label>';
+  }).join("");
+  el("expFilter").innerHTML='<option value="">All categories</option>'+EXPENSE_CATEGORIES.map(function(c){
+    return '<option value="'+esc(c)+'">'+esc(c)+'</option>';
+  }).join("");
+  el("expDate").value=new Date().toLocaleDateString("en-CA");
+}
+function validImportedExpenses(value){
+  var list=Array.isArray(value)?value:value&&value.expenses;
+  if(!Array.isArray(list))return null;
+  return list.filter(function(x){
+    return x&&x.id&&x.title&&Number(x.amount)>0&&x.paidBy&&Array.isArray(x.people);
+  }).map(function(x){
+    return {
+      id:String(x.id),title:String(x.title).slice(0,80),amount:Number(x.amount),
+      category:EXPENSE_CATEGORIES.indexOf(x.category)!==-1?x.category:"Other",
+      paidBy:String(x.paidBy),date:String(x.date||""),place:String(x.place||"").slice(0,80),
+      people:x.people.map(String),created:Number(x.created)||Date.now()
+    };
+  });
+}
+function bindExpenses(){
+  fillExpenseForm();
+  el("expForm").addEventListener("submit",function(e){
+    e.preventDefault();
+    var people=Array.prototype.map.call(document.querySelectorAll("#expPeople input:checked"),function(x){return x.value;});
+    var amount=Number(el("expAmount").value);
+    if(!people.length){setExpenseStatus("Select at least one person for the split.",true);return;}
+    if(!amount||amount<=0){setExpenseStatus("Enter a valid amount.",true);return;}
+    var list=loadExpenses();
+    list.push({
+      id:uid(),title:el("expTitle").value.trim(),amount:amount,category:el("expCategory").value,
+      paidBy:el("expPaidBy").value,date:el("expDate").value,place:el("expPlace").value.trim(),
+      people:people,created:Date.now()
+    });
+    if(!saveExpenses(list)){setExpenseStatus("Could not save. Browser storage may be full.",true);return;}
+    el("expTitle").value="";el("expAmount").value="";el("expPlace").value="";
+    setExpenseStatus("Expense saved and balances updated.",false);
+    drawExpenses();
+  });
+  el("expSelectAll").addEventListener("click",function(){
+    Array.prototype.forEach.call(document.querySelectorAll("#expPeople input"),function(x){x.checked=true;});
+    setExpenseStatus("All 7 members selected.",false);
+  });
+  el("expFilter").addEventListener("change",drawExpenses);
+  el("expList").addEventListener("click",function(e){
+    var btn=e.target.closest("[data-exp-delete]");
+    if(!btn)return;
+    if(!confirm("Delete this expense?"))return;
+    var id=decodeURIComponent(btn.getAttribute("data-exp-delete"));
+    saveExpenses(loadExpenses().filter(function(x){return x.id!==id;}));
+    setExpenseStatus("Expense deleted.",false);
+    drawExpenses();
+  });
+  el("expExport").addEventListener("click",function(){
+    var blob=new Blob([JSON.stringify({trip:"south-india",saved:new Date().toISOString(),expenses:loadExpenses()},null,2)],{type:"application/json"});
+    var a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);a.download="south-india-trip-expenses.json";a.click();
+    URL.revokeObjectURL(a.href);
+    setExpenseStatus("Expense backup downloaded.",false);
+  });
+  el("expImportBtn").addEventListener("click",function(){el("expImport").click();});
+  el("expImport").addEventListener("change",function(){
+    var file=this.files&&this.files[0];if(!file)return;
+    file.text().then(function(text){
+      var incoming=validImportedExpenses(JSON.parse(text));
+      if(!incoming)throw new Error("Invalid expense backup");
+      var byId={};
+      loadExpenses().concat(incoming).forEach(function(x){byId[x.id]=x;});
+      var merged=Object.keys(byId).map(function(id){return byId[id];});
+      if(!saveExpenses(merged))throw new Error("Browser storage is full");
+      setExpenseStatus("Imported "+incoming.length+" expenses. Duplicate entries were merged.",false);
+      drawExpenses();
+    }).catch(function(err){setExpenseStatus(err.message||"Could not import this file.",true);});
+    this.value="";
+  });
+  drawExpenses();
+}
 function showTab(t){
   state.tab=t;
-  ["dest","map","plan","places","logi","team","mem"].forEach(function(x){el("tab-"+x).hidden=(x!==t);});
+  ["dest","map","plan","places","logi","expense","team","mem"].forEach(function(x){el("tab-"+x).hidden=(x!==t);});
   Array.prototype.forEach.call(document.querySelectorAll("#tabs [data-tab]"),function(b){
     b.setAttribute("aria-selected",b.getAttribute("data-tab")===t?"true":"false");
   });
-  var secondary=["places","logi","team"].indexOf(t)!==-1;
+  var secondary=["places","logi","expense","team"].indexOf(t)!==-1;
   el("moreBtn").setAttribute("aria-selected",secondary?"true":"false");
   el("moreBtn").setAttribute("aria-expanded","false");
   el("moreMenu").hidden=true;
@@ -2479,7 +2778,7 @@ el("startbtn").addEventListener("click",function(){state.plan="12";state.day=1;d
 el("mapbtn").addEventListener("click",function(){state.mapAnim=true;drawMap();showTab("map");});
 
 el("mapRouteBtn").innerHTML='<a href="'+mapsDirectionsUrl()+'" target="_blank" rel="noopener" class="btn maplink" title="Open full route in Google Maps"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 13-9 13S3 16 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg>Navigate full route on Google Maps</a>';
-drawHero();drawMap();drawStop();drawLegs();drawDays();drawPlaces();drawTables();drawRows();drawPhotoCredits();drawTeamLegend();drawTeam();bindMemories();showTab("dest");
+drawHero();drawMap();drawStop();drawLegs();drawDays();drawPlaces();drawTables();drawRows();drawPhotoCredits();drawTeamLegend();drawTeam();bindMemories();bindExpenses();showTab("dest");
 tickLive();
 setInterval(tickLive,1000);
 setInterval(function(){heroIndex=(heroIndex+1)%HERO_KEYS.length;drawHero();},7000);
