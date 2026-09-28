@@ -167,12 +167,17 @@
   .btn.maplink.sm{font-size:12.5px;padding:7px 12px;border-radius:4px}
   .mapbtn-row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
   .tile .mapicon{
-    position:absolute;z-index:2;right:8px;bottom:8px;width:28px;height:28px;border-radius:50%;
-    background:rgba(26,115,232,.92);border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;
-    transition:transform .15s,background .15s;box-shadow:0 2px 8px rgba(0,0,0,.4);
+    position:absolute;z-index:4;left:8px;bottom:8px;height:28px;padding:0 9px 0 7px;border-radius:999px;
+    background:rgba(255,255,255,.96);color:#1a73e8;border:0;cursor:pointer;
+    display:inline-flex;align-items:center;gap:4px;text-decoration:none;
+    box-shadow:0 2px 10px rgba(0,0,0,.5);
+    transition:transform .15s,background .15s;
   }
-  .tile .mapicon:hover{background:#4285f4;transform:scale(1.12)}
-  .tile .mapicon svg{width:15px;height:15px;fill:#fff}
+  .tile .mapicon span{color:#111;font-size:11px;font-weight:800;letter-spacing:.02em;line-height:1}
+  .tile .mapicon:hover{background:#fff;transform:scale(1.08)}
+  .tile .mapicon svg{
+    width:14px;height:14px;fill:#1a73e8;stroke:none;position:static;inset:auto;display:block;flex:none;
+  }
 
   /* ---------- live strip ---------- */
   .livebar{display:grid;grid-template-columns:1fr;gap:10px;margin:22px 0 6px}
@@ -244,7 +249,8 @@
   .tile:hover,.tile:focus-visible{transform:scale(1.07) translateY(-3px);border-color:#4a4a5a;box-shadow:0 14px 34px rgba(0,0,0,.6);z-index:3;outline:none}
   .tile[aria-pressed="true"]{border-color:var(--red);box-shadow:0 0 0 1px var(--red) inset}
   .tile .artwrap{position:relative;aspect-ratio:16/9;background:#0e0e13}
-  .tile .artwrap svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+  /* Only the decorative art SVG — not the Maps pin inside .mapicon */
+  .tile .artwrap > svg{position:absolute;inset:0;width:100%;height:100%;display:block}
   .destination-photo{
     position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
     z-index:1;opacity:0;animation:photoReveal .5s ease forwards;
@@ -1736,7 +1742,7 @@ function mapBtnHTML(lat,lon,name,cls){
     +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 13-9 13S3 16 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg>'
     +'Open in Maps</a>';
 }
-var MAP_ICON_SVG='<svg viewBox="0 0 24 24"><path d="M21 10c0 6-9 13-9 13S3 16 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3" fill="rgba(255,255,255,.4)"/></svg>';
+var MAP_ICON_SVG='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 00-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 00-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>';
 
 /* ---------- Netflix-style poster rows ---------- */
 function tileHTML(key,num,title,line,badges,onclick){
@@ -1745,7 +1751,7 @@ function tileHTML(key,num,title,line,badges,onclick){
   var pin='';
   if(c){
     var mu=mapsUrlLatLon(c.lat,c.lon,c.name);
-    pin='<a href="'+mu+'" target="_blank" rel="noopener" class="mapicon" title="Open in Maps" onclick="event.stopPropagation()">'+MAP_ICON_SVG+'</a>';
+    pin='<a href="'+mu+'" target="_blank" rel="noopener" class="mapicon" title="Open in Maps" onclick="event.stopPropagation()">'+MAP_ICON_SVG+'<span>Map</span></a>';
   }
   return '<div class="tile" role="button" tabindex="0" data-go="'+onclick+'">'
     +'<div class="artwrap">'+artSVG(key)+photoHTML(key)
